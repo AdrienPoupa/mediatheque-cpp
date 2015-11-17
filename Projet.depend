@@ -1,0 +1,167 @@
+# depslib dependency file v1.0
+1447441250 source:c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\main.cpp
+	<iostream>
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<string>
+	"sqlite/SQLiteCpp.h"
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlitecpp-1.2.0\include\sqlitecpp\sqlitecpp.h
+	<SQLiteCpp/Assertion.h>
+	<SQLiteCpp/Exception.h>
+	<SQLiteCpp/Database.h>
+	<SQLiteCpp/Statement.h>
+	<SQLiteCpp/Column.h>
+	<SQLiteCpp/Transaction.h>
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlitecpp-1.2.0\include\sqlitecpp\assertion.h
+	<cassert>
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlitecpp-1.2.0\include\sqlitecpp\exception.h
+	<stdexcept>
+	<string>
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlitecpp-1.2.0\include\sqlitecpp\database.h
+	<sqlite3.h>
+	<SQLiteCpp/Column.h>
+	<string>
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlitecpp-1.2.0\sqlite3\sqlite3.h
+	<stdarg.h>
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlitecpp-1.2.0\include\sqlitecpp\column.h
+	<sqlite3.h>
+	<SQLiteCpp/Statement.h>
+	<SQLiteCpp/Exception.h>
+	<string>
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlitecpp-1.2.0\include\sqlitecpp\statement.h
+	<sqlite3.h>
+	<string>
+	<map>
+	<SQLiteCpp/Exception.h>
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlitecpp-1.2.0\include\sqlitecpp\transaction.h
+	<SQLiteCpp/Exception.h>
+
+1447440599 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\sqlitecpp.h
+	"Assertion.h"
+	"Exception.h"
+	"Database.h"
+	"Statement.h"
+	"Column.h"
+	"Transaction.h"
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\assertion.h
+	<cassert>
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\exception.h
+	<stdexcept>
+	<string>
+
+1447440616 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\database.h
+	"sqlite3.h"
+	"Column.h"
+	<string>
+
+1441785754 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\sqlite3.h
+	<stdarg.h>
+
+1447440642 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\column.h
+	"sqlite3.h"
+	"Statement.h"
+	"Exception.h"
+	<string>
+
+1447440661 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\statement.h
+	"sqlite3.h"
+	<string>
+	<map>
+	"Exception.h"
+
+1447440670 c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\transaction.h
+	"Exception.h"
+
+1447440680 source:c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\column.cpp
+	"Column.h"
+	<iostream>
+
+1447440754 source:c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\database.cpp
+	"Database.h"
+	"Statement.h"
+	"Assertion.h"
+	"Exception.h"
+	<string>
+
+1447440886 source:c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\main.cpp
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<string>
+	"SQLiteCpp.h"
+
+1441785754 source:c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\sqlite3.c
+	"mingw.h"
+	"_mingw.h"
+	<stdarg.h>
+	"config.h"
+	<stdint.h>
+	<inttypes.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	<stddef.h>
+	<TargetConditionals.h>
+	<ctype.h>
+	<time.h>
+	<sys/sysctl.h>
+	<malloc/malloc.h>
+	<libkern/OSAtomic.h>
+	<malloc.h>
+	<pthread.h>
+	"windows.h"
+	<sys/cygwin.h>
+	<errno.h>
+	<process.h>
+	<math.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<fcntl.h>
+	<unistd.h>
+	<sys/time.h>
+	<errno.h>
+	<sys/mman.h>
+	<sys/ioctl.h>
+	<semaphore.h>
+	<limits.h>
+	<sys/file.h>
+	<sys/param.h>
+	<sys/mount.h>
+	<utime.h>
+	<sys/dcmd_blk.h>
+	<sys/statvfs.h>
+	<dlfcn.h>
+	<tcl.h>
+	"sqlite3rtree.h"
+	<unicode/utypes.h>
+	<unicode/uregex.h>
+	<unicode/ustring.h>
+	<unicode/ucol.h>
+	<unicode/ubrk.h>
+	<unicode/utf16.h>
+
+1447440842 source:c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\statement.cpp
+	"Statement.h"
+	"Database.h"
+	"Column.h"
+	"Assertion.h"
+	"Exception.h"
+	<string>
+
+1447440866 source:c:\users\adrien\documents\onedrive - efrei\programmation en c++\projet\sqlite\transaction.cpp
+	"Transaction.h"
+	"Database.h"
+	"Assertion.h"
+
