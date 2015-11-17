@@ -16,8 +16,8 @@
 
 class Person {
     unsigned int _id;
-    std::string _Lastname;
-    std::string _FirstName;
+    std::string _lastname;
+    std::string _firstName;
     Date _birthDate;
     
     

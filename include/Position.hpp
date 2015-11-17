@@ -13,7 +13,8 @@
 #include <set>
 
 class Position {
-    std::set<Position*> _pool;
+    static std::set<Position*> _pool;
+    
     
 public:
     
