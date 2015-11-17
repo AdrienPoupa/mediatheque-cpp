@@ -1,5 +1,9 @@
 .idea/
 .DS_Store
+Build/
+mediatheque.xcodeproj
+mediatheque.build
+DerivedData/
 bin/
 obj/
 Projet.cbp
