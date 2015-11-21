@@ -25,17 +25,6 @@ Date::Date (int month, int day, int year)
    _year = max(1, year);
 }
 
-void Date::display()
-{
-   static char const *name[] =
-   {"inconnu", "Janvier", "Fevrier", "Mars", "Avril",
-    "Mai", "Juin", "Juillet", "Aout", "Septembre",
-    "Octobre", "Novembre", "Decembre"};
-
-   cout << endl << _day << ' ' << name[_month] << ' ' << _year << endl;
-   //cout << "Jours jusqu'à présent: " << DaysSoFar() << '\n';
-}
-
 int Date::daysSoFar()
 {
    int total = 0;
@@ -55,4 +44,16 @@ void Date::setMonth(int month)
 {
    _month = max(1, month);
    _month = min(month, 12);
+}
+
+ostream& operator<< (ostream& stream, const Date& date)
+{
+   static char const *name[] =
+   {"inconnu", "Janvier", "Fevrier", "Mars", "Avril",
+    "Mai", "Juin", "Juillet", "Aout", "Septembre",
+    "Octobre", "Novembre", "Decembre"};
+
+    cout << endl << date._day << ' ' << name[date._month] << ' ' << date._year << endl;
+
+    return stream;
 }

@@ -46,9 +46,9 @@ int main()
 
    date3 = new Date(45,45,44545);
 
-   mydate.display();
-   date2.display();
-   date3->display();
+   cout << mydate << endl;
+   cout << date2 << endl;
+   cout << date3 << endl;
 
 
    cout << "OK: " << date3->getMonth() << endl;
@@ -62,9 +62,9 @@ int main()
    date3->setMonth(4);
    cout << "OK: " << date3->getMonth() << endl;
 
-   date3->display();
+   cout << date3 << endl;
 
-   date4.display();
+   cout << date4 << endl;
 
    date5.setMonth(3);
    delete(date6);
