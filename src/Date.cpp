@@ -12,16 +12,6 @@
 
 using namespace std;
 
-int max (int a, int b)
-{
-   if (a>b) return(a) ; else return (b);
-}
-
-int min (int a, int b)
-{
-   if (a>b) return(b); else return (a);
-}
-
 Date::Date (int month, int day, int year)
 {
    static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
