@@ -9,6 +9,11 @@
 
 #include "Date.hpp"
 #include <iostream>
+#include <iomanip>
+#include <sstream>
+
+#define SSTR( x ) dynamic_cast< ostringstream & >( \
+        ( ostringstream() << dec << x ) ).str()
 
 using namespace std;
 
@@ -44,6 +49,28 @@ void Date::setMonth(int month)
 {
    _month = max(1, month);
    _month = min(month, 12);
+}
+
+// Returns YEAR-MM-DAY to store in DB
+string Date::dateToDB()
+{
+    /*
+       Convert int to string and add leading zeros
+       http://stackoverflow.com/questions/26486419/c-save-int-with-leading-zeros-to-string-not-displaying-them
+    */
+    ostringstream ss1;
+    ss1 << setw(4) << setfill('0') << _year;
+    string year = ss1.str();
+
+    ostringstream ss2;
+    ss2 << setw(2) << setfill('0') << _month;
+    string month = ss2.str();
+
+    ostringstream ss3;
+    ss3 << setw(2) << setfill('0') << _day;
+    string day = ss3.str();
+
+    return year + "-" + month + "-" + day;
 }
 
 ostream& operator<< (ostream& stream, const Date& date)

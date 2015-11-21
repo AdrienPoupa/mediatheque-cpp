@@ -23,6 +23,7 @@ class Date
     int daysSoFar();
     friend std::ostream& operator<< (std::ostream& stream, const Date& date);
     friend std::istream& operator>> (std::istream& stream, Date& date);
+    std::string dateToDB();
  private:
     int _month, _day, _year;
 };

@@ -73,4 +73,6 @@ int main()
    cout << "Vous allez saisir Jour Mois Annee" << endl;
    cin >> yourDate;
    cout << yourDate << endl;
+
+   cout << "Format BDD:" << yourDate.dateToDB() << endl;
 }
