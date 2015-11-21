@@ -75,4 +75,7 @@ int main()
    cout << yourDate << endl;
 
    cout << "Format BDD:" << yourDate.dateToDB() << endl;
+
+   Date dateDB("2015-03-04");
+   cout << dateDB << endl;
 }

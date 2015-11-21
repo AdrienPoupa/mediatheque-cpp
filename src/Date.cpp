@@ -11,9 +11,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
-
-#define SSTR( x ) dynamic_cast< ostringstream & >( \
-        ( ostringstream() << dec << x ) ).str()
+#include <string>
 
 using namespace std;
 
@@ -28,6 +26,39 @@ Date::Date (int month, int day, int year)
    _day = min(_day, length[_month]);
 
    _year = max(1, year);
+}
+
+Date::Date (string dateDB)
+{
+    static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    // Too much redundant code here...
+
+    ostringstream ss1;
+    ss1 << dateDB.substr(0,4);
+    string _yearString = ss1.str();
+    _yearString.erase(0, _yearString.find_first_not_of('0')); // Delete leading zeros
+    stringstream ss11(_yearString); // Convert string back to int
+    ss11 >> _year;
+    _year = max(1, _year);
+
+    ostringstream ss2;
+    ss2 << dateDB.substr(5,2);
+    string _monthString = ss2.str();
+    _monthString.erase(0, _monthString.find_first_not_of('0'));
+    istringstream ss22(_monthString);
+    ss22 >> _month;
+    _month = max(1, _month);
+    _month = min(_month,12);
+
+    ostringstream ss3;
+    ss3 << dateDB.substr(8,2);
+    string _dayString = ss3.str();
+    _dayString.erase(0, _dayString.find_first_not_of('0'));
+    istringstream ss33(_dayString);
+    ss33 >> _day;
+    _day = max(1, _day);
+    _day = min(_day, length[_month]);
 }
 
 int Date::daysSoFar()
