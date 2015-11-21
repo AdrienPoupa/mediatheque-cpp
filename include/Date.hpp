@@ -4,7 +4,7 @@
 //
 //  Created by Timote on 13/11/2015.
 //  Copyright © 2015 Timote. All rights reserved.
-//  Source de la classe Date: http://www.ece.uc.edu/~franco/C321/html/date.html
+//  D'après la classe Date: http://www.ece.uc.edu/~franco/C321/html/date.html
 //
 
 #ifndef Date_hpp
@@ -16,13 +16,13 @@
 class Date
 {
  public:
-    Date ( int mn = 1, int day = 1, int yr = 1);  // constructor
-    void display();                   // function to display date
-    int GetMonth();
-    void SetMonth(int mn);
+    Date (int day = 1, int month = 1, int year = 1);
+    void display();
+    int getMonth();
+    void setMonth(int month);
+    int daysSoFar();
  private:
-    int month, day, year;
-    int DaysSoFar();
+    int _month, _day, _year;
 };
 
 

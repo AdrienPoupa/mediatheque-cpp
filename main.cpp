@@ -28,17 +28,17 @@ int main()
             int         id      = query.getColumn(0);
             const char* value   = query.getColumn(1);
 
-            std::cout << "row: " << id << ", " << value << std::endl;
+            cout << "row: " << id << ", " << value << endl;
         }
     }
-    catch (std::exception& e)
+    catch (exception& e)
     {
-        std::cout << "exception: " << e.what() << std::endl;
+        cout << "exception: " << e.what() << endl;
     }
 
 
    Date mydate(1, 2, 1993);
-   Date date2(4,12,1994);
+   Date date2(12,4,1994);
    Date date4;
    Date *date3;
    Date *date6;
@@ -51,21 +51,21 @@ int main()
    date3->display();
 
 
-   cout << "OK: " << date3->GetMonth() << '\n';
-   date3->SetMonth(4);
-   cout << "OK: " << date3->GetMonth() << '\n';
+   cout << "OK: " << date3->getMonth() << endl;
+   date3->setMonth(4);
+   cout << "OK: " << date3->getMonth() << endl;
 
    delete(date3);
    date6 = new Date(1,1,1);
 
-   cout << "OK: " << date3->GetMonth() << '\n';
-   date3->SetMonth(4);
-   cout << "OK: " << date3->GetMonth() << '\n';
+   cout << "OK: " << date3->getMonth() << endl;
+   date3->setMonth(4);
+   cout << "OK: " << date3->getMonth() << endl;
 
    date3->display();
 
    date4.display();
 
-   date5.SetMonth(3);
+   date5.setMonth(3);
    delete(date6);
 }

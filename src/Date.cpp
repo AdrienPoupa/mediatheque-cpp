@@ -4,7 +4,7 @@
 //
 //  Created by Timote on 13/11/2015.
 //  Copyright © 2015 Timote. All rights reserved.
-//  Source de la classe Date: http://www.ece.uc.edu/~franco/C321/html/date.html
+//  D'après la classe Date: http://www.ece.uc.edu/~franco/C321/html/date.html
 //
 
 #include "Date.hpp"
@@ -22,46 +22,47 @@ int min (int a, int b)
    if (a>b) return(b); else return (a);
 }
 
-Date::Date (int mn, int dy, int yr)
+Date::Date (int month, int day, int year)
 {
    static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-   month = max(1, mn);
-   month = min(month,12);
+   _month = max(1, month);
+   _month = min(_month,12);
 
-   day = max(1,dy);
-   day = min(day, length[month]);
+   _day = max(1,day);
+   _day = min(_day, length[_month]);
 
-   year = max(1, yr);
+   _year = max(1, year);
 }
 
 void Date::display()
 {
-   static char const *name[] = {"nothing", "January", "February", "March", "April",
-            "May", "June", "July", "August", "September", "October",
-            "November", "December" };
+   static char const *name[] =
+   {"inconnu", "Janvier", "Fevrier", "Mars", "Avril",
+    "Mai", "Juin", "Juillet", "Aout", "Septembre",
+    "Octobre", "Novembre", "Decembre"};
 
-   cout << '\n' << name[month] << ' ' << day << "," << year << '\n';
-   cout << "Days so far: " << DaysSoFar() << '\n';
+   cout << endl << _day << ' ' << name[_month] << ' ' << _year << endl;
+   //cout << "Jours jusqu'à présent: " << DaysSoFar() << '\n';
 }
 
-int Date::DaysSoFar()
+int Date::daysSoFar()
 {
    int total = 0;
    static int length[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-   for (int i=1; i < month; i++) total += length[i];
-   total += day;
+   for (int i=1; i < _month; i++)total += length[i];
+   total += _day;
    return (total);
 }
 
-int Date::GetMonth()
+int Date::getMonth()
 {
-   return month;
+   return _month;
 }
 
-void Date::SetMonth(int mn)
+void Date::setMonth(int month)
 {
-   month = max(1, mn);
-   month = min(month, 12);
+   _month = max(1, month);
+   _month = min(month, 12);
 }
