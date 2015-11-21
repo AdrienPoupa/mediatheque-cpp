@@ -22,6 +22,7 @@ class Date
     void setMonth(int month);
     int daysSoFar();
     friend std::ostream& operator<< (std::ostream& stream, const Date& date);
+    friend std::istream& operator>> (std::istream& stream, Date& date);
  private:
     int _month, _day, _year;
 };

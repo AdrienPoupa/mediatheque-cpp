@@ -19,7 +19,7 @@ Date::Date (int month, int day, int year)
    _month = max(1, month);
    _month = min(_month,12);
 
-   _day = max(1,day);
+   _day = max(1, day);
    _day = min(_day, length[_month]);
 
    _year = max(1, year);
@@ -54,6 +54,26 @@ ostream& operator<< (ostream& stream, const Date& date)
     "Octobre", "Novembre", "Decembre"};
 
     cout << endl << date._day << ' ' << name[date._month] << ' ' << date._year << endl;
+
+    return stream;
+}
+
+istream& operator>> (istream& stream, Date& date)
+{
+    int day, month, year;
+
+    stream >> day >> month >> year;
+
+    // Redundant with constructor, should we do something about it ?
+    static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    date._month = max(1, month);
+    date._month = min(date._month,12);
+
+    date._day = max(1, day);
+    date._day = min(date._day, length[date._month]);
+
+    date._year = max(1, year);
 
     return stream;
 }

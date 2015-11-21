@@ -68,4 +68,9 @@ int main()
 
    date5.setMonth(3);
    delete(date6);
+
+   Date yourDate;
+   cout << "Vous allez saisir Jour Mois Annee" << endl;
+   cin >> yourDate;
+   cout << yourDate << endl;
 }
