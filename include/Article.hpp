@@ -19,9 +19,9 @@
 #include <set>
 
 class Article {
-
+private:
     unsigned int _id; // save
-
+protected:
     unsigned int _authorId; // save
     Person* _author; // do not save
     bool _borrowable; // save
