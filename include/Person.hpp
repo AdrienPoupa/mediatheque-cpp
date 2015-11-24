@@ -21,18 +21,22 @@ private:
     std::string _firstName;
     Date _birthDate;
 public:
-    Person(std::string lastName = "Inconnu", std::string firstName = "Inconnu");
+    Person(std::string lastName = "John", std::string firstName = "Doe");
+    Person(std::string lastName, std::string firstName, Date birthDate);
     Person(int id); // Get a person from an ID provided by DB
     virtual ~Person();
     virtual unsigned int getId();
     virtual std::string getLastName();
-    virtual std::string getFirstName();
-    virtual Date getBirthDate();
     virtual void setLastName(std::string lastName);
+    virtual std::string getFirstName();
     virtual void setFirstName(std::string firstName);
+    virtual Date getBirthDate();
     virtual void setBirthDate(Date birthDate);
-    virtual void addToDB();
-    virtual void updateDB();
+    virtual bool addToDB() = 0;
+    virtual bool updateDB() = 0;
+    virtual bool deleteDB() = 0;
+    friend std::ostream& operator<< (std::ostream& stream, const Person& person);
+    friend std::istream& operator>> (std::istream& stream, Person& person);
 };
 
 #endif /* Person_hpp */
