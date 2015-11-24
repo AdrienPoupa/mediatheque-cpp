@@ -15,9 +15,18 @@
 #include <string>
 
 class Genre {
-    static std::set<Genre*> _pool;
+    private:
+        static std::set<Genre*> _pool;
+        std::string _name;
+        int _id = -1;
 
-public:
-    bool remove(std::string genre);
+    public:
+        Genre(const std::string name);
+        bool save();
+        bool update();
+        bool remove();
+        int getId();
+        void setName(const std::string name);
+        std::string getName() const;
 };
 #endif /* Genre_hpp */
