@@ -37,6 +37,8 @@ int main()
     }
 
 
+   // Tests Date
+   /*
    Date mydate(1, 2, 1993);
    Date date2(12,4,1994);
    Date date4;
@@ -78,4 +80,7 @@ int main()
 
    Date dateDB("2015-03-04");
    cout << dateDB << endl;
+   */
+
+   // Tests Artiste
 }
