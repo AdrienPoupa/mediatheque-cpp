@@ -48,7 +48,7 @@ int main()
 
    cout << mydate << endl;
    cout << date2 << endl;
-   cout << date3 << endl;
+   cout << *date3 << endl;
 
 
    cout << "OK: " << date3->getMonth() << endl;

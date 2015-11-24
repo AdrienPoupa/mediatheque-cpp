@@ -12,12 +12,18 @@
 #include <stdio.h>
 #include <set>
 
+///
 class Position {
-    static std::set<Position*> _pool;
-    
+private:
+    std::string _name;
     
 public:
+    Position(const std::string& name);
     
+    std::string getName() const;
+    void setName(const std::string& name);
+    
+    ~Position();
 };
 
 #endif /* Position_hpp */
