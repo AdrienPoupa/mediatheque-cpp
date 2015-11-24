@@ -8,9 +8,18 @@
 
 #include "Person.hpp"
 
-Person::Person(std::string lastName, std::string firstName) : _lastName(lastName), _firstName(firstName)
+using namespace std;
+
+Person::Person(std::string lastName, std::string firstName) :
+    _lastName(lastName), _firstName(firstName)
 {
     Date(1, 1, 1900);
+    _id = 0; // No ID for now
+}
+
+Person::Person(std::string lastName, std::string firstName, Date birthDate) :
+    _lastName(lastName), _firstName(firstName), _birthDate(birthDate)
+{
     _id = 0; // No ID for now
 }
 
@@ -34,16 +43,6 @@ std::string Person::getLastName()
     return _lastName;
 }
 
-std::string Person::getFirstName()
-{
-    return _firstName;
-}
-
-Date Person::getBirthDate()
-{
-    return _birthDate;
-}
-
 void Person::setLastName(std::string lastName)
 {
     _lastName = lastName;
@@ -54,17 +53,31 @@ void Person::setFirstName(std::string firstName)
     _firstName = firstName;
 }
 
+std::string Person::getFirstName()
+{
+    return _firstName;
+}
+
+Date Person::getBirthDate()
+{
+    return _birthDate;
+}
+
 void Person::setBirthDate(Date birthDate)
 {
     _birthDate = birthDate;
 }
 
-void Person::addToDB()
+ostream& operator<< (ostream& stream, const Person& person)
 {
-    // TODO: query INSERT INTO
+    cout << person._id << ' ' << person._firstName << ' ' << person._lastName << endl;
+
+    return stream;
 }
 
-void Person::updateDB()
+istream& operator>> (istream& stream, Person& person)
 {
-    // TODO: query INSERT INTO
+    stream >> person._firstName >> person._lastName >> person._birthDate;
+
+    return stream;
 }
