@@ -23,7 +23,7 @@ class Artist: public Person {
     std::set<Article*> _articles;
     
 public:
-    Artist(std::string nationality = "");
+    Artist(const std::string& firstName, const std::string& lastName, const std::string& nationality = "Inconnu");
     
     std::string getNationality() const;
     void setNationality(const std::string& nationality);
