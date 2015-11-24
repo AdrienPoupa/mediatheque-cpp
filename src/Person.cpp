@@ -33,12 +33,12 @@ Person::~Person()
     // Nothing for now
 }
 
-unsigned int Person::getId()
+unsigned int Person::getId() const
 {
     return _id;
 }
 
-std::string Person::getLastName()
+std::string Person::getLastName() const
 {
     return _lastName;
 }
@@ -53,12 +53,12 @@ void Person::setFirstName(std::string firstName)
     _firstName = firstName;
 }
 
-std::string Person::getFirstName()
+std::string Person::getFirstName() const
 {
     return _firstName;
 }
 
-Date Person::getBirthDate()
+Date Person::getBirthDate() const
 {
     return _birthDate;
 }
