@@ -42,6 +42,7 @@ std::ostream& operator<<(std::ostream& os, const Artist& me){
     os << me.getFirstName() << me.getLastName() <<" (" << me.getNationality() << "), née le " << me.getBirthDate() << endl;
     return os;
 }
+
 std::istream& operator>>(std::istream& is, Artist& me){
     cout << "Saisie d'un artiste: " << endl;
     cout << " - prénom : ";
@@ -57,8 +58,18 @@ std::istream& operator>>(std::istream& is, Artist& me){
 }
 
 // DB method
-bool save();
-bool update();
-bool remove();
+bool Artist::save(){
+    return true;
+}
+bool Artist::update(){
+    return true;
+}
+bool Artist::remove(){
+    return true;
+}
+
+Artist::~Artist(){
+    
+}
 
 

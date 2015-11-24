@@ -40,9 +40,9 @@ public:
     virtual void setBirthDate(Date birthDate);
     
     // DB
-    virtual bool insertPerson() = 0;
-    virtual bool updatePerson() = 0;
-    virtual bool deletePerson() = 0;
+    virtual bool save() = 0;
+    virtual bool update() = 0;
+    virtual bool remove() = 0;
     
     friend std::ostream& operator<< (std::ostream& stream, const Person& person);
     friend std::istream& operator>> (std::istream& stream, Person& person);

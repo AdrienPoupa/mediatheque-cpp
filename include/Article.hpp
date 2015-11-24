@@ -25,7 +25,7 @@ class Article {
     bool _borrowable; // save
     unsigned int * _genreIdList; // save (modified)
     unsigned int _genreIdListLength; // do not save
-    std::set<Genre> _genreList; // do not save
+    std::set<Genre*> _genreList; // do not save
     Date _release; // save
     std::string _studio; // save
     std::string _title; // save
