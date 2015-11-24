@@ -12,10 +12,12 @@
 #include <stdio.h>
 #include <set>
 
+#include <string>
+
 class Genre {
     static std::set<Genre*> _pool;
-    
+
 public:
-    
+    bool remove(std::string genre);
 };
 #endif /* Genre_hpp */

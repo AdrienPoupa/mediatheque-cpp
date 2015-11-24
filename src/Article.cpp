@@ -8,7 +8,32 @@
 
 #include "Article.hpp"
 
+using namespace std;
+
+//set<Genre*>Article::_genres = set<Genre*>();
+
 Article::~Article()
 {
 
+}
+
+void Article::addGenre(Genre* genre)
+{
+    _genres.insert(genre);
+    update();
+}
+
+bool Article::save()
+{
+    return true;
+}
+
+bool Article::update()
+{
+    return true;
+}
+
+bool Article::remove()
+{
+    return true;
 }
