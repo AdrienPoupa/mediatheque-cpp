@@ -5,6 +5,7 @@
 
 #include "sqlite/SQLiteCpp.h"
 #include "Date.hpp"
+#include "Address.hpp"
 
 using namespace std;
 
@@ -83,4 +84,8 @@ int main()
    */
 
    // Tests Artiste
+
+   Address monAdresse;
+   monAdresse.setTown("Toulouse");
+   cout << monAdresse << endl;
 }

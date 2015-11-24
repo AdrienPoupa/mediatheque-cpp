@@ -26,9 +26,9 @@ class User: public Person {
     public:
         User(std::string firstName, std::string lastName, Date birthDate);
         ~User();
-        bool insertPerson();
-        bool updatePerson();
-        bool deletePerson();
+        bool save();
+        bool update();
+        bool remove();
 };
 
 #endif /* User_hpp */

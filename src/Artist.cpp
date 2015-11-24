@@ -16,6 +16,11 @@ Artist::Artist(const std::string& firstName, const std::string& lastName, const 
     // empty
 }
 
+Artist::~Artist()
+{
+
+}
+
 std::string Artist::getNationality() const{
     return _nationality;
 }
@@ -52,13 +57,24 @@ std::istream& operator>>(std::istream& is, Artist& me){
     is >> me._nationality;
     cout << " - date de Naissance : ";
     is >> me._birthDate;
-    
+
     return is;
 }
 
 // DB method
-bool save();
-bool update();
-bool remove();
+bool Artist::save()
+{
+    return true;
+}
+
+bool Artist::update()
+{
+    return true;
+}
+
+bool Artist::remove()
+{
+    return true;
+}
 
 
