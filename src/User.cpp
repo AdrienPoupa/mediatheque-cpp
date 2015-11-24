@@ -19,17 +19,17 @@ User::~User()
 
 }
 
-bool User::insertPerson()
+bool User::save()
 {
     return true;
 }
 
-bool User::updatePerson()
+bool User::update()
 {
     return true;
 }
 
-bool User::deletePerson()
+bool User::remove()
 {
     return true;
 }

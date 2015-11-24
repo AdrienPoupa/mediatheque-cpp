@@ -53,7 +53,7 @@ std::istream& operator>>(std::istream& is, Artist& me){
     is >> me._nationality;
     cout << " - date de Naissance : ";
     is >> me._birthDate;
-    
+
     return is;
 }
 
@@ -69,7 +69,6 @@ bool Artist::remove(){
 }
 
 Artist::~Artist(){
-    
 }
 
 
