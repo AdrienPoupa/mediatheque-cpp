@@ -10,12 +10,25 @@
 #define Transaction_hpp
 
 #include <stdio.h>
+#include "Article.hpp"
+#include "Date.hpp"
+#include "User.hpp"
 
 class Transaction {
-    
-    
-public:
-    
+    private:
+        Article _article;
+        User _user;
+        Date _beginning, _finish;
+    public:
+        Transaction(Article article, User user, Date beginning, Date finish);
+        virtual ~Transaction();
+        void getCurrentTransactions();
+        void getAllTransactions();
+        void getTransactions(int day = 0, int month = 0, int year = 0);
+        //Transaction getTransaction(int id);
+        bool updateTransation();
+        bool deleteTransaction();
+        bool insertTransaction();
 };
 
 #endif /* Transaction_hpp */
