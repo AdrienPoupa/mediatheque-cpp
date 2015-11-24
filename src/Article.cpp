@@ -7,3 +7,8 @@
 //
 
 #include "Article.hpp"
+
+Article::~Article()
+{
+
+}
