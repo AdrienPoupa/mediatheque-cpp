@@ -9,10 +9,8 @@
 #ifndef Position_hpp
 #define Position_hpp
 
-#include <stdio.h>
-#include <set>
+#include <iostream>
 
-///
 class Position {
 private:
     std::string _name;

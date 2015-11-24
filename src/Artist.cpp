@@ -7,3 +7,5 @@
 //
 
 #include "Artist.hpp"
+
+//Artist::Artist(std){};
