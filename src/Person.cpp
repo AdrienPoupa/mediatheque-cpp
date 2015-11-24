@@ -70,7 +70,7 @@ void Person::setBirthDate(Date birthDate)
 
 ostream& operator<< (ostream& stream, const Person& person)
 {
-    cout << person._id << ' ' << person._firstName << ' ' << person._lastName << endl;
+    stream << person._id << ' ' << person._firstName << ' ' << person._lastName << endl;
 
     return stream;
 }
