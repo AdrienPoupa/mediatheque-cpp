@@ -14,15 +14,21 @@
 
 #include "Article.hpp"
 #include "Address.hpp"
+#include "Date.hpp"
 #include "Person.hpp"
 
 
 class User: public Person {
-    Address _address;
-    std::set<Article*> _borrowed;
-    
-public:
-    
+    private:
+        Address _address;
+        std::set<Article*> _borrowed;
+
+    public:
+        User(std::string firstName, std::string lastName, Date birthDate);
+        ~User();
+        bool insertPerson();
+        bool updatePerson();
+        bool deletePerson();
 };
 
 #endif /* User_hpp */
