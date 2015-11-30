@@ -6,6 +6,7 @@
 #include "sqlite/SQLiteCpp.h"
 #include "Date.hpp"
 #include "Address.hpp"
+#include "User.hpp"
 
 using namespace std;
 
@@ -85,7 +86,17 @@ int main()
 
    // Tests Artiste
 
-   Address monAdresse;
-   monAdresse.setTown("Toulouse");
-   cout << monAdresse << endl;
+    Date dateDB("1970-03-04");
+
+    Address addPOTUS;
+    addPOTUS.setCountry("USA");
+    addPOTUS.setTown("Washington DC");
+    addPOTUS.setStreetName("White House");
+    //cout << addPOTUS;
+    cout << addPOTUS.addressDB() << endl;
+
+    User POTUS("Obama", "Barack", dateDB, "911");
+    POTUS.setAddress(addPOTUS);
+    cout << POTUS;
+    POTUS.save();
 }

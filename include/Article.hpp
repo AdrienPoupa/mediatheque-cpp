@@ -57,11 +57,6 @@ public:
     bool save();
     bool update();
     bool remove();
-
-
-
-
-
 };
 
 #endif /* Article_hpp */

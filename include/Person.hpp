@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <iostream>
 
+#include "../sqlite/SQLiteCpp.h"
 #include "Date.hpp"
 
 class Person {

@@ -13,7 +13,7 @@ using namespace std;
 
 Address::Address()
 {
-    
+
 }
 
 string Address::getCountry() const
@@ -72,11 +72,16 @@ ostream& operator<< (ostream& stream, const Address& adresse)
     return stream;
 }
 
+string Address::addressDB()
+{
+    return _houseNumber+" "+_streetName+" "+_postalCode+" "+_town;
+}
+
 istream& operator>> (std::istream& stream, Address& adresse)
 {
-    
+
     cout<<"Saisie de l'adresse "<<endl;
-    
+
     cout<<"Numero de rue : ";
     stream >> adresse._houseNumber;
     cout<<"Rue : ";
@@ -87,9 +92,9 @@ istream& operator>> (std::istream& stream, Address& adresse)
     stream>> adresse._town ;
     cout << "Pays : ";
     stream >> adresse._country ;
-    
+
     return stream;
-    
+
 }
 
 
