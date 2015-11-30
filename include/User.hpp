@@ -27,6 +27,7 @@ class User: public Person {
     public:
         User(std::string firstName, std::string lastName, Date birthDate, std::string phone = "Inconnu");
         ~User();
+        User(int id); // Get a person from an ID provided by DB
 
         std::string getPhone();
         void setPhone(std::string phone);
@@ -35,7 +36,6 @@ class User: public Person {
         void setAddress(Address address);
 
         bool save();
-        bool update();
         bool remove();
 };
 

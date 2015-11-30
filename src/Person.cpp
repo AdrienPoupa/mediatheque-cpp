@@ -23,11 +23,6 @@ Person::Person(std::string lastName, std::string firstName, Date birthDate) :
     _id = 0; // No ID for now
 }
 
-Person::Person(int id) // Get a person from an ID provided by DB
-{
-    // TODO: query to get an existing person
-}
-
 Person::~Person()
 {
     // Nothing for now

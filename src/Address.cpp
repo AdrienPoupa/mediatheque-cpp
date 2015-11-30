@@ -74,19 +74,19 @@ ostream& operator<< (ostream& stream, const Address& adresse)
 
 string Address::addressDB()
 {
-    return _houseNumber+" "+_streetName+" "+_postalCode+" "+_town;
+    return _houseNumber + ", " + _streetName + ", " + _postalCode + ",  " + _town + ", " + _country;
 }
 
 istream& operator>> (std::istream& stream, Address& adresse)
 {
 
-    cout<<"Saisie de l'adresse "<<endl;
+    cout << "Saisie de l'adresse " << endl;;
 
-    cout<<"Numero de rue : ";
+    cout << "Numero de rue : ";
     stream >> adresse._houseNumber;
-    cout<<"Rue : ";
+    cout << "Rue : ";
     stream >> adresse._streetName;
-    cout<<"Code postal : ";
+    cout << "Code postal : ";
     stream>> adresse._postalCode ;
     cout <<"Ville : ";
     stream>> adresse._town ;
