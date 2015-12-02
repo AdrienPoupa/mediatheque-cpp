@@ -111,7 +111,7 @@ ostream& operator<< (ostream& stream, const Date& date)
     "Mai", "Juin", "Juillet", "Aout", "Septembre",
     "Octobre", "Novembre", "Decembre"};
 
-    cout << endl << date._day << ' ' << name[date._month] << ' ' << date._year << endl;
+    cout << date._day << ' ' << name[date._month] << ' ' << date._year << endl;
 
     return stream;
 }
@@ -120,7 +120,12 @@ istream& operator>> (istream& stream, Date& date)
 {
     int day, month, year;
 
-    stream >> day >> month >> year;
+    cout << "Saisissez d'abord le jour (de 1 à 31) : " << endl;
+    stream >> day;
+    cout << "Saisissez ensuite le mois (de 1 à 12) : " << endl;
+    stream >> month;
+    cout << "Saisissez enfin l'annee : " << endl;
+    stream >> year;
 
     // Redundant with constructor, should we do something about it ?
     static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
