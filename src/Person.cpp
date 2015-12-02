@@ -72,7 +72,13 @@ ostream& operator<< (ostream& stream, const Person& person)
 
 istream& operator>> (istream& stream, Person& person)
 {
-    stream >> person._firstName >> person._lastName >> person._birthDate;
+    cout << "Saisie d'une personne" << endl;
+    cout << "Saisie du prenom" << endl;
+    stream >> person._firstName;
+    cout << "Saisie du nom" << endl;
+    stream >> person._lastName;
+    cout << "Saisie de l'anniversaire" << endl;
+    stream >> person._birthDate;
 
     return stream;
 }
