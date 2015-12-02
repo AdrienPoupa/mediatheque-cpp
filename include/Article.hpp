@@ -19,23 +19,19 @@
 #include <set>
 
 class Article {
-private:
-    unsigned int _id; // save
 protected:
+    unsigned int _id = 0; // save
     unsigned int _authorId; // save
     Person* _author; // do not save
     bool _borrowable; // save
     std::set<Genre*> _genres; // do not save
     Date _release; // save
-    std::string _studio; // save
     std::string _title; // save
-    unsigned int _length; // save
 
     static unsigned int _lastIdUsed;
 
 public:
-    Article();
-    ~Article();
+    virtual ~Article();
 
     unsigned int getId() const;
     bool getBorrowable() const;
@@ -47,16 +43,11 @@ public:
     void addGenre(Genre* genre);
     Date getRelease() const;
     void setRelease(const Date& newRelease);
-    std::string getStudio() const;
-    void setStudio(const std::string& newStudio);
     std::string getTitle() const;
     void setTitle(const std::string& newTitle);
-    unsigned int getLength() const;
-    void setLength(const unsigned int& newLength);
 
-    bool save();
-    bool update();
-    bool remove();
+    virtual bool save() = 0;
+    virtual bool remove() = 0;
 };
 
 #endif /* Article_hpp */
