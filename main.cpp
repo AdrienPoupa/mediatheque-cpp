@@ -6,6 +6,7 @@
 #include "sqlite/SQLiteCpp.h"
 #include "Date.hpp"
 #include "Address.hpp"
+#include "Artist.hpp"
 #include "User.hpp"
 #include "Genre.hpp"
 
@@ -87,5 +88,13 @@ int main()
 
     Genre nouveauGenre(7);
     cout << nouveauGenre << endl;
+
+    /*Artist monArtiste;
+    cin >> monArtiste;
+    cout << monArtiste;
+    monArtiste.save();*/
+
+    Artist monArtiste(2);
+    cout << monArtiste << endl;
 
 }
