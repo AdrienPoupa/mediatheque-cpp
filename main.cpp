@@ -7,6 +7,7 @@
 #include "Date.hpp"
 #include "Address.hpp"
 #include "User.hpp"
+#include "Genre.hpp"
 
 using namespace std;
 
@@ -78,4 +79,13 @@ int main()
 
     User userFromID(1);
     cout << userFromID << endl;
+
+    /*Genre nouveauGenre;
+    cin >> nouveauGenre;
+    nouveauGenre.save();
+    cout << nouveauGenre << endl;*/
+
+    Genre nouveauGenre(7);
+    cout << nouveauGenre << endl;
+
 }
