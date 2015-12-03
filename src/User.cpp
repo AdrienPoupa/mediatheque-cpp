@@ -20,7 +20,7 @@ User::User(int id) // Get a person from an ID provided by DB
 {
     SQLite::Database    dbUser("example.db3");
 
-    SQLite::Statement query(dbUser, "SELECT name, surname, phone, address, birthdate FROM users WHERE id=?");
+    SQLite::Statement query(dbUser, "SELECT name, surname, phone, birthdate, country, house_number, postal_code, town, street FROM users WHERE id=?");
     query.bind(1, id);
 
     while (query.executeStep())
@@ -29,11 +29,14 @@ User::User(int id) // Get a person from an ID provided by DB
         _firstName = query.getColumn(0).getText();
         _lastName = query.getColumn(1).getText();
         _phone = query.getColumn(2).getText();
-        string addressTmp = query.getColumn(3).getText();
-        //_address = "to do";
-        string birthDateTmp = query.getColumn(4).getText();
+        string birthDateTmp = query.getColumn(3).getText();
         Date newDate(birthDateTmp);
         _birthDate = newDate;
+        _address.setCountry(query.getColumn(4).getText());
+        _address.setHouseNumber(query.getColumn(5).getInt());
+        _address.setPostalCode(query.getColumn(6).getText());
+        _address.setTown(query.getColumn(7).getText());
+        _address.setStreetName(query.getColumn(8).getText());
     }
 }
 
@@ -70,13 +73,17 @@ bool User::save()
         {
             SQLite::Database    dbUser("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
              // Insert query
-            SQLite::Statement   query(dbUser, "UPDATE users SET name=?, surname=?, phone=?, address=?, birthdate=? WHERE id=?");
+            SQLite::Statement   query(dbUser, "UPDATE users SET name=?, surname=?, phone=?, birthdate=?, country=?, house_number=?, postal_code=?, town=?, street=? WHERE id=?");
             query.bind(1, _firstName);
             query.bind(2, _lastName);
             query.bind(3, _phone);
-            query.bind(4, _address.addressDB());
-            query.bind(5, _birthDate.dateToDB());
-            query.bind(6, (int) _id);
+            query.bind(4, _birthDate.dateToDB());
+            query.bind(5, _address.getCountry());
+            query.bind(6, _address.getHouseNumber());
+            query.bind(7, _address.getPostalCode());
+            query.bind(8, _address.getTown());
+            query.bind(9, _address.getStreetName());
+            query.bind(10, (int) _id);
             query.exec();
 
             return true;
@@ -94,12 +101,16 @@ bool User::save()
         {
             SQLite::Database    dbUser("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
              // Insert query
-            SQLite::Statement   query(dbUser, "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)");
+            SQLite::Statement   query(dbUser, "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             query.bind(2, _firstName);
             query.bind(3, _lastName);
             query.bind(4, _phone);
-            query.bind(5, _address.addressDB());
             query.bind(6, _birthDate.dateToDB());
+            query.bind(7, _address.getCountry());
+            query.bind(8, _address.getHouseNumber());
+            query.bind(9, _address.getPostalCode());
+            query.bind(10, _address.getTown());
+            query.bind(11, _address.getStreetName());
             query.exec();
 
             // Update current ID

@@ -15,7 +15,7 @@
 
 class Address {
     std::string _country = "France";
-    unsigned int _houseNumber = 0;
+    unsigned int _houseNumber = 30;
     std::string _postalCode = "94800";// à cause de la corse et des départements commencant par 0
     std::string _streetName = "Avenue de la Republique";
     std::string _town = "Villjuif";
