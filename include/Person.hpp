@@ -12,13 +12,12 @@
 #include <stdio.h>
 #include <iostream>
 
+#include "../sqlite/SQLiteCpp.h"
 #include "Date.hpp"
 
 class Person {
-private:
-    unsigned int _id;
-
 protected:
+    unsigned int _id;
     std::string _lastName;
     std::string _firstName;
     Date _birthDate;
@@ -26,7 +25,6 @@ protected:
 public:
     Person(std::string lastName = "John", std::string firstName = "Doe");
     Person(std::string lastName, std::string firstName, Date birthDate);
-    Person(int id); // Get a person from an ID provided by DB
 
     virtual unsigned int getId() const;
 
@@ -41,7 +39,6 @@ public:
 
     // DB
     virtual bool save() = 0;
-    virtual bool update() = 0;
     virtual bool remove() = 0;
 
     friend std::ostream& operator<< (std::ostream& stream, const Person& person);

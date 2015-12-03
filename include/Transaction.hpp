@@ -16,19 +16,24 @@
 
 class Transaction {
     private:
-        Article _article;
+        Article *_article;
         User _user;
         Date _beginning, _finish;
+        int _id = 0;
     public:
-        Transaction(Article article, User user, Date beginning, Date finish);
+        Transaction(Article *article, User user, Date beginning, Date finish);
         virtual ~Transaction();
+
         void getCurrentTransactions();
         void getAllTransactions();
         void getTransactions(int day = 0, int month = 0, int year = 0);
         //Transaction getTransaction(int id);
-        bool updateTransation();
-        bool deleteTransaction();
-        bool insertTransaction();
+
+        bool save();
+        bool remove();
+
+        friend std::ostream& operator<<(std::ostream& os, const Transaction& transaction);
+        friend std::istream& operator>>(std::istream& is, Transaction& transaction);
 };
 
 #endif /* Transaction_hpp */

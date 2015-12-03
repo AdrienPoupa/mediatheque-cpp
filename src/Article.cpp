@@ -20,20 +20,60 @@ Article::~Article()
 void Article::addGenre(Genre* genre)
 {
     _genres.insert(genre);
-    update();
+    save();
 }
 
-bool Article::save()
+unsigned int Article::getId() const
 {
-    return true;
+    return _id;
 }
 
-bool Article::update()
+bool Article::getBorrowable() const
 {
-    return true;
+    return _borrowable;
 }
 
-bool Article::remove()
+unsigned int Article::getAuthorId() const
 {
-    return true;
+    return _authorId;
+}
+
+void Article::setAuthorId(const int& newAuthorId)
+{
+    _authorId = newAuthorId;
+}
+
+Person* Article::getAuthor() const
+{
+    return _author;
+}
+
+void Article::setBorrowable(const bool& newBorrowable)
+{
+    _borrowable = newBorrowable;
+}
+
+std::set<Genre*> Article::getGenres() const
+{
+    return _genres;
+}
+
+Date Article::getRelease() const
+{
+    return _release;
+}
+
+void Article::setRelease(const Date& newRelease)
+{
+    _release = newRelease;
+}
+
+std::string Article::getTitle() const
+{
+    return _title;
+}
+
+void Article::setTitle(const std::string& newTitle)
+{
+    _title = newTitle;
 }
