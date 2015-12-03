@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <set>
+#include <map>
 
 #include "Article.hpp"
 #include "Position.hpp"
@@ -19,8 +20,9 @@
 
 class Artist: public Person {
     std::string _nationality;
-    std::set<Position*> _positions;
-    std::set<Article*> _articles;
+    //std::set<Position*> _positions;
+    //std::set<Article*> _articles;
+    std::map<Position*, std::set<Article*>> _realisations;
     
 public:
     Artist(const std::string& firstName, const std::string& lastName, const std::string& nationality = "Inconnu");

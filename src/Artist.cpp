@@ -31,7 +31,7 @@ std::set<Article*> Artist::getArticles() const{
 }
 
 void addArticles(const Article& article, const Position& position){
-    // TODO
+    
 }
 void removeArticles(const Article& article){
     // TODO
@@ -59,6 +59,7 @@ std::istream& operator>>(std::istream& is, Artist& me){
 
 // DB method
 bool Artist::save(){
+    
     return true;
 }
 bool Artist::update(){
