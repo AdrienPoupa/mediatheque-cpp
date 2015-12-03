@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "Artist.hpp"
+#include "Position.hpp"
 
 using namespace std;
 
@@ -134,6 +135,7 @@ bool Artist::save()
             return false;
         }
     }
+}
 
 bool Artist::remove()
 {

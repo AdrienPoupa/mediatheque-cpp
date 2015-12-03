@@ -22,7 +22,7 @@ class Artist: public Person {
 
     //std::set<Position*> _positions;
     std::set<Article*> _articles;
-    std::map<Position*, std::set<Article*>> _realisations;
+    //std::map<Position*, std::set<Article*>> _realisations;
     
 public:
     Artist(const std::string& firstName = "John", const std::string& lastName = "Doe", const std::string& nationality = "Inconnu");
