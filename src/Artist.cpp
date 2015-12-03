@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "Artist.hpp"
+#include "Position.hpp"
 
 using namespace std;
 
@@ -51,9 +52,9 @@ std::set<Article*> Artist::getArticles() const
     return _articles;
 }
 
-void addArticles(const Article& article)
-{
-    // TODO
+
+void addArticles(const Article& article, const Position& position){
+    
 }
 
 void removeArticles(const Article& article)
@@ -134,8 +135,6 @@ bool Artist::save()
             return false;
         }
     }
-
-    return true;
 }
 
 bool Artist::remove()

@@ -1,11 +1,3 @@
-//
-//  Address.cpp
-//  Mediatheque
-//
-//  Created by Timote on 13/11/2015.
-//  Copyright © 2015 Timote. All rights reserved.
-//
-
 #include "Address.hpp"
 #include <iostream>
 
@@ -74,7 +66,7 @@ ostream& operator<< (ostream& stream, const Address& adresse)
 
 string Address::addressDB()
 {
-    return _houseNumber + ", " + _streetName + ", " + _postalCode + ",  " + _town + ", " + _country;
+    return to_string(_houseNumber) + ", " + _streetName + ", " + _postalCode + ",  " + _town + ", " + _country;
 }
 
 istream& operator>> (std::istream& stream, Address& adresse)

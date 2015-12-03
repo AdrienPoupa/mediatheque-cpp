@@ -12,14 +12,18 @@
 #include <stdio.h>
 #include <iostream>
 #include <set>
+#include <map>
 
 #include "Article.hpp"
 #include "Person.hpp"
 
 class Artist: public Person {
     std::string _nationality;
-    std::set<Article*> _articles;
 
+    //std::set<Position*> _positions;
+    std::set<Article*> _articles;
+    //std::map<Position*, std::set<Article*>> _realisations;
+    
 public:
     Artist(const std::string& firstName = "John", const std::string& lastName = "Doe", const std::string& nationality = "Inconnu");
     Artist(int id);
