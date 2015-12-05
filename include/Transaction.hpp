@@ -23,6 +23,21 @@ class Transaction {
         //Transaction(unsigned int id);
         virtual ~Transaction();
 
+        User getUser() const;
+        void setUser(const User user);
+
+        Date getBeginDate() const;
+        void setBeginDate(const Date beginning);
+
+        Date getFinishDate() const;
+        void setFinishDate(const Date finish);
+
+        unsigned int getId() const;
+        void setId(const unsigned int id);
+
+        std::string getType() const;
+        void setType(std::string const type);
+
         void displayCurrentTransactions();
         void displayAllTransactions();
         void displayTransactions(int day = 0, int month = 0, int year = 0);

@@ -39,6 +39,46 @@ Transaction::~Transaction()
 
 }
 
+Date Transaction::getBeginDate() const
+{
+    return _beginning;
+}
+
+void Transaction::setBeginDate(const Date beginning)
+{
+    _beginning = beginning;
+}
+
+Date Transaction::getFinishDate() const
+{
+    return _finish;
+}
+
+void Transaction::setFinishDate(const Date finish)
+{
+    _finish = finish;
+}
+
+unsigned int Transaction::getId() const
+{
+    return _id;
+}
+
+void Transaction::setId(const unsigned int id)
+{
+    _id = id;
+}
+
+std::string Transaction::getType() const
+{
+    return _type;
+}
+
+void Transaction::setType(std::string const type)
+{
+    _type = type;
+}
+
 void Transaction::displayCurrentTransactions()
 {
     SQLite::Database    dbTransaction("example.db3");
