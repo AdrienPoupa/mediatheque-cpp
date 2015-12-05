@@ -1,11 +1,3 @@
-//
-//  Article.hpp
-//  Mediatheque
-//
-//  Created by Timote on 13/11/2015.
-//  Copyright © 2015 Timote. All rights reserved.
-//
-
 #ifndef Article_hpp
 #define Article_hpp
 
@@ -27,8 +19,8 @@ protected:
     std::set<Genre*> _genres; // do not save
     Date _release; // save
     std::string _title; // save
-
-    static unsigned int _lastIdUsed;
+   
+    //std::map<int, std::string> _content;
 
 public:
     virtual ~Article();
@@ -48,6 +40,7 @@ public:
 
     virtual bool save() = 0;
     virtual bool remove() = 0;
+    
 };
 
 #endif /* Article_hpp */

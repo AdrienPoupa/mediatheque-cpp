@@ -1,11 +1,3 @@
-//
-//  Article.cpp
-//  Mediatheque
-//
-//  Created by Timote on 13/11/2015.
-//  Copyright © 2015 Timote. All rights reserved.
-//
-
 #include "Article.hpp"
 
 using namespace std;
@@ -19,7 +11,10 @@ Article::~Article()
 
 void Article::addGenre(Genre* genre)
 {
-    _genres.insert(genre);
+    if (_genres.size() < 2)
+        _genres.insert(genre);
+    else
+        cout<<"Il y a déjà deux genres pour cet article"<<endl;
     save();
 }
 
