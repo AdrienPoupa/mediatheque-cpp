@@ -98,4 +98,29 @@ int main()
 //    Artist monArtiste(2);
 //    cout << monArtiste << endl;
 
+
+
+    /*Address addPOTUS;
+    addPOTUS.setCountry("USA");
+    addPOTUS.setTown("Washington DC");
+    addPOTUS.setStreetName("White House");
+    addPOTUS.setHouseNumber(1);
+    addPOTUS.setPostalCode("911");
+    //cout << addPOTUS;
+    cout << addPOTUS.addressDB() << endl;
+
+    Date dateDB("1970-03-04");
+    User POTUS("Obama", "Barack", dateDB, "911");
+    POTUS.setAddress(addPOTUS);
+    POTUS.save();
+    cout << POTUS;*/
+
+    /*User POTUS(8);
+    cout << POTUS << endl;
+    Address test = POTUS.getAddress();
+    cout << test;
+    test.setCountry("France");
+    POTUS.setAddress(test);
+    POTUS.save();*/
+
 }
