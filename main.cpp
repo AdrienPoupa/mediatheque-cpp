@@ -4,6 +4,7 @@
 #include <string>
 
 #include "sqlite/SQLiteCpp.h"
+#include "BaseModel.hpp"
 #include "Date.hpp"
 #include "Address.hpp"
 #include "Artist.hpp"
@@ -61,7 +62,7 @@ int main()
 
    // Tests Artiste
 
-    /*Date dateDB("1970-03-04");
+    Date dateDB("1970-03-04");
 
     Address addPOTUS;
     addPOTUS.setCountry("USA");
@@ -75,26 +76,26 @@ int main()
     POTUS.save();
     cout << POTUS;
     POTUS.setLastName("Jackson");
-    //POTUS.save();
-    //POTUS.remove();*/
+    POTUS.save();
+    //POTUS.remove();
 
-    User userFromID(1);
-    cout << userFromID << endl;
+//    User userFromID(1);
+//    cout << userFromID << endl;
 
     /*Genre nouveauGenre;
     cin >> nouveauGenre;
     nouveauGenre.save();
     cout << nouveauGenre << endl;*/
 
-    Genre nouveauGenre(7);
-    cout << nouveauGenre << endl;
+//    Genre nouveauGenre(7);
+//    cout << nouveauGenre << endl;
 
     /*Artist monArtiste;
     cin >> monArtiste;
     cout << monArtiste;
     monArtiste.save();*/
 
-    Artist monArtiste(2);
-    cout << monArtiste << endl;
+//    Artist monArtiste(2);
+//    cout << monArtiste << endl;
 
 }

@@ -7,6 +7,7 @@
 //
 
 #include "User.hpp"
+#include "BaseModel.hpp"
 
 using namespace std;
 
@@ -64,7 +65,7 @@ void User::setAddress(Address address)
 
 bool User::save()
 {
-    // Update
+    /*// Update
     if (_id != 0) {
         try
         {
@@ -116,6 +117,18 @@ bool User::save()
     }
 
     return true;
+     */
+    int res = BaseModel::save("users", {
+        {"_id", {to_string(_id), "int"}},
+        {"name", {_firstName, "string"}},
+        {"surname", {_lastName, "string"}}
+    });
+    
+    if(_id == 0){
+        _id = res;
+    }
+    
+    return (bool)res;
 }
 
 bool User::remove()

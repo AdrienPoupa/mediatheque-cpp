@@ -1,15 +1,19 @@
 #ifndef BaseModel_hpp
 #define BaseModel_hpp
 
+#include <map>
+#include <set>
+#include <vector>
+
+#include "../sqlite/SQLiteCpp.h"
+
 class BaseModel {
-    int _id = -1;
+private:
+    BaseModel(){}
     
 public:
-    BaseModel();
-    ~BaseModel();
-    
-    bool save();
-    bool remove();
+    static int save(const std::string& table, std::map<std::string, std::vector<std::string>> data);
+    static bool remove(const std::string& table, const int& id);
     
 };
 

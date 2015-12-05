@@ -23,11 +23,6 @@ void Article::addGenre(Genre* genre)
     save();
 }
 
-unsigned int Article::getId() const
-{
-    return _id;
-}
-
 bool Article::getBorrowable() const
 {
     return _borrowable;
