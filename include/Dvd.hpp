@@ -17,6 +17,7 @@ class Dvd : public Cd
     protected:
         std::set<Artist*> _casting; // do not save
     private:
+        
 };
 
 #endif // DVD_H

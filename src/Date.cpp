@@ -1,9 +1,3 @@
-//
-//  Date.cpp
-//  Mediatheque
-//
-//  Created by Timote on 13/11/2015.
-//  Copyright © 2015 Timote. All rights reserved.
 //  D'après la classe Date: http://www.ece.uc.edu/~franco/C321/html/date.html
 //
 

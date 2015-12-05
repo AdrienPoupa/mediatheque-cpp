@@ -1,11 +1,3 @@
-//
-//  Library.hpp
-//  Mediatheque
-//
-//  Created by Timote on 13/11/2015.
-//  Copyright © 2015 Timote. All rights reserved.
-//
-
 #ifndef Library_hpp
 #define Library_hpp
 
