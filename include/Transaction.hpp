@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "../sqlite/SQLiteCpp.h"
+#include "BaseModel.hpp"
 #include "Article.hpp"
 #include "Book.hpp"
 #include "Cd.hpp"
@@ -16,10 +17,26 @@ class Transaction {
         User _user;
         Date _beginning, _finish;
         int _id = 0;
+        std::string _type = "Book";
     public:
         Transaction(Article *article, User user, Date beginning, Date finish);
         //Transaction(unsigned int id);
         virtual ~Transaction();
+
+        User getUser() const;
+        void setUser(const User user);
+
+        Date getBeginDate() const;
+        void setBeginDate(const Date beginning);
+
+        Date getFinishDate() const;
+        void setFinishDate(const Date finish);
+
+        unsigned int getId() const;
+        void setId(const unsigned int id);
+
+        std::string getType() const;
+        void setType(std::string const type);
 
         void displayCurrentTransactions();
         void displayAllTransactions();

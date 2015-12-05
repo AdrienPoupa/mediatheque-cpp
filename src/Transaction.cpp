@@ -39,6 +39,46 @@ Transaction::~Transaction()
 
 }
 
+Date Transaction::getBeginDate() const
+{
+    return _beginning;
+}
+
+void Transaction::setBeginDate(const Date beginning)
+{
+    _beginning = beginning;
+}
+
+Date Transaction::getFinishDate() const
+{
+    return _finish;
+}
+
+void Transaction::setFinishDate(const Date finish)
+{
+    _finish = finish;
+}
+
+unsigned int Transaction::getId() const
+{
+    return _id;
+}
+
+void Transaction::setId(const unsigned int id)
+{
+    _id = id;
+}
+
+std::string Transaction::getType() const
+{
+    return _type;
+}
+
+void Transaction::setType(std::string const type)
+{
+    _type = type;
+}
+
 void Transaction::displayCurrentTransactions()
 {
     SQLite::Database    dbTransaction("example.db3");
@@ -72,7 +112,7 @@ void Transaction::displayCurrentTransactions()
         //int returned = query.getColumn(5).getInt();
         string date2Tmp = query.getColumn(6).getText();
         Date newDate2(date2Tmp);
-        //cout << "Transaction #" << id << " : Article " << *article << " emprunte par " << borrower << " le " << newDate << endl;
+        cout << "Transaction #" << id << " : Article " << article << " emprunte par " << borrower << " le " << newDate << endl;
     }
 }
 
@@ -95,8 +135,21 @@ Transaction Transaction::displayTransaction(int id)
 
 bool Transaction::save()
 {
-    // TODO
-    return true;
+    int res = BaseModel::save("transactions", {
+        {"id", {to_string(_id), "int"}},
+        {"article_id", {to_string(_article->getId()), "int"}},
+        {"borrower_id", {to_string(_user.getId()), "int"}},
+        {"type", {_type, "string"}},
+        {"date_borrowed", {_beginning.dateToDB(), "string"}},
+        {"returned", {to_string(0), "int"}},
+        {"date_returned", {_finish.dateToDB(), "string"}},
+    });
+
+    if(_id == 0){
+        _id = res;
+    }
+
+    return (bool)res;
 }
 
 bool Transaction::remove()

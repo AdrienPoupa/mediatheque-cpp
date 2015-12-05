@@ -23,6 +23,11 @@ bool Article::getBorrowable() const
     return _borrowable;
 }
 
+unsigned int Article::getId() const
+{
+    return _id;
+}
+
 unsigned int Article::getAuthorId() const
 {
     return _authorId;
