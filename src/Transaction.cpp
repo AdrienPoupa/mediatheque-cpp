@@ -72,7 +72,7 @@ void Transaction::displayCurrentTransactions()
         //int returned = query.getColumn(5).getInt();
         string date2Tmp = query.getColumn(6).getText();
         Date newDate2(date2Tmp);
-        //cout << "Transaction #" << id << " : Article " << *article << " emprunte par " << borrower << " le " << newDate << endl;
+        cout << "Transaction #" << id << " : Article " << article << " emprunte par " << borrower << " le " << newDate << endl;
     }
 }
 
