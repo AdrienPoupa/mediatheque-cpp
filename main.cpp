@@ -73,10 +73,12 @@ int main()
 
     User POTUS("Obama", "Barack", dateDB, "911");
     POTUS.setAddress(addPOTUS);
+    
     POTUS.save();
     cout << POTUS;
     POTUS.setLastName("Jackson");
     POTUS.save();
+    cout << POTUS;
     //POTUS.remove();
 
 //    User userFromID(1);

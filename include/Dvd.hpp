@@ -1,7 +1,7 @@
 #ifndef DVD_H
 #define DVD_H
 
-#include "Cd.h"
+#include "Cd.hpp"
 #include "Artist.hpp"
 
 class Dvd : public Cd
