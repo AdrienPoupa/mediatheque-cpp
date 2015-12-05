@@ -22,12 +22,3 @@ class Cd : public Article
 };
 
 #endif // CD_H
-unsigned int _id;
-bool _etat;
-std::string _titre;
-std::string _artiste;
-std::string _studioDeDistriburtion;
-std::map<int, std::string> _chansons;
-Date _dateDeSortie;
-unsigned int _duree;
-Genre _genre;
