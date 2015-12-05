@@ -121,10 +121,31 @@ bool User::save()
 
     return true;
      */
+    /*
+     User:
+     id: Integer
+     name: Text
+     surname: Text
+     phone: Text
+     birthdate: Date
+     country: Text
+     house_number: Integer
+     postal_code: Text
+     town: Text
+     street: Text
+     */
+    
     int res = BaseModel::save("users", {
-        {"_id", {to_string(_id), "int"}},
+        {"id", {to_string(_id), "int"}},
         {"name", {_firstName, "string"}},
-        {"surname", {_lastName, "string"}}
+        {"surname", {_lastName, "string"}},
+        {"phone", {_phone, "string"}},
+        {"birthdate", {_birthDate.dateToDB(), "string"}},
+        {"country", {_address.getCountry(), "string"}},
+        {"house_number", {to_string(_address.getHouseNumber()), "int"}},
+        {"postal_code", {_address.getPostalCode(), "string"}},
+        {"town", {_address.getTown(), "string"}},
+        {"street", {_address.getStreetName(), "string"}}
     });
     
     if(_id == 0){
