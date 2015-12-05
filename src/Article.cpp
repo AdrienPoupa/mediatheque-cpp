@@ -2,8 +2,6 @@
 
 using namespace std;
 
-//set<Genre*>Article::_genres = set<Genre*>();
-
 Article::~Article()
 {
 

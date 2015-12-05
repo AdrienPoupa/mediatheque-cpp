@@ -6,15 +6,15 @@
  Table: books
  
  Columns:
- - id: INTEGER, 
- - borrowable: NUMERIC,
+ - id: INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+ - borrowable: BOOLEAN,
  - title: TEXT,
- - release: NUMERIC,
- - author: INTEGER,
+ - release: DATE,
+ - author: INTEGER REFERENCES artists (id),
  - editor: TEXT,
- - pages: TEXT,
- - genre1: INTEGER,
- - genre2: INTEGER
+ - pages: INTEGER,
+ - genre1: INTEGER REFERENCES genres (id),
+ - genre2: INTEGER REFERENCES genres (id)
  */
 
 Book::Book()

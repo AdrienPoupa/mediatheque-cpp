@@ -8,16 +8,16 @@ using namespace std;
  Table: users
  
  Columns:
- - id: Integer
- - name: Text
- - surname: Text
- - phone: Text
- - birthdate: Date
- - country: Text
- - house_number: Integer
- - postal_code: Text
- - town: Text
- - street: Text
+ - id: INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+ - name: TEXT NOT NULL,
+ - surname: TEXT NOT NULL,
+ - phone: TEXT,
+ - birthdate: DATE,
+ - country: TEXT,
+ - house_number: INTEGER,
+ - postal_code: TEXT,
+ - town: TEXT,
+ - street: TEXT
  
  */
 
@@ -83,7 +83,7 @@ bool User::save()
     });
     
     if(_id == 0){
-        _id = res;
+        _id = res["id"];
     }
     
     return (bool)res;
@@ -92,5 +92,4 @@ bool User::save()
 bool User::remove()
 {
     return BaseModel::remove("users", _id);
-    
 }

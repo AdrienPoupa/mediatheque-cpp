@@ -10,6 +10,8 @@
 #include "Person.hpp"
 
 class Artist: public Person {
+    
+    static std::string _dbTable;
     std::string _nationality;
 
     //std::set<Position*> _positions;

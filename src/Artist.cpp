@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Artist.hpp"
+#include "BaseModel.hpp"
 #include "Position.hpp"
 
 using namespace std;
@@ -11,12 +12,14 @@ using namespace std;
  Table: artists
  
  Columns:
- - id: INTEGER
+ - id: INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
  - name: TEXT,
  - surname: TEXT,
- - birthdate: NUMERIC,
+ - birthdate: DATE,
  - nationality: TEXT
  */
+
+string Artist::_dbTable = "artists";
 
 Artist::Artist(const std::string& firstName, const std::string& lastName, const std::string& nationality) :
     Person(firstName, lastName), _nationality(nationality)
@@ -26,20 +29,14 @@ Artist::Artist(const std::string& firstName, const std::string& lastName, const 
 
 Artist::Artist(int id) // Get a person from an ID provided by DB
 {
-    SQLite::Database    dbArtist("example.db3");
-
-    SQLite::Statement query(dbArtist, "SELECT name, surname, birthdate, nationality FROM artists WHERE id=?");
-    query.bind(1, id);
-
-    while (query.executeStep())
-    {
+    map<string, string> data = BaseModel::getById(_dbTable, id);
+    
+    if(!data.empty()){
         _id = id;
-        _firstName = query.getColumn(0).getText();
-        _lastName = query.getColumn(1).getText();
-        string birthDateTmp = query.getColumn(2).getText();
-        Date newDate(birthDateTmp);
-        _birthDate = newDate;
-        _nationality = query.getColumn(3).getText();
+        _firstName = data["name"];
+        _lastName = data["surname"];
+        _birthDate = Date(data["birthdate"]);
+        _nationality = data["nationality"];
     }
 }
 
@@ -93,80 +90,24 @@ std::istream& operator>>(std::istream& is, Artist& me)
 // DB method
 bool Artist::save()
 {
-    // Update
-    if (_id != 0) {
-        try
-        {
-            SQLite::Database    dbArtist("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
-             // Insert query
-            SQLite::Statement   query(dbArtist, "UPDATE artists SET name=?, surname=?, birthdate=?, nationality=? WHERE id=?");
-            query.bind(1, _firstName);
-            query.bind(2, _lastName);
-            query.bind(3, _birthDate.dateToDB());
-            query.bind(4, _nationality);
-            query.bind(5, (int) _id);
-            query.exec();
-
-            return true;
-        }
-        catch (std::exception& e)
-        {
-            std::cout << "SQLite exception: " << e.what() << std::endl;
-            return false;
-        }
+    int res = BaseModel::save(_dbTable, {
+        {"id", {to_string(_id), "int"}},
+        {"name", {_firstName, "string"}},
+        {"surname", {_lastName, "string"}},
+        {"birthdate", {_birthDate.dateToDB(), "string"}},
+        {"nationality", {_nationality, "string"}}
+    });
+    
+    if(_id == 0){
+        _id = res["id"];
     }
-    // Insert
-    else
-    {
-        try
-        {
-            SQLite::Database    dbArtist("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
-             // Insert query
-            SQLite::Statement   query(dbArtist, "INSERT INTO artists VALUES (?, ?, ?, ?, ?, ?)");
-            query.bind(2, _firstName);
-            query.bind(3, _lastName);
-            query.bind(4, _birthDate.dateToDB());
-            query.bind(5, _nationality);
-            query.exec();
-
-            // Update current ID
-            int tmp = dbArtist.execAndGet("SELECT last_insert_rowid();");
-            _id = tmp;
-
-            return true;
-        }
-        catch (std::exception& e)
-        {
-            std::cout << "SQLite exception: " << e.what() << std::endl;
-            return false;
-        }
-    }
+    
+    return (bool)res;
 }
 
 bool Artist::remove()
 {
-    // If the genre doesn't exist yet, we can't remove it
-    if (_id == 0) {
-        return false;
-    }
-
-    try
-    {
-        SQLite::Database    dbArtist("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
-         // Delete query
-        SQLite::Statement   query(dbArtist, "DELETE FROM artists WHERE id=?");
-        query.bind(1, (int) _id);
-        query.exec();
-
-        return true;
-    }
-    catch (std::exception& e)
-    {
-        std::cout << "SQLite exception: " << e.what() << std::endl;
-        return false;
-    }
-
-    return true;
+    return BaseModel::remove(_dbTable, _id);
 }
 
 Artist::~Artist()

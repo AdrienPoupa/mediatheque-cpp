@@ -6,16 +6,15 @@
  Table: dvds
  
  Columns:
- - id: INTEGER,
+ - id: INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
  - borrowable: BOOLEAN,
  - title: TEXT NOT NULL,
- - director: INTEGER,
+ - director: INTEGER REFERENCES artists (id),
  - release: DATE,
- - casting: INTEGER,
  - length: INTEGER (10),
  - studio: TEXT,
- - genre1: INTEGER,
- - genre2: INTEGER
+ - genre1: INTEGER REFERENCES genres (id),
+ - genre2: INTEGER REFERENCES genres (id)
  */
 
 Dvd::Dvd()

@@ -2,6 +2,21 @@
 
 using namespace std;
 
+/*
+ # Database Model
+ 
+ Table:
+ 
+ Columns:
+ - id: INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+ - article_id: INTEGER NOT NULL,
+ - borrower_id: INTEGER REFERENCES users (id) NOT NULL,
+ - type: INTEGER NOT NULL,
+ - date_borrowed: DATE,
+ - returned: BOOLEAN,
+ - date_returned: DATE
+ */
+
 Transaction::Transaction(Article *article, User user, Date beginning, Date finish) :
     _article(article), _user(user), _beginning(beginning), _finish(finish)
 {

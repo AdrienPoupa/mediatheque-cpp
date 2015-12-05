@@ -1,4 +1,5 @@
 #include "Genre.hpp"
+#include "BaseModel.hpp"
 
 using namespace std;
 
@@ -24,15 +25,11 @@ Genre::~Genre()
 
 Genre::Genre(int id)
 {
-    SQLite::Database    dbGenres("example.db3");
-
-    SQLite::Statement query(dbGenres, "SELECT genre FROM genres WHERE id=?");
-    query.bind(1, id);
-
-    while (query.executeStep())
-    {
+    map<string, string> data = BaseModel::getById("genres", id);
+    
+    if(!data.empty()){
         _id = id;
-        _name = query.getColumn(0).getText();
+        _name = data["genre"];
     }
 }
 
@@ -53,76 +50,21 @@ std::string Genre::getName() const
 
 bool Genre::save()
 {
-    // Update
-    if (_id != 0) {
-        try
-        {
-            SQLite::Database    dbGenres("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
-             // Insert query
-            SQLite::Statement   query(dbGenres, "UPDATE genres SET genre=? WHERE id=?");
-            query.bind(1, _name);
-            query.bind(2, (int) _id);
-            query.exec();
-
-            return true;
-        }
-        catch (std::exception& e)
-        {
-            std::cout << "SQLite exception: " << e.what() << std::endl;
-            return false;
-        }
+    int res = BaseModel::save("genres", {
+        {"id", {to_string(_id), "int"}},
+        {"genre", {_name, "string"}},
+    });
+    
+    if(_id == 0){
+        _id = res["id"];
     }
-    // Insert
-    else
-    {
-        try
-        {
-            SQLite::Database    dbGenres("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
-             // Insert query
-            SQLite::Statement   query(dbGenres, "INSERT INTO genres VALUES (?, ?)");
-            query.bind(2, _name);
-            query.exec();
-
-            // Update current ID
-            int tmp = dbGenres.execAndGet("SELECT last_insert_rowid();");
-            _id = tmp;
-
-            return true;
-        }
-        catch (std::exception& e)
-        {
-            std::cout << "SQLite exception: " << e.what() << std::endl;
-            return false;
-        }
-    }
-
-    return true;
+    
+    return (bool)res;
 }
 
 bool Genre::remove()
 {
-    // If the genre doesn't exist yet, we can't remove it
-    if (_id == 0) {
-        return false;
-    }
-
-    try
-    {
-        SQLite::Database    dbGenre("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
-         // Delete query
-        SQLite::Statement   query(dbGenre, "DELETE FROM genres WHERE id=?");
-        query.bind(1, (int) _id);
-        query.exec();
-
-        return true;
-    }
-    catch (std::exception& e)
-    {
-        std::cout << "SQLite exception: " << e.what() << std::endl;
-        return false;
-    }
-
-    return true;
+    return BaseModel::remove("genres", _id);
 }
 
 ostream& operator<< (ostream& stream, const Genre& genre)
