@@ -64,11 +64,6 @@ ostream& operator<< (ostream& stream, const Address& adresse)
     return stream;
 }
 
-string Address::addressDB()
-{
-    return to_string(_houseNumber) + ", " + _streetName + ", " + _postalCode + ",  " + _town + ", " + _country;
-}
-
 istream& operator>> (std::istream& stream, Address& adresse)
 {
 

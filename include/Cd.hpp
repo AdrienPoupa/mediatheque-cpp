@@ -7,6 +7,7 @@ class Cd : public Article
 {
     public:
         Cd();
+        Cd(int id);
         virtual ~Cd();
         std::string getStudio() const;
         void setStudio(const std::string& newStudio);

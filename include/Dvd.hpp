@@ -8,6 +8,7 @@ class Dvd : public Cd
 {
     public:
         Dvd();
+        Dvd(int id);
         virtual ~Dvd();
         std::set<Artist*> getCasting() const;
         void addCasting(Artist* artist);
@@ -16,7 +17,7 @@ class Dvd : public Cd
     protected:
         std::set<Artist*> _casting; // do not save
     private:
-        
+
 };
 
 #endif // DVD_H

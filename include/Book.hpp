@@ -14,6 +14,7 @@ protected:
     std::string _editor;
 public:
     Book();
+    Book(int id);
     ~Book();
 
     int getPages() const;

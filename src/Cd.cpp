@@ -5,6 +5,11 @@ Cd::Cd()
     //ctor
 }
 
+Cd::Cd(int id)
+{
+    //ctor
+}
+
 Cd::~Cd()
 {
     //dtor
