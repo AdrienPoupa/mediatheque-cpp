@@ -5,8 +5,8 @@
 #include "../sqlite/SQLiteCpp.h"
 #include "Article.hpp"
 #include "Book.hpp"
-#include "Cd.h"
-#include "Dvd.h"
+#include "Cd.hpp"
+#include "Dvd.hpp"
 #include "Date.hpp"
 #include "User.hpp"
 

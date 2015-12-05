@@ -69,7 +69,6 @@ int main()
     addPOTUS.setTown("Washington DC");
     addPOTUS.setStreetName("White House");
     //cout << addPOTUS;
-    cout << addPOTUS.addressDB() << endl;
 
     User POTUS("Obama", "Barack", dateDB, "911");
     POTUS.setAddress(addPOTUS);
