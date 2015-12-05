@@ -60,15 +60,16 @@ int main()
    cout << dateDB << endl;
    */
 
-   // Tests Artiste
+    // Tests Artiste
 
+    /*
     Date dateDB("1970-03-04");
 
     Address addPOTUS;
     addPOTUS.setCountry("USA");
     addPOTUS.setTown("Washington DC");
     addPOTUS.setStreetName("White House");
-    //cout << addPOTUS;
+    cout << addPOTUS;
 
     User POTUS("Obama", "Barack", dateDB, "911");
     POTUS.setAddress(addPOTUS);
@@ -78,7 +79,14 @@ int main()
     POTUS.setLastName("Jackson");
     POTUS.save();
     cout << POTUS;
-    //POTUS.remove();
+    cout << POTUS.remove();
+     */
+    
+    User test1(8);
+    cout << test1 << endl;
+    
+    User test2(900);
+    cout << test2 << endl;
 
 //    User userFromID(1);
 //    cout << userFromID << endl;

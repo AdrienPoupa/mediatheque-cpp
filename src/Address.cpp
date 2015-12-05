@@ -3,9 +3,9 @@
 
 using namespace std;
 
-Address::Address()
+Address::Address(const int& houseNumber, const std::string& streetName, const std::string& postalCode, const std::string& town, const std::string& country): _houseNumber(houseNumber), _streetName(streetName), _postalCode(postalCode), _town(town), _country(country)
 {
-
+    // empty
 }
 
 string Address::getCountry() const
