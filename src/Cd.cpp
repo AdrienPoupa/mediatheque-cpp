@@ -1,8 +1,3 @@
-#include "Cd.hpp"
-#include "BaseModel.hpp"
-
-using namespace std;
-
 /*
  # Database Model
  
@@ -19,6 +14,11 @@ using namespace std;
  - genre1: INTEGER REFERENCES genres (id),
  - genre2: INTEGER REFERENCES genres (id)
  */
+
+#include "Cd.hpp"
+#include "BaseModel.hpp"
+
+using namespace std;
 
 string Cd::_dbTable = "cds";
 

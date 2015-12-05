@@ -1,5 +1,3 @@
-#include "Dvd.hpp"
-
 /*
  # Database Model
  
@@ -17,6 +15,13 @@
  - genre2: INTEGER REFERENCES genres (id)
  */
 
+#include "Dvd.hpp"
+#include "BaseModel.hpp"
+
+using namespace std;
+
+string Dvd::_dbTable = "dvds";
+
 Dvd::Dvd()
 {
     //ctor
@@ -29,7 +34,17 @@ Dvd::~Dvd()
 
 Dvd::Dvd(int id)
 {
-    //ctor
+    map<string, string> data = BaseModel::getById(_dbTable, id);
+    
+    if(!data.empty()){
+        _id = id;
+        _authorId = stoi(data["author"]);
+        _title = data["title"];
+        _borrowable = data["borrowable"] != "0";
+        _release = Date(data["release"]);
+        _length = stoi(data["length"]);
+        _studio = data["studio"];
+    }
 }
 
 void Dvd::addCasting(Artist* artist)
@@ -40,31 +55,27 @@ void Dvd::addCasting(Artist* artist)
 
 bool Dvd::save()
 {
-    return true;
+    int res = BaseModel::save(_dbTable, {
+        {"id", {to_string(_id), "int"}},
+        {"artist", {to_string(_authorId), "int"}},
+        {"title", {_title, "string"}},
+        {"borrowable", {to_string(_borrowable), "boolean"}},
+        {"release", {_release.dateToDB(), "string"}},
+        {"length", {to_string(_length), "int"}},
+        {"studio", {_studio, "string"}}
+        // genres
+    });
+    
+    // save castings ...
+    
+    if(_id == 0){
+        _id = res["id"];
+    }
+    
+    return (bool)res;
 }
 
 bool Dvd::remove()
 {
-    // If the genre doesn't exist yet, we can't remove it
-    if (_id == 0) {
-        return false;
-    }
-
-    try
-    {
-        SQLite::Database    dbGenre("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
-         // Delete query
-        SQLite::Statement   query(dbGenre, "DELETE FROM dvds WHERE id=?");
-        query.bind(1, (int) _id);
-        query.exec();
-
-        return true;
-    }
-    catch (std::exception& e)
-    {
-        std::cout << "SQLite exception: " << e.what() << std::endl;
-        return false;
-    }
-
-    return true;
+    return BaseModel::remove(_dbTable, _id);
 }

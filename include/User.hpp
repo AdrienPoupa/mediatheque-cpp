@@ -15,6 +15,8 @@ class User: public Person {
         Address _address;
         std::set<Article*> _borrowed;
         std::string _phone;
+    
+        static std::string _dbTable;
 
     public:
         User(std::string firstName, std::string lastName, Date birthDate, std::string phone = "Inconnu");

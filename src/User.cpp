@@ -21,6 +21,8 @@ using namespace std;
  
  */
 
+string User::_dbTable = "users";
+
 User::User(std::string firstName, std::string lastName, Date birthDate, string phone):
     Person(firstName, lastName, birthDate), _phone(phone)
 {
@@ -29,7 +31,7 @@ User::User(std::string firstName, std::string lastName, Date birthDate, string p
 
 User::User(int id) // Get a person from an ID provided by DB
 {
-    map<string, string> data = BaseModel::getById("users", id);
+    map<string, string> data = BaseModel::getById(_dbTable, id);
     
     if(!data.empty()){
         _id = id;
@@ -69,7 +71,7 @@ void User::setAddress(Address address)
 bool User::save()
 {
     
-    int res = BaseModel::save("users", {
+    int res = BaseModel::save(_dbTable, {
         {"id", {to_string(_id), "int"}},
         {"name", {_firstName, "string"}},
         {"surname", {_lastName, "string"}},
@@ -91,5 +93,5 @@ bool User::save()
 
 bool User::remove()
 {
-    return BaseModel::remove("users", _id);
+    return BaseModel::remove(_dbTable, _id);
 }
