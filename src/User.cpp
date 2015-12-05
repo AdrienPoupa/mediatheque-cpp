@@ -6,7 +6,7 @@ using namespace std;
 
 /* Database Model
  Table: users
- 
+
  Columns:
  - id: INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
  - name: TEXT NOT NULL,
@@ -18,7 +18,7 @@ using namespace std;
  - postal_code: TEXT,
  - town: TEXT,
  - street: TEXT
- 
+
  */
 
 string User::_dbTable = "users";
@@ -32,7 +32,7 @@ User::User(std::string firstName, std::string lastName, Date birthDate, string p
 User::User(int id) // Get a person from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
-    
+
     if(!data.empty()){
         _id = id;
         _firstName = data["name"];
@@ -70,7 +70,7 @@ void User::setAddress(Address address)
 
 bool User::save()
 {
-    
+
     int res = BaseModel::save(_dbTable, {
         {"id", {to_string(_id), "int"}},
         {"name", {_firstName, "string"}},
@@ -83,11 +83,11 @@ bool User::save()
         {"town", {_address.getTown(), "string"}},
         {"street", {_address.getStreetName(), "string"}}
     });
-    
+
     if(_id == 0){
         _id = res["id"];
     }
-    
+
     return (bool)res;
 }
 

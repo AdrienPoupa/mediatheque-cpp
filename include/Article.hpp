@@ -19,7 +19,7 @@ protected:
     std::set<Genre*> _genres; // do not save
     Date _release; // save
     std::string _title; // save
-   
+
     //std::map<int, std::string> _content;
 
 public:
@@ -40,7 +40,7 @@ public:
 
     virtual bool save() = 0;
     virtual bool remove() = 0;
-    
+
 };
 
 #endif /* Article_hpp */

@@ -18,8 +18,9 @@ class Transaction {
         Date _beginning, _finish;
         int _id = 0;
         std::string _type = "Book";
+        static std::string _dbTable;
     public:
-        Transaction(Article *article, User user, Date beginning, Date finish);
+        Transaction(Article *article, std::string type, User user, Date beginning, Date finish);
         //Transaction(unsigned int id);
         virtual ~Transaction();
 

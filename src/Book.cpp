@@ -1,10 +1,10 @@
 #include "Book.hpp"
 
-/* 
+/*
  # Database Model
- 
+
  Table: books
- 
+
  Columns:
  - id: INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
  - borrowable: BOOLEAN,
@@ -17,6 +17,10 @@
  - genre2: INTEGER REFERENCES genres (id)
  */
 
+using namespace std;
+
+string Book::_dbTable = "books";
+
 Book::Book()
 {
 
@@ -24,7 +28,18 @@ Book::Book()
 
 Book::Book(int id)
 {
+    map<string, string> data = BaseModel::getById(_dbTable, id);
 
+    if(!data.empty()){
+        _id = id;
+        _borrowable = data["borrowable"] != "0";
+        _title = data["title"];
+        _release = Date(data["release"]);
+        _authorId = stoi(data["author"]);
+        _editor = data["editor"];
+        _pages = stoi(data["pages"]);
+        // TODO: genres
+    }
 }
 
 Book::~Book()
@@ -42,12 +57,12 @@ void Book::setPages(const int& pages)
     _pages = pages;
 }
 
-std::string Book::getEditor() const
+string Book::getEditor() const
 {
     return _editor;
 }
 
-void Book::setEditor(const std::string& editor)
+void Book::setEditor(const string& editor)
 {
     _editor = editor;
 }
@@ -59,26 +74,5 @@ bool Book::save()
 
 bool Book::remove()
 {
-    // If the genre doesn't exist yet, we can't remove it
-    if (_id == 0) {
-        return false;
-    }
-
-    try
-    {
-        SQLite::Database    dbGenre("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
-         // Delete query
-        SQLite::Statement   query(dbGenre, "DELETE FROM books WHERE id=?");
-        query.bind(1, (int) _id);
-        query.exec();
-
-        return true;
-    }
-    catch (std::exception& e)
-    {
-        std::cout << "SQLite exception: " << e.what() << std::endl;
-        return false;
-    }
-
-    return true;
+    return BaseModel::remove(_dbTable, _id);
 }

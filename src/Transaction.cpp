@@ -2,11 +2,13 @@
 
 using namespace std;
 
+string Transaction::_dbTable = "transactions";
+
 /*
  # Database Model
- 
+
  Table:
- 
+
  Columns:
  - id: INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
  - article_id: INTEGER NOT NULL,
@@ -17,15 +19,15 @@ using namespace std;
  - date_returned: DATE
  */
 
-Transaction::Transaction(Article *article, User user, Date beginning, Date finish) :
-    _article(article), _user(user), _beginning(beginning), _finish(finish)
+Transaction::Transaction(Article *article, string type, User user, Date beginning, Date finish) :
+    _article(article), _type(type), _user(user), _beginning(beginning), _finish(finish)
 {
 
 }
 
 /*Transaction::Transaction(unsigned int id)
 {
-    SQLite::Database    dbTransaction("example.db3");
+    SQLite::Database    dbTransaction("mediatheque.db3");
 
     SQLite::Statement query(dbTransaction, "SELECT article_id, borrower, date, returned, date_returned FROM transactions WHERE id=?");
     query.bind(1, id);
@@ -169,28 +171,7 @@ bool Transaction::save()
 
 bool Transaction::remove()
 {
-    // If the genre doesn't exist yet, we can't remove it
-    if (_id == 0) {
-        return false;
-    }
-
-    try
-    {
-        SQLite::Database    dbTransaction("example.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
-         // Delete query
-        SQLite::Statement   query(dbTransaction, "DELETE FROM transactions WHERE id=?");
-        query.bind(1, (int) _id);
-        query.exec();
-
-        return true;
-    }
-    catch (std::exception& e)
-    {
-        std::cout << "SQLite exception: " << e.what() << std::endl;
-        return false;
-    }
-
-    return true;
+    return BaseModel::remove(_dbTable, _id);
 }
 
 std::ostream& operator<<(std::ostream& os, const Transaction& transaction)
