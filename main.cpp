@@ -5,11 +5,15 @@
 
 #include "sqlite/SQLiteCpp.h"
 #include "BaseModel.hpp"
+#include "Book.hpp"
+#include "Cd.hpp"
+#include "Dvd.hpp"
 #include "Date.hpp"
 #include "Address.hpp"
 #include "Artist.hpp"
 #include "User.hpp"
-#include "Genre.hpp"
+#include "User.hpp"
+#include "Transaction.hpp"
 
 using namespace std;
 
@@ -73,7 +77,7 @@ int main()
 
     User POTUS("Obama", "Barack", dateDB, "911");
     POTUS.setAddress(addPOTUS);
-    
+
     POTUS.save();
     cout << POTUS;
     POTUS.setLastName("Jackson");
@@ -81,10 +85,10 @@ int main()
     cout << POTUS;
     cout << POTUS.remove();
      */
-    
+
     User test1(8);
     cout << test1 << endl;
-    
+
     User test2(900);
     cout << test2 << endl;
 
@@ -131,5 +135,11 @@ int main()
     test.setCountry("France");
     POTUS.setAddress(test);
     POTUS.save();*/
+
+    Book *GoT = new Book(1);
+    User POTUS(8);
+    std::string type = "book";
+    Transaction testT(GoT, type, POTUS, Date("2015-12-05"), Date("2015-12-15"));
+    std::cout << testT;
 
 }

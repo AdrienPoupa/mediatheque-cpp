@@ -176,7 +176,7 @@ bool Transaction::remove()
 
 std::ostream& operator<<(std::ostream& os, const Transaction& transaction)
 {
-    os << "Transaction #" << transaction._id << " : Article  " << transaction._article << " emprunte par " << transaction._user << " le " << transaction._beginning << endl;
+    os << "Transaction #" << transaction._id << " : Article  " << transaction._article->getTitle() << " emprunte par " << transaction._user << " le " << transaction._beginning << " a rendre le "  << transaction._finish << endl;
     return os;
 }
 

@@ -14,10 +14,10 @@
 class Transaction {
     private:
         Article *_article;
+        std::string _type = "Book";
         User _user;
         Date _beginning, _finish;
         int _id = 0;
-        std::string _type = "Book";
         static std::string _dbTable;
     public:
         Transaction(Article *article, std::string type, User user, Date beginning, Date finish);
