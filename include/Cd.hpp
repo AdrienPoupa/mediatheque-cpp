@@ -1,5 +1,5 @@
-#ifndef CD_H
-#define CD_H
+#ifndef CD_HPP
+#define CD_HPP
 
 #include "Article.hpp"
 
@@ -21,4 +21,4 @@ class Cd : public Article
     private:
 };
 
-#endif // CD_H
+#endif // CD_HPP
