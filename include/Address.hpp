@@ -30,8 +30,6 @@ public:
     std::string getStreetName() const;
     void setStreetName(const std::string& rue );
 
-    std::string addressDB();
-
     friend std::ostream& operator<< (std::ostream& stream, const Address& adresse);
     friend std::istream& operator>> (std::istream& stream, Address& addresse);
 };
