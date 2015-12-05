@@ -10,7 +10,11 @@
 #define Transaction_hpp
 
 #include <stdio.h>
+#include "../sqlite/SQLiteCpp.h"
 #include "Article.hpp"
+#include "Book.hpp"
+#include "Cd.h"
+#include "Dvd.h"
 #include "Date.hpp"
 #include "User.hpp"
 
@@ -22,11 +26,12 @@ class Transaction {
         int _id = 0;
     public:
         Transaction(Article *article, User user, Date beginning, Date finish);
+        //Transaction(unsigned int id);
         virtual ~Transaction();
 
-        void getCurrentTransactions();
-        void getAllTransactions();
-        void getTransactions(int day = 0, int month = 0, int year = 0);
+        void displayCurrentTransactions();
+        void displayAllTransactions();
+        void displayTransactions(int day = 0, int month = 0, int year = 0);
         //Transaction getTransaction(int id);
 
         bool save();
