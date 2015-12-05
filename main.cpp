@@ -138,8 +138,11 @@ int main()
 
     Book *GoT = new Book(1);
     User POTUS(8);
-    std::string type = "book";
+    string type = "book";
     Transaction testT(GoT, type, POTUS, Date("2015-12-05"), Date("2015-12-15"));
-    std::cout << testT;
+    cout << testT;
+    //testT.save();
+    Transaction::displayTransactions("current");
+    Transaction::displayTransactions();
 
 }

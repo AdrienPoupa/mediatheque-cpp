@@ -39,9 +39,8 @@ class Transaction {
         std::string getType() const;
         void setType(std::string const type);
 
-        void displayCurrentTransactions();
-        void displayAllTransactions();
-        void displayTransactions(int day = 0, int month = 0, int year = 0);
+        static void displayCurrentTransactions();
+        static void displayTransactions(std::string current = "current", int day_borrowed = 0, int month_borrowed = 0, int year_borrowed = 0, int day_returned = 0, int month_returned = 0, int year_returned = 0);
         //Transaction getTransaction(int id);
 
         bool save();

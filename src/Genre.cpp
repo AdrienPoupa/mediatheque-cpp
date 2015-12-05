@@ -5,9 +5,9 @@ using namespace std;
 
 /*
  # Database Model
- 
+
  Table: genres
- 
+
  Columns:
  - id: INTEGER,
  - genre: TEXT
@@ -26,7 +26,7 @@ Genre::~Genre()
 Genre::Genre(int id)
 {
     map<string, string> data = BaseModel::getById("genres", id);
-    
+
     if(!data.empty()){
         _id = id;
         _name = data["genre"];
@@ -54,12 +54,12 @@ bool Genre::save()
         {"id", {to_string(_id), "int"}},
         {"genre", {_name, "string"}},
     });
-    
+
     if(_id == 0){
         _id = res["id"];
     }
-    
-    return (bool)res;
+
+    return (bool) res;
 }
 
 bool Genre::remove()

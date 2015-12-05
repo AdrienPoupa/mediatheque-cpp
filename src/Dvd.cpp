@@ -1,8 +1,8 @@
 /*
  # Database Model
- 
+
  Table: dvds
- 
+
  Columns:
  - id: INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
  - borrowable: BOOLEAN,
@@ -35,7 +35,7 @@ Dvd::~Dvd()
 Dvd::Dvd(int id)
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
-    
+
     if(!data.empty()){
         _id = id;
         _authorId = stoi(data["author"]);
@@ -65,14 +65,14 @@ bool Dvd::save()
         {"studio", {_studio, "string"}}
         // genres
     });
-    
-    // save castings ...
-    
+
+    // TODO: save castings ...
+
     if(_id == 0){
         _id = res["id"];
     }
-    
-    return (bool)res;
+
+    return (bool) res;
 }
 
 bool Dvd::remove()

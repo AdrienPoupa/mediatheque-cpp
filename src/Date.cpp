@@ -105,7 +105,7 @@ ostream& operator<< (ostream& stream, const Date& date)
     "Mai", "Juin", "Juillet", "Aout", "Septembre",
     "Octobre", "Novembre", "Decembre"};
 
-    cout << date._day << ' ' << name[date._month] << ' ' << date._year << endl;
+    cout << date._day << ' ' << name[date._month] << ' ' << date._year;
 
     return stream;
 }

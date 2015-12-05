@@ -86,21 +86,24 @@ void Transaction::setId(const unsigned int id)
     _id = id;
 }
 
-std::string Transaction::getType() const
+string Transaction::getType() const
 {
     return _type;
 }
 
-void Transaction::setType(std::string const type)
+void Transaction::setType(string const type)
 {
     _type = type;
 }
 
-void Transaction::displayCurrentTransactions()
+// TODO: day/month/year
+void Transaction::displayTransactions(string current, int day_borrowed, int month_borrowed, int year_borrowed, int day_returned, int month_returned, int year_returned)
 {
-    SQLite::Database    dbTransaction("example.db3");
+    string condition = (current == "current") ? "AND returned=0" : "";
 
-    SQLite::Statement query(dbTransaction, "SELECT id, article_id, type, borrower, date, returned, date_returned FROM transactions WHERE returned=0");
+    SQLite::Database    dbTransaction("mediatheque.db3");
+
+    SQLite::Statement query(dbTransaction, "SELECT id, article_id, type, borrower_id, date_borrowed, date_returned, returned FROM transactions WHERE id!=0 "+condition);
 
     while (query.executeStep())
     {
@@ -125,22 +128,15 @@ void Transaction::displayCurrentTransactions()
         int _userTmp = query.getColumn(3).getInt();
         User borrower(_userTmp);
         string dateTmp = query.getColumn(4).getText();
-        Date newDate(dateTmp);
-        //int returned = query.getColumn(5).getInt();
-        string date2Tmp = query.getColumn(6).getText();
-        Date newDate2(date2Tmp);
-        cout << "Transaction #" << id << " : Article " << article << " emprunte par " << borrower << " le " << newDate << endl;
+        Date beginning(dateTmp);
+        string date2Tmp = query.getColumn(5).getText();
+        Date finish(date2Tmp);
+        int returned = query.getColumn(6).getInt();
+
+        cout << "Transaction #" << id << " : Article  " << article->getTitle() << " emprunte par " << borrower << " le " << beginning << " a rendre le "  << finish << " ";
+        (returned == 0) ? cout << "pas encore rendu" : cout << "rendu";
+        cout << endl;
     }
-}
-
-void Transaction::displayAllTransactions()
-{
-
-}
-
-void Transaction::displayTransactions(int day, int month, int year)
-{
-
 }
 
 /*
@@ -174,13 +170,13 @@ bool Transaction::remove()
     return BaseModel::remove(_dbTable, _id);
 }
 
-std::ostream& operator<<(std::ostream& os, const Transaction& transaction)
+ostream& operator<<(ostream& os, const Transaction& transaction)
 {
     os << "Transaction #" << transaction._id << " : Article  " << transaction._article->getTitle() << " emprunte par " << transaction._user << " le " << transaction._beginning << " a rendre le "  << transaction._finish << endl;
     return os;
 }
 
-std::istream& operator>>(std::istream& is, Transaction& transaction)
+istream& operator>>(istream& is, Transaction& transaction)
 {
     cout << "Saisie d'une transaction" << endl;
     cout << "Utilisateur emprunteur:" << endl;

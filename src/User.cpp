@@ -70,7 +70,6 @@ void User::setAddress(Address address)
 
 bool User::save()
 {
-
     int res = BaseModel::save(_dbTable, {
         {"id", {to_string(_id), "int"}},
         {"name", {_firstName, "string"}},
@@ -88,7 +87,7 @@ bool User::save()
         _id = res["id"];
     }
 
-    return (bool)res;
+    return (bool) res;
 }
 
 bool User::remove()

@@ -69,7 +69,22 @@ void Book::setEditor(const string& editor)
 
 bool Book::save()
 {
-    return true;
+    int res = BaseModel::save(_dbTable, {
+        {"id", {to_string(_id), "int"}},
+        {"borrowable", {to_string(_borrowable), "boolean"}},
+        {"title", {_title, "string"}},
+        {"release", {_release.dateToDB(), "string"}},
+        {"author", {to_string(_authorId), "int"}},
+        {"editor", {_editor, "string"}},
+        {"pages", {to_string(_pages), "int"}},
+        // TODO: genres
+    });
+
+    if(_id == 0){
+        _id = res["id"];
+    }
+
+    return (bool) res;
 }
 
 bool Book::remove()

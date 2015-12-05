@@ -31,8 +31,8 @@ map<string, string> BaseModel::getById(const string& table, const int& id){
 
         return data;
 
-    } catch (std::exception& e) {
-        std::cout << "exception: " << e.what() << std::endl;
+    } catch (exception& e) {
+        cout << "exception: " << e.what() << endl;
         return data;
     }
 }
@@ -91,9 +91,9 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
 
             return true;
         }
-        catch (std::exception& e)
+        catch (exception& e)
         {
-            std::cout << "SQLite exception: " << e.what() << std::endl;
+            cout << "SQLite exception: " << e.what() << endl;
             return false;
         }
     }
@@ -151,15 +151,15 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
             int tmp = db.execAndGet("SELECT last_insert_rowid();");
             return tmp;
         }
-        catch (std::exception& e)
+        catch (exception& e)
         {
-            std::cout << "SQLite exception: " << e.what() << std::endl;
+            cout << "SQLite exception: " << e.what() << endl;
             return false;
         }
     }
 }
 
-bool BaseModel::remove(const std::string& table, const int& id){
+bool BaseModel::remove(const string& table, const int& id){
 
     // We cannot delete a non-existing field
     if(id == 0){
@@ -176,9 +176,9 @@ bool BaseModel::remove(const std::string& table, const int& id){
 
         return true;
     }
-    catch (std::exception& e)
+    catch (exception& e)
     {
-        std::cout << "SQLite exception: " << e.what() << std::endl;
+        cout << "SQLite exception: " << e.what() << endl;
         return false;
     }
     return true;
