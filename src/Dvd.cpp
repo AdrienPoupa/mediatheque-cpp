@@ -10,6 +10,11 @@ Dvd::~Dvd()
     //dtor
 }
 
+Dvd::Dvd(int id)
+{
+    //ctor
+}
+
 void Dvd::addCasting(Artist* artist)
 {
     _casting.insert(artist);

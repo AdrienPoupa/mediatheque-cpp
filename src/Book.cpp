@@ -13,6 +13,11 @@ Book::Book()
 
 }
 
+Book::Book(int id)
+{
+
+}
+
 Book::~Book()
 {
 
