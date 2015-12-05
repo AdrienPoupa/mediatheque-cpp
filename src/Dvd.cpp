@@ -1,5 +1,23 @@
 #include "Dvd.hpp"
 
+/*
+ # Database Model
+ 
+ Table: dvds
+ 
+ Columns:
+ - id: INTEGER,
+ - borrowable: BOOLEAN,
+ - title: TEXT NOT NULL,
+ - director: INTEGER,
+ - release: DATE,
+ - casting: INTEGER,
+ - length: INTEGER (10),
+ - studio: TEXT,
+ - genre1: INTEGER,
+ - genre2: INTEGER
+ */
+
 Dvd::Dvd()
 {
     //ctor

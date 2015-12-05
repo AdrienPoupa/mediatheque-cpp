@@ -5,6 +5,19 @@
 
 using namespace std;
 
+/*
+ # Database Model
+ 
+ Table: artists
+ 
+ Columns:
+ - id: INTEGER
+ - name: TEXT,
+ - surname: TEXT,
+ - birthdate: NUMERIC,
+ - nationality: TEXT
+ */
+
 Artist::Artist(const std::string& firstName, const std::string& lastName, const std::string& nationality) :
     Person(firstName, lastName), _nationality(nationality)
 {

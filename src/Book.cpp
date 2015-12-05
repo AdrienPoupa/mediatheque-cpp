@@ -1,5 +1,22 @@
 #include "Book.hpp"
 
+/* 
+ # Database Model
+ 
+ Table: books
+ 
+ Columns:
+ - id: INTEGER, 
+ - borrowable: NUMERIC,
+ - title: TEXT,
+ - release: NUMERIC,
+ - author: INTEGER,
+ - editor: TEXT,
+ - pages: TEXT,
+ - genre1: INTEGER,
+ - genre2: INTEGER
+ */
+
 Book::Book()
 {
 

@@ -4,6 +4,23 @@
 
 using namespace std;
 
+/* Database Model
+ Table: users
+ 
+ Columns:
+ - id: Integer
+ - name: Text
+ - surname: Text
+ - phone: Text
+ - birthdate: Date
+ - country: Text
+ - house_number: Integer
+ - postal_code: Text
+ - town: Text
+ - street: Text
+ 
+ */
+
 User::User(std::string firstName, std::string lastName, Date birthDate, string phone):
     Person(firstName, lastName, birthDate), _phone(phone)
 {
@@ -51,18 +68,6 @@ void User::setAddress(Address address)
 
 bool User::save()
 {
-    /*
-     id: Integer
-     name: Text
-     surname: Text
-     phone: Text
-     birthdate: Date
-     country: Text
-     house_number: Integer
-     postal_code: Text
-     town: Text
-     street: Text
-     */
     
     int res = BaseModel::save("users", {
         {"id", {to_string(_id), "int"}},

@@ -2,6 +2,16 @@
 
 using namespace std;
 
+/*
+ # Database Model
+ 
+ Table: genres
+ 
+ Columns:
+ - id: INTEGER,
+ - genre: TEXT
+ */
+
 Genre::Genre(const std::string name) : _name(name)
 {
 
