@@ -95,8 +95,21 @@ Transaction Transaction::displayTransaction(int id)
 
 bool Transaction::save()
 {
-    // TODO
-    return true;
+    int res = BaseModel::save("transactions", {
+        {"id", {to_string(_id), "int"}},
+        {"article_id", {to_string(_article->getId()), "int"}},
+        {"borrower_id", {to_string(_user.getId()), "int"}},
+        {"type", {_type, "string"}},
+        {"date_borrowed", {_beginning.dateToDB(), "string"}},
+        {"returned", {to_string(0), "int"}},
+        {"date_returned", {_finish.dateToDB(), "string"}},
+    });
+
+    if(_id == 0){
+        _id = res;
+    }
+
+    return (bool)res;
 }
 
 bool Transaction::remove()
