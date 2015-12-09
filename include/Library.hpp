@@ -1,6 +1,7 @@
 #ifndef Library_hpp
 #define Library_hpp
 
+#include <iostream>
 #include <stdio.h>
 #include <set>
 
@@ -10,11 +11,11 @@
 class Library {
     std::set<Article*> _articleSet;
     std::set<Person*> _personSet;
-    
+
 public:
     Library();
     ~Library();
-    
+
 };
 
 #endif /* Library_hpp */

@@ -6,9 +6,13 @@
 
 #include <string>
 
+#include "BaseModel.hpp"
+#include "Artist.hpp"
 #include "Article.hpp"
 
 class Book : public Article {
+private:
+    static std::string _dbTable;
 protected:
     int _pages;
     std::string _editor;

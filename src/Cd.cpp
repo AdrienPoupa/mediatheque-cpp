@@ -1,8 +1,8 @@
 /*
  # Database Model
- 
+
  Table: cds
- 
+
  Columns:
  - id: INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
  - artist: INTEGER REFERENCES artists (id),
@@ -30,7 +30,7 @@ Cd::Cd()
 Cd::Cd(int id)
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
-    
+
     if(!data.empty()){
         _id = id;
         _authorId = stoi(data["author"]);
@@ -49,7 +49,6 @@ Cd::~Cd()
 
 bool Cd::save()
 {
-
     int res = BaseModel::save(_dbTable, {
         {"id", {to_string(_id), "int"}},
         {"artist", {to_string(_authorId), "int"}},
@@ -58,14 +57,14 @@ bool Cd::save()
         {"release", {_release.dateToDB(), "string"}},
         {"length", {to_string(_length), "int"}},
         {"studio", {_studio, "string"}}
-        // genres
+        // TODO: genres
     });
-    
+
     if(_id == 0){
         _id = res["id"];
     }
-    
-    return (bool)res;
+
+    return (bool) res;
 }
 
 bool Cd::remove()
