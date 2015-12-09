@@ -5,11 +5,16 @@
 
 #include "sqlite/SQLiteCpp.h"
 #include "BaseModel.hpp"
+#include "Book.hpp"
+#include "Cd.hpp"
+#include "Dvd.hpp"
 #include "Date.hpp"
 #include "Address.hpp"
 #include "Artist.hpp"
 #include "User.hpp"
-#include "Genre.hpp"
+#include "User.hpp"
+#include "Transaction.hpp"
+#include "sha256.h"
 
 using namespace std;
 
@@ -73,7 +78,7 @@ int main()
 
     User POTUS("Obama", "Barack", dateDB, "911");
     POTUS.setAddress(addPOTUS);
-    
+
     POTUS.save();
     cout << POTUS;
     POTUS.setLastName("Jackson");
@@ -81,12 +86,12 @@ int main()
     cout << POTUS;
     cout << POTUS.remove();
      */
-    
-    User test1(8);
+
+    /*User test1(8);
     cout << test1 << endl;
-    
+
     User test2(900);
-    cout << test2 << endl;
+    cout << test2 << endl;*/
 
 //    User userFromID(1);
 //    cout << userFromID << endl;
@@ -132,4 +137,23 @@ int main()
     POTUS.setAddress(test);
     POTUS.save();*/
 
+    /*Book *GoT = new Book(1);
+    User POTUS(8);
+    string type = "book";
+    Transaction testT(GoT, type, POTUS, Date("2015-12-05"), Date("2015-12-15"));
+    cout << testT;
+    //testT.save();
+    Transaction::displayTransactions("current");
+    Transaction::displayTransactions();
+
+    string input = "grape";
+    string output1 = sha256(input);
+
+    cout << "sha256('"<< input << "'):" << output1 << endl;*/
+
+    User POTUS(8);
+    POTUS.setPassword("president");
+    cout << POTUS.checkPassword("bad_pwd") << endl;
+    cout << POTUS.checkPassword("president") << endl;
+    POTUS.save();
 }
