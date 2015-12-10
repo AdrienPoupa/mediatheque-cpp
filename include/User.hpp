@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <set>
+#include <iostream>
 
 #include "Article.hpp"
 #include "Address.hpp"
@@ -23,6 +24,7 @@ class User: public Person {
     public:
         User(std::string firstName, std::string lastName, Date birthDate,
              std::string phone = "Inconnu", int _isAdmin = 0, int _quota = 1, std::string password = "");
+        User();
         ~User();
         User(int id); // Get a person from an ID provided by DB
 
@@ -43,6 +45,9 @@ class User: public Person {
 
         bool save();
         bool remove();
+
+        friend std::ostream& operator<< (std::ostream& stream, const User& user);
+        friend std::istream& operator>> (std::istream& stream, User& user);
 };
 
 #endif /* User_hpp */

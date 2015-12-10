@@ -151,13 +151,16 @@ int main()
 
     cout << "sha256('"<< input << "'):" << output1 << endl;*/
 
-    User POTUS(8);
+    /*User POTUS(8);
     POTUS.setPassword("president");
     cout << POTUS.checkPassword("bad_pwd") << endl;
     cout << POTUS.checkPassword("president") << endl;
     POTUS.setAdmin(1);
     POTUS.setQuota(10);
-    POTUS.save();
+    POTUS.save();*/
 
-    // TODO: cin&cout User
+    User toBeInserted;
+    cin >> toBeInserted;
+    cout << toBeInserted;
+    //toBeInserted.save();
 }

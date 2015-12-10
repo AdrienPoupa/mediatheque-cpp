@@ -30,6 +30,17 @@ User::User(std::string firstName, std::string lastName, Date birthDate, string p
 
 }
 
+User::User()
+{
+    _firstName = "John";
+    _lastName = "Doe";
+
+    Date mock(1, 1, 1);
+    _birthDate = mock;
+
+    _phone = "Inconnu";
+}
+
 User::User(int id) // Get a person from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
@@ -135,4 +146,43 @@ bool User::save()
 bool User::remove()
 {
     return BaseModel::remove(_dbTable, _id);
+}
+
+ostream& operator<< (ostream& stream, const User& user)
+{
+    stream << "ID #" << user._id << " " << user._firstName << " " << user._lastName << endl;
+    stream << "Anniversaire: " << user._birthDate << endl;
+    stream << "Telephone: " << user._phone << endl;
+    stream << "Adresse: " << user._address << endl;
+    stream << "Est admin: " << user._isAdmin << endl;
+    stream << "Nombre d'emprunts simultanes: " << user._quota << endl;
+
+    return stream;
+}
+
+istream& operator>> (istream& stream, User& user)
+{
+    string passwordTmp;
+
+    cout << "Saisie d'un user" << endl;
+    cout << "Saisie du prenom" << endl;
+    stream >> user._firstName;
+    cout << "Saisie du nom" << endl;
+    stream >> user._lastName;
+    cout << "Saisie de l'anniversaire" << endl;
+    stream >> user._birthDate;
+    cout << "Saisie du telephone" << endl;
+    stream >> user._phone;
+    stream >> user._address;
+    cout << "Saisie du mot de passe" << endl;
+    stream >> passwordTmp;
+    cout << "Tapez 1 si l'utilisateur est administrateur, 0 sinon" << endl;
+    stream >> user._isAdmin;
+    cout << "Saisie du nombre d'emprunts simultanes" << endl;
+    stream >> user._quota;
+
+    // Insert the hashed password
+    user._password = sha256(passwordTmp);
+
+    return stream;
 }

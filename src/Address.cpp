@@ -60,7 +60,7 @@ void Address::setStreetName(const string& rue)
 
 ostream& operator<< (ostream& stream, const Address& adresse)
 {
-    stream << adresse._houseNumber << endl << adresse._streetName << endl << adresse._postalCode << endl << adresse._town << endl << adresse._country << endl ;
+    stream << adresse._houseNumber << endl << adresse._streetName << endl << adresse._postalCode << endl << adresse._town << endl << adresse._country;
     return stream;
 }
 
@@ -78,7 +78,7 @@ istream& operator>> (std::istream& stream, Address& adresse)
     cout <<"Ville : ";
     stream>> adresse._town ;
     cout << "Pays : ";
-    stream >> adresse._country ;
+    stream >> adresse._country;
 
     return stream;
 
