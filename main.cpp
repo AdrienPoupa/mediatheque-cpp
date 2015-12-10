@@ -15,6 +15,7 @@
 #include "User.hpp"
 #include "Transaction.hpp"
 #include "sha256.h"
+#include "Library.hpp"
 
 using namespace std;
 
@@ -159,8 +160,12 @@ int main()
     POTUS.setQuota(10);
     POTUS.save();*/
 
-    User toBeInserted;
+    /*User toBeInserted;
     cin >> toBeInserted;
-    cout << toBeInserted;
+    cout << toBeInserted;*/
     //toBeInserted.save();
+
+    Library *l = Library::getSingleton();
+    Library *l2 = Library::getSingleton();
+    l->open();
 }

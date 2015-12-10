@@ -6,11 +6,8 @@
 #include <string>
 
 class Address {
-    std::string _country;
-    unsigned int _houseNumber = 30;
-    std::string _postalCode ;// à cause de la corse et des départements commencant par 0
-    std::string _streetName;
-    std::string _town;
+    unsigned int _houseNumber;
+    std::string _streetName, _postalCode, _town, _country;
 
 public:
     Address(const int& houseNumber = 30, const std::string& streetName = "Avenue de la Republique", const std::string& postalCode = "94800", const std::string& town = "Villejuif", const std::string& country = "France");

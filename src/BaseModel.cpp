@@ -8,7 +8,8 @@ map<string, string> BaseModel::getById(const string& table, const int& id){
 
     map<string, string> data = map<string, string>();
 
-    try {
+    try
+    {
         SQLite::Database db("mediatheque.db3");
 
         SQLite::Statement query(db, "SELECT * FROM " + table + " WHERE id=?");
@@ -23,11 +24,32 @@ map<string, string> BaseModel::getById(const string& table, const int& id){
             }
         }
 
-        /*
-         for(auto const& elem: data){
-         cout << elem.first << ":" << elem.second << endl;
-         }
-         */
+        return data;
+
+    } catch (exception& e) {
+        cout << "exception: " << e.what() << endl;
+        return data;
+    }
+}
+
+map<int, map<string, string>> BaseModel::select(const string& table, const string& fields){
+
+    map<int, map<string, string>> data = map<int, map<string, string>>();
+
+    try
+    {
+        SQLite::Database db("mediatheque.db3");
+
+        SQLite::Statement query(db, "SELECT " + fields + " FROM " + table);
+
+        int resultCount = 0;
+        while (query.executeStep())
+        {
+            resultCount++;
+            for(int i = 0; i < query.getColumnCount(); i ++){
+                data[resultCount].insert({query.getColumnName(i), query.getColumn(i).getText()});
+            }
+        }
 
         return data;
 
