@@ -24,8 +24,8 @@ using namespace std;
 
 string User::_dbTable = "users";
 
-User::User(std::string firstName, std::string lastName, Date birthDate, string phone, string password):
-    Person(firstName, lastName, birthDate), _phone(phone), _password(password)
+User::User(std::string firstName, std::string lastName, Date birthDate, string phone, int isAdmin, int quota, string password):
+    Person(firstName, lastName, birthDate), _phone(phone), _isAdmin(isAdmin), _quota(quota), _password(password)
 {
 
 }
@@ -41,6 +41,8 @@ User::User(int id) // Get a person from an ID provided by DB
         _birthDate = data["birthdate"];
         _phone = data["phone"];
         _address = Address(stoi(data["house_number"]), data["street"], data["postal_code"], data["town"], data["country"]);
+        _isAdmin = stoi(data["isadmin"]);
+        _quota = stoi(data["quota"]);
         _password = data["password"];
     }
 }
@@ -85,6 +87,26 @@ void User::setAddress(Address address)
     _address = address;
 }
 
+int User::getAdmin()
+{
+    return _isAdmin;
+}
+
+void User::setAdmin(int isAdmin)
+{
+    _isAdmin = isAdmin;
+}
+
+int User::getQuota()
+{
+    return _quota;
+}
+
+void User::setQuota(int quota)
+{
+    _quota = quota;
+}
+
 bool User::save()
 {
     int res = BaseModel::save(_dbTable, {
@@ -98,6 +120,8 @@ bool User::save()
         {"postal_code", {_address.getPostalCode(), "string"}},
         {"town", {_address.getTown(), "string"}},
         {"street", {_address.getStreetName(), "string"}},
+        {"isadmin", {to_string(_isAdmin), "int"}},
+        {"quota", {to_string(_quota), "int"}},
         {"password", {_password, "string"}}
     });
 

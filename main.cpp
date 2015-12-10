@@ -155,5 +155,9 @@ int main()
     POTUS.setPassword("president");
     cout << POTUS.checkPassword("bad_pwd") << endl;
     cout << POTUS.checkPassword("president") << endl;
+    POTUS.setAdmin(1);
+    POTUS.setQuota(10);
     POTUS.save();
+
+    // TODO: cin&cout User
 }
