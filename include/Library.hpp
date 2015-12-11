@@ -8,6 +8,7 @@
 #include "BaseModel.hpp"
 #include "Article.hpp"
 #include "Person.hpp"
+#include "Artist.hpp"
 #include "User.hpp"
 #include "../sqlite/SQLiteCpp.h"
 
@@ -24,8 +25,19 @@ private:
     Library();
     ~Library();
 
+    bool isAdmin();
+
     void displayMenu();
     void redirectChoice(int choice);
+    void bookList();
+    void dvdList();
+    void cdList();
+    void borrowArticle();
+    void returnArticle();
+    void userList();
+    void addUser();
+    void deleteUser();
+    void listTransactions();
 
     static Library* singleton;
 

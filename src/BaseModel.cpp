@@ -32,7 +32,7 @@ map<string, string> BaseModel::getById(const string& table, const int& id){
     }
 }
 
-map<int, map<string, string>> BaseModel::select(const string& table, const string& fields){
+map<int, map<string, string>> BaseModel::select(const string& table, const string& fields, const string& where){
 
     map<int, map<string, string>> data = map<int, map<string, string>>();
 
@@ -40,7 +40,7 @@ map<int, map<string, string>> BaseModel::select(const string& table, const strin
     {
         SQLite::Database db("mediatheque.db3");
 
-        SQLite::Statement query(db, "SELECT " + fields + " FROM " + table);
+        SQLite::Statement query(db, "SELECT " + fields + " FROM " + table + " " + where);
 
         int resultCount = 0;
         while (query.executeStep())
