@@ -165,7 +165,8 @@ int main()
     cout << toBeInserted;*/
     //toBeInserted.save();
 
-    Library *l = Library::getSingleton();
-    Library *l2 = Library::getSingleton();
-    l->open();
+    Library *towerOfBabel = Library::getSingleton();
+    //Library *l2 = Library::getSingleton();
+    towerOfBabel->open();
+    delete towerOfBabel;
 }
