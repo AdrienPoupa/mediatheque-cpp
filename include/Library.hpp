@@ -24,6 +24,9 @@ private:
     Library();
     ~Library();
 
+    void displayMenu();
+    void redirectChoice(int choice);
+
     static Library* singleton;
 
 };

@@ -37,7 +37,7 @@ class User: public Person {
         Address getAddress();
         void setAddress(Address address);
 
-        int getAdmin();
+        bool isAdmin();
         void setAdmin(int isAdmin);
 
         int getQuota();

@@ -98,9 +98,9 @@ void User::setAddress(Address address)
     _address = address;
 }
 
-int User::getAdmin()
+bool User::isAdmin()
 {
-    return _isAdmin;
+    return (bool) _isAdmin;
 }
 
 void User::setAdmin(int isAdmin)

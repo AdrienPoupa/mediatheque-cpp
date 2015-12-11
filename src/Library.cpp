@@ -45,9 +45,50 @@ void Library::open()
     }
 
     cout << "Saisissez le numero du compte a ouvrir" << endl;
-    int accountToOpen;
-    cin >> accountToOpen;
+    int idToOpen;
+    cin >> idToOpen;
 
-    User test(accountToOpen);
-    cout << test;
+    User accountToOpen(idToOpen);
+    _currentUser = accountToOpen;
+
+    cout << "Identification: rentrez votre mot de passe" << endl;
+    string inputPassword;
+    cin >> inputPassword;
+
+    if (_currentUser.checkPassword(inputPassword))
+    {
+        cout << "Identification reussie!" << endl;
+        displayMenu();
+    }
+    else
+    {
+        cout << "Identification ratee" << endl;
+    }
+}
+
+void Library::displayMenu()
+{
+    int choice;
+
+    cout << endl;
+    cout << "Menu : tapez le numero de l'action choisie" << endl;
+    cout << "1. Liste des livres" << endl;
+    cout << "2. Liste des dvds" << endl;
+    cout << "3. Liste des cds" << endl;
+    cout << "4. Restituer un emprunt" << endl;
+
+    if (_currentUser.isAdmin())
+    {
+        cout << endl << "Menu Administrateur" << endl;
+        cout << "5. Liste des utilisateurs" << endl;
+        cout << "6. Emprunts en cours" << endl;
+    }
+
+    cin >> choice;
+    redirectChoice(choice);
+}
+
+void Library::redirectChoice(int choice)
+{
+
 }
