@@ -14,6 +14,8 @@
 #include "User.hpp"
 #include "User.hpp"
 #include "Transaction.hpp"
+#include "sha256.h"
+#include "Library.hpp"
 
 using namespace std;
 
@@ -87,10 +89,11 @@ int main()
      */
 
     User test1(8);
+    /*User test1(8);
     cout << test1 << endl;
 
     User test2(900);
-    cout << test2 << endl;
+    cout << test2 << endl;*/
 
 //    User userFromID(1);
 //    cout << userFromID << endl;
@@ -137,6 +140,8 @@ int main()
     POTUS.save();*/
 
     Book *GoT = new Book(1);
+
+    /*Book *GoT = new Book(1);
     User POTUS(8);
     string type = "book";
     Transaction testT(GoT, type, POTUS, Date("2015-12-05"), Date("2015-12-15"));
@@ -145,4 +150,26 @@ int main()
     Transaction::displayTransactions("current");
     Transaction::displayTransactions();
 
+    string input = "grape";
+    string output1 = sha256(input);
+
+    cout << "sha256('"<< input << "'):" << output1 << endl;*/
+
+    /*User POTUS(8);
+    POTUS.setPassword("president");
+    cout << POTUS.checkPassword("bad_pwd") << endl;
+    cout << POTUS.checkPassword("president") << endl;
+    POTUS.setAdmin(1);
+    POTUS.setQuota(10);
+    POTUS.save();*/
+
+    /*User toBeInserted;
+    cin >> toBeInserted;
+    cout << toBeInserted;*/
+    //toBeInserted.save();
+
+    Library *towerOfBabel = Library::getSingleton();
+    //Library *l2 = Library::getSingleton();
+    towerOfBabel->open();
+    delete towerOfBabel;
 }

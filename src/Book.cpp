@@ -1,5 +1,3 @@
-#include "Book.hpp"
-
 /*
  # Database Model
 
@@ -16,6 +14,10 @@
  - genre1: INTEGER REFERENCES genres (id),
  - genre2: INTEGER REFERENCES genres (id)
  */
+
+#include "Book.hpp"
+#include "BaseModel.hpp"
+#include "Artist.hpp"
 
 using namespace std;
 
@@ -81,7 +83,7 @@ bool Book::save()
     });
 
     if(_id == 0){
-        _id = res["id"];
+        _id = res;
     }
 
     return (bool) res;
@@ -90,4 +92,41 @@ bool Book::save()
 bool Book::remove()
 {
     return BaseModel::remove(_dbTable, _id);
+}
+
+ostream& operator<< (ostream& stream, const Book& book)
+{
+    Artist author(book._authorId);
+
+    stream << "ID #" << book._id << " : " << book._title << endl;
+    stream << "Auteur : " << author.getFirstName() << " "  << author.getLastName() << endl;
+    stream << "Editeur : " << book._editor << endl;
+    stream << "Date de sortie : " << book._release << endl;
+    stream << "Nombre de pages : " << book._pages << endl;
+    //TODO stream << "Genre : " << book._genre << endl;
+
+    return stream;
+}
+
+istream& operator>> (istream& stream, Book& book)
+{
+    cout << "Saisie d'un livre" << endl;
+    cout << "Saisie du titre" << endl;
+    stream.ignore(1, '\n');
+    getline(stream, book._title, '\n');
+    cout << "ID de l'auteur" << endl;
+    stream >> book._authorId;
+    cout << "Editeur" << endl;
+    stream.ignore(1, '\n');
+    getline(stream, book._editor, '\n');
+    cout << "Date de sortie" << endl;
+    stream >> book._release;
+    cout << "Nombre de pages" << endl;
+    stream >> book._pages;
+    /*cout << "Genres" << endl;
+    stream >> book._genres;*/
+
+    book._author = new Artist(book._authorId);
+
+    return stream;
 }

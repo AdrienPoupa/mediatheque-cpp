@@ -1,4 +1,3 @@
-
 #ifndef Book_hpp
 #define Book_hpp
 
@@ -6,8 +5,6 @@
 
 #include <string>
 
-#include "BaseModel.hpp"
-#include "Artist.hpp"
 #include "Article.hpp"
 
 class Book : public Article {
@@ -29,6 +26,10 @@ public:
 
     bool save();
     bool remove();
+
+    friend std::ostream& operator<< (std::ostream& stream, const Book& book);
+    friend std::istream& operator>> (std::istream& stream, Book& book);
+
 };
 
 #endif /* Book_hpp */

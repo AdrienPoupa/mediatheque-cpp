@@ -33,7 +33,7 @@ Cd::Cd(int id)
 
     if(!data.empty()){
         _id = id;
-        _authorId = stoi(data["author"]);
+        _authorId = stoi(data["artist"]);
         _title = data["title"];
         _borrowable = data["borrowable"] != "0";
         _release = Date(data["release"]);
@@ -45,6 +45,26 @@ Cd::Cd(int id)
 Cd::~Cd()
 {
     //dtor
+}
+
+string Cd::getStudio() const
+{
+    return _studio;
+}
+
+void Cd::setStudio(const std::string& studio)
+{
+    _studio = studio;
+}
+
+unsigned int Cd::getLength() const
+{
+    return _length;
+}
+
+void Cd::setLength(const unsigned int& length)
+{
+    _length = length;
 }
 
 bool Cd::save()
@@ -61,7 +81,7 @@ bool Cd::save()
     });
 
     if(_id == 0){
-        _id = res["id"];
+        _id = res;
     }
 
     return (bool) res;
@@ -71,3 +91,41 @@ bool Cd::remove()
 {
     return BaseModel::remove(_dbTable, _id);
 }
+
+ostream& operator<< (ostream& stream, const Cd& cd)
+{
+    Artist singer(cd._authorId);
+
+    stream << "ID #" << cd._id << " : " << cd._title << endl;
+    stream << "Artiste principal : " << singer.getFirstName() << " "  << singer.getLastName() << endl;
+    stream << "Studio : " << cd._studio << endl;
+    stream << "Date de sortie : " << cd._release << endl;
+    stream << "Duree : " << cd._length << endl;
+    //TODO stream << "Genre : " << cd._genre << endl;
+
+    return stream;
+}
+
+istream& operator>> (istream& stream, Cd& cd)
+{
+    cout << "Saisie d'un CD" << endl;
+    cout << "Saisie du titre" << endl;
+    stream.ignore(1, '\n');
+    getline(stream, cd._title, '\n');
+    cout << "ID de l'artiste principal" << endl;
+    stream >> cd._authorId;
+    cout << "Studio" << endl;
+    stream.ignore(1, '\n');
+    getline(stream, cd._studio, '\n');
+    cout << "Date de sortie" << endl;
+    stream >> cd._release;
+    cout << "Duree" << endl;
+    stream >> cd._length;
+    /*cout << "Genres" << endl;
+    stream >> cd._genres;*/
+
+    cd._author = new Artist(cd._authorId);
+
+    return stream;
+}
+

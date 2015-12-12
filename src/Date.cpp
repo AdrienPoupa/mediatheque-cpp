@@ -114,9 +114,9 @@ istream& operator>> (istream& stream, Date& date)
 {
     int day, month, year;
 
-    cout << "Saisissez d'abord le jour (de 1 à 31) : " << endl;
+    cout << "Saisissez d'abord le jour (de 1 a 31) : " << endl;
     stream >> day;
-    cout << "Saisissez ensuite le mois (de 1 à 12) : " << endl;
+    cout << "Saisissez ensuite le mois (de 1 a 12) : " << endl;
     stream >> month;
     cout << "Saisissez enfin l'annee : " << endl;
     stream >> year;
