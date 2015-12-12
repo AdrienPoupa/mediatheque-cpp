@@ -110,11 +110,13 @@ istream& operator>> (istream& stream, Book& book)
 {
     cout << "Saisie d'un livre" << endl;
     cout << "Saisie du titre" << endl;
-    stream >> book._title;
+    stream.ignore(1, '\n');
+    getline(stream, book._title, '\n');
     cout << "ID de l'auteur" << endl;
     stream >> book._authorId;
     cout << "Editeur" << endl;
-    stream >> book._editor;
+    stream.ignore(1, '\n');
+    getline(stream, book._editor, '\n');
     cout << "Date de sortie" << endl;
     stream >> book._release;
     cout << "Nombre de pages" << endl;

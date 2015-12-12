@@ -98,11 +98,13 @@ istream& operator>> (istream& stream, Dvd& dvd)
 {
     cout << "Saisie d'un dvd" << endl;
     cout << "Saisie du titre" << endl;
-    stream >> dvd._title;
+    stream.ignore(1, '\n');
+    getline(stream, dvd._title, '\n');
     cout << "ID du realisateur" << endl;
     stream >> dvd._authorId;
     cout << "Studio" << endl;
-    stream >> dvd._studio;
+    stream.ignore(1, '\n');
+    getline(stream, dvd._studio, '\n');
     cout << "Date de sortie" << endl;
     stream >> dvd._release;
     cout << "Duree" << endl;

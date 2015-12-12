@@ -33,7 +33,7 @@ Cd::Cd(int id)
 
     if(!data.empty()){
         _id = id;
-        _authorId = stoi(data["author"]);
+        _authorId = stoi(data["artist"]);
         _title = data["title"];
         _borrowable = data["borrowable"] != "0";
         _release = Date(data["release"]);
@@ -90,11 +90,13 @@ istream& operator>> (istream& stream, Cd& cd)
 {
     cout << "Saisie d'un CD" << endl;
     cout << "Saisie du titre" << endl;
-    stream >> cd._title;
+    stream.ignore(1, '\n');
+    getline(stream, cd._title, '\n');
     cout << "ID de l'artiste principal" << endl;
     stream >> cd._authorId;
     cout << "Studio" << endl;
-    stream >> cd._studio;
+    stream.ignore(1, '\n');
+    getline(stream, cd._studio, '\n');
     cout << "Date de sortie" << endl;
     stream >> cd._release;
     cout << "Duree" << endl;

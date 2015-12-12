@@ -105,7 +105,10 @@ bool User::isAdmin()
 
 void User::setAdmin(int isAdmin)
 {
-    _isAdmin = isAdmin;
+    if (isAdmin == 0 || isAdmin == 1)
+    {
+        _isAdmin = isAdmin;
+    }
 }
 
 int User::getQuota()
@@ -166,16 +169,20 @@ istream& operator>> (istream& stream, User& user)
 
     cout << "Saisie d'un user" << endl;
     cout << "Saisie du prenom" << endl;
-    stream >> user._firstName;
+    stream.ignore(1, '\n');
+    getline(stream, user._firstName, '\n');
     cout << "Saisie du nom" << endl;
-    stream >> user._lastName;
+    getline(stream, user._lastName, '\n');
     cout << "Saisie de l'anniversaire" << endl;
     stream >> user._birthDate;
     cout << "Saisie du telephone" << endl;
-    stream >> user._phone;
+    stream.ignore(1, '\n');
+    getline(stream, user._phone, '\n');
+    cout << "Saisie de l'adresse" << endl;
     stream >> user._address;
     cout << "Saisie du mot de passe" << endl;
-    stream >> passwordTmp;
+    stream.ignore(1, '\n');
+    getline(stream, passwordTmp, '\n');
     cout << "Tapez 1 si l'utilisateur est administrateur, 0 sinon" << endl;
     stream >> user._isAdmin;
     cout << "Saisie du nombre d'emprunts simultanes" << endl;

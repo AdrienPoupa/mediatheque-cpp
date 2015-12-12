@@ -70,13 +70,14 @@ istream& operator>> (std::istream& stream, Address& adresse)
     cout << "Numero de rue : " << endl;
     stream >> adresse._houseNumber;
     cout << "Rue : " << endl;
-    stream >> adresse._streetName;
+    stream.ignore(1, '\n');
+    getline(stream, adresse._streetName, '\n');
     cout << "Code postal : " << endl;
-    stream>> adresse._postalCode;
+    getline(stream, adresse._postalCode, '\n');
     cout <<"Ville : " << endl;
-    stream>> adresse._town;
+    getline(stream, adresse._town, '\n');
     cout << "Pays : " << endl;
-    stream >> adresse._country;
+    getline(stream, adresse._country, '\n');
 
     return stream;
 
