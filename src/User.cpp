@@ -44,8 +44,6 @@ User::User()
 User::User(int id) // Get a person from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
-    
-    cout << data["isadmin"] << endl;
 
     if(!data.empty()){
         _id = id;
