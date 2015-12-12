@@ -12,19 +12,21 @@
 
 class Genre {
     private:
-        static std::set<Genre*> _pool; // Utilité?
-        std::string _name;
+        std::string _name = "Inconnu";
         int _id = 0;
 
     public:
         Genre(const std::string name = "Inconnu");
         Genre(int id);
         ~Genre();
-        bool save();
-        bool remove();
+
         int getId();
+
         void setName(const std::string name);
         std::string getName() const;
+
+        bool save();
+        bool remove();
 
         friend std::ostream& operator<< (std::ostream& stream, const Genre& genre);
         friend std::istream& operator>> (std::istream& stream, Genre& genre);

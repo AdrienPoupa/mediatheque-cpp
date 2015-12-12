@@ -7,13 +7,21 @@ Article::~Article()
 
 }
 
-void Article::addGenre(Genre* genre)
+void Article::addGenre(int genreId)
 {
     if (_genres.size() < 2)
-        _genres.insert(genre);
+    {
+        _genres.push_back(genreId);
+    }
     else
-        cout<<"Il y a déjà deux genres pour cet article"<<endl;
-    save();
+    {
+        cout << "Il y a deja deux genres pour cet article" << endl;
+    }
+}
+
+void Article::deleteGenre()
+{
+    _genres.clear();
 }
 
 bool Article::getBorrowable() const
@@ -46,7 +54,7 @@ void Article::setBorrowable(const bool& newBorrowable)
     _borrowable = newBorrowable;
 }
 
-std::set<Genre*> Article::getGenres() const
+vector<int> Article::getGenres() const
 {
     return _genres;
 }
@@ -61,12 +69,12 @@ void Article::setRelease(const Date& newRelease)
     _release = newRelease;
 }
 
-std::string Article::getTitle() const
+string Article::getTitle() const
 {
     return _title;
 }
 
-void Article::setTitle(const std::string& newTitle)
+void Article::setTitle(const string& newTitle)
 {
     _title = newTitle;
 }

@@ -3,12 +3,11 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <vector>
 
 #include "Date.hpp"
 #include "Genre.hpp"
 #include "Person.hpp"
-
-#include <set>
 
 class Article {
 protected:
@@ -16,7 +15,7 @@ protected:
     unsigned int _authorId; // save
     Person* _author; // do not save
     bool _borrowable; // save
-    std::set<Genre*> _genres; // do not save
+    std::vector<int> _genres; // contains genres IDs
     Date _release; // save
     std::string _title; // save
 
@@ -26,15 +25,21 @@ public:
     virtual ~Article();
 
     unsigned int getId() const;
+
     bool getBorrowable() const;
-    unsigned int getAuthorId() const;
-    void setAuthorId(const int& newAuthorId);
-    Person* getAuthor() const;
     void setBorrowable(const bool& newBorrowable);
-    std::set<Genre*> getGenres() const;
-    void addGenre(Genre* genre);
+
+    unsigned int getAuthorId() const;
+    Person* getAuthor() const;
+    void setAuthorId(const int& newAuthorId);
+
+    std::vector<int> getGenres() const;
+    void addGenre(int genreId);
+    void deleteGenre();
+
     Date getRelease() const;
     void setRelease(const Date& newRelease);
+
     std::string getTitle() const;
     void setTitle(const std::string& newTitle);
 

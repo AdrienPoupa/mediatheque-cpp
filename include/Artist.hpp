@@ -10,14 +10,14 @@
 #include "Person.hpp"
 
 class Artist: public Person {
-    
+
     static std::string _dbTable;
     std::string _nationality;
 
     //std::set<Position*> _positions;
     std::set<Article*> _articles;
     //std::map<Position*, std::set<Article*>> _realisations;
-    
+
 public:
     Artist(const std::string& firstName = "John", const std::string& lastName = "Doe", const std::string& nationality = "Inconnu");
     Artist(int id);

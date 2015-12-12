@@ -69,14 +69,15 @@ bool Genre::remove()
 
 ostream& operator<< (ostream& stream, const Genre& genre)
 {
-    stream << genre._id << ' ' << genre._name << endl;
+    stream << genre._name;
 
     return stream;
 }
 
 istream& operator>> (istream& stream, Genre& genre)
 {
-    stream >> genre._name;
+    stream.ignore(1, '\n');
+    getline(stream, genre._name, '\n');
 
     return stream;
 }
