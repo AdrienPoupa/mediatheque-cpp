@@ -88,7 +88,7 @@ int main()
     cout << POTUS.remove();
      */
 
-    User test1(8);
+    //User test1(8);
     /*User test1(8);
     cout << test1 << endl;
 
@@ -139,7 +139,7 @@ int main()
     POTUS.setAddress(test);
     POTUS.save();*/
 
-    Book *GoT = new Book(1);
+    //Book *GoT = new Book(1);
 
     /*Book *GoT = new Book(1);
     User POTUS(8);
@@ -168,22 +168,22 @@ int main()
     cout << toBeInserted;*/
     //toBeInserted.save();
 
-    /*Library *towerOfBabel = Library::getSingleton();
+    Library *towerOfBabel = Library::getSingleton();
     //Library *l2 = Library::getSingleton();
     towerOfBabel->open();
-    delete towerOfBabel;*/
+    delete towerOfBabel;
 
     /*Book newB;
     cin >> newB;
     cout << newB;
     newB.save();*/
 
-    Book b(3);
+    /*Book b(3);
     cout << b;
     b.deleteGenre();
     b.addGenre(1);
     b.addGenre(5);
     cout << b;
     b.save();
-    cout << b;
+    cout << b;*/
 }
