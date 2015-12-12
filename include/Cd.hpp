@@ -19,10 +19,10 @@ class Cd : public Article
         virtual ~Cd();
 
         std::string getStudio() const;
-        void setStudio(const std::string& newStudio);
+        void setStudio(const std::string& studio);
 
         unsigned int getLength() const;
-        void setLength(const unsigned int& newLength);
+        void setLength(const unsigned int& length);
 
         bool save();
         bool remove();

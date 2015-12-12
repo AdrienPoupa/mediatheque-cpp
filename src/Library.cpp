@@ -250,7 +250,84 @@ void Library::addBook()
 
 void Library::editBook(Book& book)
 {
-    // TODO
+    cout << "Modification d'un livre" << endl;
+
+    cout << "1. Modifier l'auteur" << endl;
+    cout << "2. Modifier le titre" << endl;
+    cout << "3. Modifier la date de sortie" << endl;
+    cout << "4. Modifier le nombre de pages" << endl;
+    cout << "5. Modifier l'editeur" << endl;
+    // TODO: genres
+
+    int choice;
+    cin >> choice;
+
+    if (cin.fail() || choice < 1)
+    {
+        cout << "Merci d'entrer un choix valide" << endl;
+        return;
+    }
+
+    switch (choice)
+    {
+        case 1:
+        {
+            int newArtist;
+            cin >> newArtist;
+
+            if (cin.fail() || newArtist < 1)
+            {
+                cout << "Merci d'entrer un ID valide" << endl;
+                return;
+            }
+
+            book.setAuthorId(newArtist);
+            break;
+        }
+        case 2:
+        {
+            string newTitle;
+            cin.ignore(1, '\n');
+            getline(cin, newTitle, '\n');
+            book.setTitle(newTitle);
+            break;
+        }
+        case 3:
+        {
+            Date newReleaseDate;
+            cin >> newReleaseDate;
+            book.setRelease(newReleaseDate);
+            break;
+        }
+        case 4:
+        {
+            int newPages;
+            cin >> newPages;
+
+            if (cin.fail() || newPages < 1)
+            {
+                cout << "Merci d'entrer un nombre de pages valide" << endl;
+                return;
+            }
+
+            book.setPages(newPages);
+            break;
+        }
+        case 5:
+        {
+            string newEditor;
+            cin.ignore(1, '\n');
+            getline(cin, newEditor, '\n');
+            book.setEditor(newEditor);
+            break;
+        }
+        default:
+            editBook(book);
+            break;
+    }
+
+    cout << "Sauvegarde..." << endl;
+    book.save();
     displayMenu();
 }
 
@@ -333,7 +410,85 @@ void Library::addDvd()
 
 void Library::editDvd(Dvd& dvd)
 {
-    // TODO
+    cout << "Modification d'un DVD" << endl;
+
+    cout << "1. Modifier le realisateur" << endl;
+    cout << "2. Modifier le titre" << endl;
+    cout << "3. Modifier la date de sortie" << endl;
+    cout << "4. Modifier la duree" << endl;
+    cout << "5. Modifier le studio" << endl;
+    // TODO: genres
+
+    int choice;
+    cin >> choice;
+
+    if (cin.fail() || choice < 1)
+    {
+        cout << "Merci d'entrer un choix valide" << endl;
+        return;
+    }
+
+    switch (choice)
+    {
+        case 1:
+        {
+            int newArtist;
+            cin >> newArtist;
+
+            if (cin.fail() || newArtist < 1)
+            {
+                cout << "Merci d'entrer un ID valide" << endl;
+                return;
+            }
+
+            dvd.setAuthorId(newArtist);
+            break;
+        }
+        case 2:
+        {
+            string newTitle;
+            cin.ignore(1, '\n');
+            getline(cin, newTitle, '\n');
+            dvd.setTitle(newTitle);
+            break;
+        }
+        case 3:
+        {
+            Date newReleaseDate;
+            cin >> newReleaseDate;
+            dvd.setRelease(newReleaseDate);
+            break;
+        }
+        case 4:
+        {
+            int newLength;
+            cin >> newLength;
+
+            if (cin.fail() || newLength < 1)
+            {
+                cout << "Merci d'entrer une duree valide" << endl;
+                return;
+            }
+
+            dvd.setLength(newLength);
+            break;
+        }
+        case 5:
+        {
+            string newStudio;
+            cin.ignore(1, '\n');
+            getline(cin, newStudio, '\n');
+            dvd.setStudio(newStudio);
+            break;
+        }
+        default:
+            editDvd(dvd);
+            break;
+    }
+
+    cout << "Sauvegarde..." << endl;
+    dvd.save();
+    displayMenu();
 }
 
 void Library::cdList()
@@ -415,7 +570,85 @@ void Library::addCd()
 
 void Library::editCd(Cd& cd)
 {
-    // TODO
+    cout << "Modification d'un CD" << endl;
+
+    cout << "1. Modifier l'artiste" << endl;
+    cout << "2. Modifier le titre" << endl;
+    cout << "3. Modifier la date de sortie" << endl;
+    cout << "4. Modifier la duree" << endl;
+    cout << "5. Modifier le studio" << endl;
+    // TODO: genres
+
+    int choice;
+    cin >> choice;
+
+    if (cin.fail() || choice < 1)
+    {
+        cout << "Merci d'entrer un choix valide" << endl;
+        return;
+    }
+
+    switch (choice)
+    {
+        case 1:
+        {
+            int newArtist;
+            cin >> newArtist;
+
+            if (cin.fail() || newArtist < 1)
+            {
+                cout << "Merci d'entrer un ID valide" << endl;
+                return;
+            }
+
+            cd.setAuthorId(newArtist);
+            break;
+        }
+        case 2:
+        {
+            string newTitle;
+            cin.ignore(1, '\n');
+            getline(cin, newTitle, '\n');
+            cd.setTitle(newTitle);
+            break;
+        }
+        case 3:
+        {
+            Date newReleaseDate;
+            cin >> newReleaseDate;
+            cd.setRelease(newReleaseDate);
+            break;
+        }
+        case 4:
+        {
+            int newLength;
+            cin >> newLength;
+
+            if (cin.fail() || newLength < 1)
+            {
+                cout << "Merci d'entrer une duree valide" << endl;
+                return;
+            }
+
+            cd.setLength(newLength);
+            break;
+        }
+        case 5:
+        {
+            string newStudio;
+            cin.ignore(1, '\n');
+            getline(cin, newStudio, '\n');
+            cd.setStudio(newStudio);
+            break;
+        }
+        default:
+            editCd(cd);
+            break;
+    }
+
+    cout << "Sauvegarde..." << endl;
+    cd.save();
+    displayMenu();
 }
 
 void Library::borrowArticle()

@@ -47,6 +47,26 @@ Cd::~Cd()
     //dtor
 }
 
+string Cd::getStudio() const
+{
+    return _studio;
+}
+
+void Cd::setStudio(const std::string& studio)
+{
+    _studio = studio;
+}
+
+unsigned int Cd::getLength() const
+{
+    return _length;
+}
+
+void Cd::setLength(const unsigned int& length)
+{
+    _length = length;
+}
+
 bool Cd::save()
 {
     int res = BaseModel::save(_dbTable, {
