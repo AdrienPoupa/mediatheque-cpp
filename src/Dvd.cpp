@@ -36,7 +36,8 @@ Dvd::Dvd(int id)
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
 
-    if(!data.empty()){
+    if(!data.empty())
+    {
         _id = id;
         _authorId = stoi(data["director"]);
         _title = data["title"];
@@ -45,17 +46,20 @@ Dvd::Dvd(int id)
         _length = stoi(data["length"]);
         _studio = data["studio"];
     }
+
+    retrieveGenreFromDB(data);
 }
 
 void Dvd::addCasting(Artist* artist)
 {
+    // TODO
     _casting.insert(artist);
     save();
 }
 
 bool Dvd::save()
 {
-    int res = BaseModel::save(_dbTable, {
+    map<string, vector<string>> data = {
         {"id", {to_string(_id), "int"}},
         {"director", {to_string(_authorId), "int"}},
         {"title", {_title, "string"}},
@@ -63,12 +67,16 @@ bool Dvd::save()
         {"release", {_release.dateToDB(), "string"}},
         {"length", {to_string(_length), "int"}},
         {"studio", {_studio, "string"}}
-        // TODO: genres
-    });
+    };
+
+    addGenreToDB(data);
+
+    int res = BaseModel::save(_dbTable, data);
 
     // TODO: save castings ...
 
-    if(_id == 0){
+    if(_id == 0)
+    {
         _id = res["id"];
     }
 
@@ -80,7 +88,7 @@ bool Dvd::remove()
     return BaseModel::remove(_dbTable, _id);
 }
 
-ostream& operator<< (ostream& stream, const Dvd& dvd)
+ostream& operator<< (ostream& stream, Dvd& dvd)
 {
     Artist director(dvd._authorId);
 
@@ -89,7 +97,7 @@ ostream& operator<< (ostream& stream, const Dvd& dvd)
     stream << "Studio : " << dvd._studio << endl;
     stream << "Date de sortie : " << dvd._release << endl;
     stream << "Duree : " << dvd._length << endl;
-    //TODO stream << "Genre : " << dvd._genre << endl;
+    dvd.displayGenres(stream);
 
     return stream;
 }
@@ -109,8 +117,7 @@ istream& operator>> (istream& stream, Dvd& dvd)
     stream >> dvd._release;
     cout << "Duree" << endl;
     stream >> dvd._length;
-    /*cout << "Genres" << endl;
-    stream >> dvd._genres;*/
+    dvd.displayGenreFromCli(stream);
 
     dvd._author = new Artist(dvd._authorId);
 

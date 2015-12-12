@@ -45,7 +45,8 @@ User::User(int id) // Get a person from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
 
-    if(!data.empty()){
+    if(!data.empty())
+    {
         _id = id;
         _firstName = data["name"];
         _lastName = data["surname"];
@@ -139,7 +140,8 @@ bool User::save()
         {"password", {_password, "string"}}
     });
 
-    if(_id == 0){
+    if(_id == 0)
+    {
         _id = res["id"];
     }
 

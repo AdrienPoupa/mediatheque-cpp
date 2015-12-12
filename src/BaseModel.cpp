@@ -71,7 +71,6 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
 
     // Update
     if (stoi(data["id"][0]) != 0) {
-        //cout << "Updating ..." << endl;
         try
         {
             SQLite::Database db("mediatheque.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
@@ -123,7 +122,6 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
     // Insert
     else
     {
-        //cout << "Inserting ..." << endl;
         try
         {
             SQLite::Database db("mediatheque.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);

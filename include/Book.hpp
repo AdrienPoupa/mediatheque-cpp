@@ -27,7 +27,7 @@ public:
     bool save();
     bool remove();
 
-    friend std::ostream& operator<< (std::ostream& stream, const Book& book);
+    friend std::ostream& operator<< (std::ostream& stream, Book& book);
     friend std::istream& operator>> (std::istream& stream, Book& book);
 
 };

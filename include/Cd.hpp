@@ -27,7 +27,7 @@ class Cd : public Article
         bool save();
         bool remove();
 
-        friend std::ostream& operator<< (std::ostream& stream, const Cd& cd);
+        friend std::ostream& operator<< (std::ostream& stream, Cd& cd);
         friend std::istream& operator>> (std::istream& stream, Cd& cd);
 };
 

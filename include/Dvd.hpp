@@ -23,7 +23,7 @@ class Dvd : public Cd
         bool save();
         bool remove();
 
-        friend std::ostream& operator<< (std::ostream& stream, const Dvd& dvd);
+        friend std::ostream& operator<< (std::ostream& stream, Dvd& dvd);
         friend std::istream& operator>> (std::istream& stream, Dvd& dvd);
 };
 

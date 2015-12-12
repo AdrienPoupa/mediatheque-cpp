@@ -257,7 +257,7 @@ void Library::editBook(Book& book)
     cout << "3. Modifier la date de sortie" << endl;
     cout << "4. Modifier le nombre de pages" << endl;
     cout << "5. Modifier l'editeur" << endl;
-    // TODO: genres
+    cout << "6. Modifier les genres" << endl;
 
     int choice;
     cin >> choice;
@@ -319,6 +319,32 @@ void Library::editBook(Book& book)
             cin.ignore(1, '\n');
             getline(cin, newEditor, '\n');
             book.setEditor(newEditor);
+            break;
+        }
+        case 6:
+        {
+            int genre1 = 0, genre2 = 0;
+
+            cout << "ID genre 1" << endl;
+            cin >> genre1;
+            if (cin.fail() || genre1 < 1)
+            {
+                cout << "Merci d'entrer un ID" << endl;
+                return;
+            }
+
+            book.addGenre(genre1);
+
+            cout << "ID genre 2" << endl;
+            cin >> genre2;
+            if (cin.fail() || genre1 < 1)
+            {
+                cout << "Merci d'entrer un ID" << endl;
+                return;
+            }
+
+            book.addGenre(genre2);
+
             break;
         }
         default:
@@ -417,7 +443,7 @@ void Library::editDvd(Dvd& dvd)
     cout << "3. Modifier la date de sortie" << endl;
     cout << "4. Modifier la duree" << endl;
     cout << "5. Modifier le studio" << endl;
-    // TODO: genres
+    cout << "6. Modifier les genres" << endl;
 
     int choice;
     cin >> choice;
@@ -479,6 +505,32 @@ void Library::editDvd(Dvd& dvd)
             cin.ignore(1, '\n');
             getline(cin, newStudio, '\n');
             dvd.setStudio(newStudio);
+            break;
+        }
+        case 6:
+        {
+            int genre1 = 0, genre2 = 0;
+
+            cout << "ID genre 1" << endl;
+            cin >> genre1;
+            if (cin.fail() || genre1 < 1)
+            {
+                cout << "Merci d'entrer un ID" << endl;
+                return;
+            }
+
+            dvd.addGenre(genre1);
+
+            cout << "ID genre 2" << endl;
+            cin >> genre2;
+            if (cin.fail() || genre1 < 1)
+            {
+                cout << "Merci d'entrer un ID" << endl;
+                return;
+            }
+
+            dvd.addGenre(genre2);
+
             break;
         }
         default:
@@ -577,7 +629,7 @@ void Library::editCd(Cd& cd)
     cout << "3. Modifier la date de sortie" << endl;
     cout << "4. Modifier la duree" << endl;
     cout << "5. Modifier le studio" << endl;
-    // TODO: genres
+    cout << "6. Modifier les genres" << endl;
 
     int choice;
     cin >> choice;
@@ -639,6 +691,32 @@ void Library::editCd(Cd& cd)
             cin.ignore(1, '\n');
             getline(cin, newStudio, '\n');
             cd.setStudio(newStudio);
+            break;
+        }
+        case 6:
+        {
+            int genre1 = 0, genre2 = 0;
+
+            cout << "ID genre 1" << endl;
+            cin >> genre1;
+            if (cin.fail() || genre1 < 1)
+            {
+                cout << "Merci d'entrer un ID" << endl;
+                return;
+            }
+
+            cd.addGenre(genre1);
+
+            cout << "ID genre 2" << endl;
+            cin >> genre2;
+            if (cin.fail() || genre1 < 1)
+            {
+                cout << "Merci d'entrer un ID" << endl;
+                return;
+            }
+
+            cd.addGenre(genre2);
+
             break;
         }
         default:

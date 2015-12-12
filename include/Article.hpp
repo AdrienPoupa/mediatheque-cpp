@@ -43,6 +43,11 @@ public:
     std::string getTitle() const;
     void setTitle(const std::string& newTitle);
 
+    void retrieveGenreFromDB(std::map<std::string, std::string> data);
+    void addGenreToDB(std::map<std::string, std::vector<std::string>>& data);
+    std::ostream& displayGenres(std::ostream& stream);
+    std::istream& displayGenreFromCli(std::istream& stream);
+
     virtual bool save() = 0;
     virtual bool remove() = 0;
 

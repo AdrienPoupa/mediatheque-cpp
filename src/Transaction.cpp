@@ -158,7 +158,8 @@ bool Transaction::save()
         {"date_returned", {_finish.dateToDB(), "string"}},
     });
 
-    if(_id == 0){
+    if(_id == 0)
+    {
         _id = res;
     }
 

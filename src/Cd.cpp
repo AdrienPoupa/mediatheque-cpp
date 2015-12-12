@@ -31,7 +31,8 @@ Cd::Cd(int id)
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
 
-    if(!data.empty()){
+    if(!data.empty())
+    {
         _id = id;
         _authorId = stoi(data["artist"]);
         _title = data["title"];
@@ -40,6 +41,8 @@ Cd::Cd(int id)
         _length = stoi(data["length"]);
         _studio = data["studio"];
     }
+
+    retrieveGenreFromDB(data);
 }
 
 Cd::~Cd()
@@ -69,7 +72,7 @@ void Cd::setLength(const unsigned int& length)
 
 bool Cd::save()
 {
-    int res = BaseModel::save(_dbTable, {
+    map<string, vector<string>> data = {
         {"id", {to_string(_id), "int"}},
         {"artist", {to_string(_authorId), "int"}},
         {"title", {_title, "string"}},
@@ -77,10 +80,14 @@ bool Cd::save()
         {"release", {_release.dateToDB(), "string"}},
         {"length", {to_string(_length), "int"}},
         {"studio", {_studio, "string"}}
-        // TODO: genres
-    });
+    };
 
-    if(_id == 0){
+    addGenreToDB(data);
+
+    int res = BaseModel::save(_dbTable, data);
+
+    if(_id == 0)
+    {
         _id = res;
     }
 
@@ -92,7 +99,7 @@ bool Cd::remove()
     return BaseModel::remove(_dbTable, _id);
 }
 
-ostream& operator<< (ostream& stream, const Cd& cd)
+ostream& operator<< (ostream& stream, Cd& cd)
 {
     Artist singer(cd._authorId);
 
@@ -101,7 +108,7 @@ ostream& operator<< (ostream& stream, const Cd& cd)
     stream << "Studio : " << cd._studio << endl;
     stream << "Date de sortie : " << cd._release << endl;
     stream << "Duree : " << cd._length << endl;
-    //TODO stream << "Genre : " << cd._genre << endl;
+    cd.displayGenres(stream);
 
     return stream;
 }
@@ -121,8 +128,8 @@ istream& operator>> (istream& stream, Cd& cd)
     stream >> cd._release;
     cout << "Duree" << endl;
     stream >> cd._length;
-    /*cout << "Genres" << endl;
-    stream >> cd._genres;*/
+
+    cd.displayGenreFromCli(stream);
 
     cd._author = new Artist(cd._authorId);
 
