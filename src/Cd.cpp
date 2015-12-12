@@ -81,7 +81,7 @@ bool Cd::save()
     });
 
     if(_id == 0){
-        _id = res["id"];
+        _id = res;
     }
 
     return (bool) res;

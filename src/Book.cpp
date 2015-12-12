@@ -1,5 +1,3 @@
-#include "Book.hpp"
-
 /*
  # Database Model
 
@@ -16,6 +14,10 @@
  - genre1: INTEGER REFERENCES genres (id),
  - genre2: INTEGER REFERENCES genres (id)
  */
+
+#include "Book.hpp"
+#include "BaseModel.hpp"
+#include "Artist.hpp"
 
 using namespace std;
 
@@ -128,7 +130,7 @@ bool Book::save()
     });
 
     if(_id == 0){
-        _id = res["id"];
+        _id = res;
     }
 
     return (bool) res;

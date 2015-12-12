@@ -88,6 +88,7 @@ int main()
     cout << POTUS.remove();
      */
 
+    User test1(8);
     /*User test1(8);
     cout << test1 << endl;
 
@@ -137,6 +138,8 @@ int main()
     test.setCountry("France");
     POTUS.setAddress(test);
     POTUS.save();*/
+
+    Book *GoT = new Book(1);
 
     /*Book *GoT = new Book(1);
     User POTUS(8);

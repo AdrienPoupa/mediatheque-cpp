@@ -1,4 +1,3 @@
-
 #ifndef Book_hpp
 #define Book_hpp
 
@@ -6,34 +5,31 @@
 
 #include <string>
 
-#include "BaseModel.hpp"
-#include "Artist.hpp"
 #include "Article.hpp"
 
 class Book : public Article {
-    private:
-        static std::string _dbTable;
+private:
+    static std::string _dbTable;
+protected:
+    int _pages;
+    std::string _editor;
+public:
+    Book();
+    Book(int id);
+    ~Book();
 
-    protected:
-        int _pages;
-        std::string _editor;
+    int getPages() const;
+    void setPages(const int& pages);
 
-    public:
-        Book();
-        Book(int id);
-        ~Book();
+    std::string getEditor() const;
+    void setEditor(const std::string& editor);
 
-        int getPages() const;
-        void setPages(const int& pages);
+    bool save();
+    bool remove();
 
-        std::string getEditor() const;
-        void setEditor(const std::string& editor);
+    friend std::ostream& operator<< (std::ostream& stream, const Book& book);
+    friend std::istream& operator>> (std::istream& stream, Book& book);
 
-        bool save();
-        bool remove();
-
-        friend std::ostream& operator<< (std::ostream& stream, const Book& book);
-        friend std::istream& operator>> (std::istream& stream, Book& book);
 };
 
 #endif /* Book_hpp */
