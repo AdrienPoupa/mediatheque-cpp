@@ -49,9 +49,12 @@ class Library {
         void deleteUser();
 
         void artistList();
-        void addArtist();
-        void editArtist(int artistId);
-        void deleteArtist();
+        void seeArtist(int artistId);
+        void editArtist(Artist& artist);
+
+        void biography(Artist& artist);
+        void discography(Artist& artist);
+        void filmography(Artist& artist);
 
         template <class T>
         void addThing();

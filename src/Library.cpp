@@ -94,8 +94,7 @@ void Library::displayMenu()
         cout << "11. Ajouter un dvd" << endl;
         cout << "12. Liste des artistes" << endl;
         cout << "13. Ajouter un artiste" << endl;
-        cout << "14. Supprimer un artiste" << endl;
-        cout << "15. Emprunts en cours" << endl;
+        cout << "14. Emprunts en cours" << endl;
     }
 
     cout << "42. Quitter" << endl;
@@ -157,9 +156,6 @@ void Library::redirectChoice(int choice)
             (isAdmin()) ? addThing<Artist>() : displayMenu();
             break;
         case 14:
-            (isAdmin()) ? deleteArtist() : displayMenu();
-            break;
-        case 15:
             (isAdmin()) ? listTransactions() : displayMenu();
             break;
         case 42:
@@ -839,6 +835,11 @@ void Library::editUser(int userId)
         {
             int newQuota;
             cin >> newQuota;
+            if (cin.fail() || newQuota < 0)
+            {
+                cout << "Merci d'entrer un choix valide" << endl;
+                return;
+            }
             userToEdit.setQuota(newQuota);
             break;
         }
@@ -888,15 +889,139 @@ void Library::deleteUser()
 
 void Library::artistList()
 {
+    cout << "Liste des artistes de la mediatheque:" << endl;
 
+    map<int, map<string, string>> artists = BaseModel::select("artists", "id, name, surname");
+
+    int totalArtists = artists.size();
+
+    if (totalArtists == 0)
+    {
+        cout << "Aucun artiste dans la mediatheque" << endl;
+        return;
+    }
+
+    for (int i = 1; i != totalArtists + 1; i++)
+    {
+        cout << artists[i]["id"] << ". " << artists[i]["name"] << " " << artists[i]["surname"] << endl;
+    }
+
+    int artistId;
+    cout << "Pour voir un artiste, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
+    cin >> artistId;
+
+    if (cin.fail() || artistId < 0)
+    {
+        cout << "Merci d'entrer un ID valide" << endl;
+        return;
+    }
+
+    seeArtist(artistId);
 }
 
-void Library::editArtist(int artistId)
+void Library::seeArtist(int artistId)
 {
+    if (artistId == 0)
+    {
+        displayMenu();
+    }
 
+    Artist artistToDisplay(artistId);
+    cout << artistToDisplay << endl;
+
+    if (isAdmin())
+    {
+        cout << "Voulez-vous modifier cet artiste ? Tapez 'Oui' le cas echeant, 'Non' sinon" << endl;
+        string choice;
+        cin >> choice;
+
+        if (choice == "Oui")
+        {
+            editArtist(artistToDisplay);
+        }
+
+        cout << "Voulez-vous supprimer cet artiste ? Tapez 'Oui' le cas echeant, 'Non' sinon" << endl;
+        string choice2;
+        cin >> choice2;
+
+        if (choice2 == "Oui")
+        {
+            artistToDisplay.remove();
+        }
+    }
+
+    biography(artistToDisplay);
+    discography(artistToDisplay);
+    filmography(artistToDisplay);
+
+    displayMenu();
 }
 
-void Library::deleteArtist()
+void Library::biography(Artist& artist)
+{
+    cout << "Biographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
+
+    map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "WHERE author=" + to_string(artist.getId()));
+
+    int totalBooks = bibliography.size();
+
+    if (totalBooks == 0)
+    {
+        cout << "Aucun livre dans la mediatheque" << endl;
+        return;
+    }
+
+    for (int i = 1; i != totalBooks + 1; i++)
+    {
+        Artist writer(stoi(bibliography[i]["author"]));
+        Date release(bibliography[i]["release"]);
+        cout << bibliography[i]["id"] << ". " << bibliography[i]["title"] << " (" << release << ")" << endl;
+    }
+}
+
+void Library::discography(Artist& artist)
+{
+    cout << "Discographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
+
+    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "WHERE artist=" + to_string(artist.getId()));
+
+    int totalCds = cds.size();
+
+    if (totalCds == 0)
+    {
+        cout << "Aucun cd dans la mediatheque" << endl;
+        return;
+    }
+
+    for (int i = 1; i != totalCds + 1; i++)
+    {
+        Date release(cds[i]["release"]);
+        cout << cds[i]["id"] << ". " << cds[i]["title"] << " (" << release << ")" << endl;
+    }
+}
+
+void Library::filmography(Artist& artist)
+{
+    cout << "Filmographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
+
+    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "WHERE director=" + to_string(artist.getId()));
+
+    int totalDvds = dvds.size();
+
+    if (totalDvds == 0)
+    {
+        cout << "Aucun dvd dans la mediatheque" << endl;
+        return;
+    }
+
+    for (int i = 1; i != totalDvds + 1; i++)
+    {
+        Date release(dvds[i]["release"]);
+        cout << dvds[i]["id"] << ". " << dvds[i]["title"] << " (" << release << ")" << endl;
+    }
+}
+
+void Library::editArtist(Artist& artist)
 {
 
 }
