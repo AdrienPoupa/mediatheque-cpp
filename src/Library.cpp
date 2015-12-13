@@ -29,6 +29,14 @@ bool Library::isAdmin()
     return _currentUser.isAdmin();
 }
 
+void Library::checkInput(istream& stream, int intToCheck, int minValue)
+{
+    if (stream.fail() || intToCheck < minValue)
+    {
+        throw invalid_argument("Merci d'entrer un choix valide");
+    }
+}
+
 void Library::open()
 {
     cout << "Liste des comptes disponibles pour l'ouverture:" << endl;
@@ -46,11 +54,7 @@ void Library::open()
     int idToOpen;
     cin >> idToOpen;
 
-    if (cin.fail() || idToOpen < 1)
-    {
-        cout << "Merci d'entrer un ID valide" << endl;
-        return;
-    }
+    checkInput(cin, idToOpen, 1);
 
     User accountToOpen(idToOpen);
     _currentUser = accountToOpen;
@@ -101,11 +105,7 @@ void Library::displayMenu()
 
     cin >> choice;
 
-    if (cin.fail() || choice < 0)
-    {
-        cout << "Merci d'entrer un choix valide" << endl;
-        return;
-    }
+    checkInput(cin, choice, 0);
 
     redirectChoice(choice);
 }
@@ -192,11 +192,7 @@ void Library::bookList()
     cout << "Pour voir un livre, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
     cin >> articleId;
 
-    if (cin.fail() || articleId < 0)
-    {
-        cout << "Merci d'entrer un ID valide" << endl;
-        return;
-    }
+    checkInput(cin, articleId, 0);
 
     seeBook(articleId);
 }
@@ -251,11 +247,7 @@ void Library::editBook(Book& book)
     int choice;
     cin >> choice;
 
-    if (cin.fail() || choice < 1)
-    {
-        cout << "Merci d'entrer un choix valide" << endl;
-        return;
-    }
+    checkInput(cin, choice, 1);
 
     switch (choice)
     {
@@ -264,11 +256,7 @@ void Library::editBook(Book& book)
             int newArtist;
             cin >> newArtist;
 
-            if (cin.fail() || newArtist < 1)
-            {
-                cout << "Merci d'entrer un ID valide" << endl;
-                return;
-            }
+            checkInput(cin, newArtist, 1);
 
             book.setAuthorId(newArtist);
             break;
@@ -293,11 +281,7 @@ void Library::editBook(Book& book)
             int newPages;
             cin >> newPages;
 
-            if (cin.fail() || newPages < 1)
-            {
-                cout << "Merci d'entrer un nombre de pages valide" << endl;
-                return;
-            }
+            checkInput(cin, newPages, 1);
 
             book.setPages(newPages);
             break;
@@ -316,21 +300,15 @@ void Library::editBook(Book& book)
 
             cout << "ID genre 1" << endl;
             cin >> genre1;
-            if (cin.fail() || genre1 < 1)
-            {
-                cout << "Merci d'entrer un ID" << endl;
-                return;
-            }
+
+            checkInput(cin, genre1, 1);
 
             book.addGenre(genre1);
 
             cout << "ID genre 2" << endl;
             cin >> genre2;
-            if (cin.fail() || genre1 < 1)
-            {
-                cout << "Merci d'entrer un ID" << endl;
-                return;
-            }
+
+            checkInput(cin, genre2, 1);
 
             book.addGenre(genre2);
 
@@ -372,11 +350,7 @@ void Library::dvdList()
     cout << "Pour voir un dvd, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
     cin >> articleId;
 
-    if (cin.fail() || articleId < 0)
-    {
-        cout << "Merci d'entrer un ID valide" << endl;
-        return;
-    }
+    checkInput(cin, articleId, 0);
 
     seeDvd(articleId);
 }
@@ -431,11 +405,7 @@ void Library::editDvd(Dvd& dvd)
     int choice;
     cin >> choice;
 
-    if (cin.fail() || choice < 1)
-    {
-        cout << "Merci d'entrer un choix valide" << endl;
-        return;
-    }
+    checkInput(cin, choice, 1);
 
     switch (choice)
     {
@@ -444,11 +414,7 @@ void Library::editDvd(Dvd& dvd)
             int newArtist;
             cin >> newArtist;
 
-            if (cin.fail() || newArtist < 1)
-            {
-                cout << "Merci d'entrer un ID valide" << endl;
-                return;
-            }
+            checkInput(cin, newArtist, 1);
 
             dvd.setAuthorId(newArtist);
             break;
@@ -473,11 +439,7 @@ void Library::editDvd(Dvd& dvd)
             int newLength;
             cin >> newLength;
 
-            if (cin.fail() || newLength < 1)
-            {
-                cout << "Merci d'entrer une duree valide" << endl;
-                return;
-            }
+            checkInput(cin, newLength, 1);
 
             dvd.setLength(newLength);
             break;
@@ -496,21 +458,15 @@ void Library::editDvd(Dvd& dvd)
 
             cout << "ID genre 1" << endl;
             cin >> genre1;
-            if (cin.fail() || genre1 < 1)
-            {
-                cout << "Merci d'entrer un ID" << endl;
-                return;
-            }
+
+            checkInput(cin, genre1, 1);
 
             dvd.addGenre(genre1);
 
             cout << "ID genre 2" << endl;
             cin >> genre2;
-            if (cin.fail() || genre1 < 1)
-            {
-                cout << "Merci d'entrer un ID" << endl;
-                return;
-            }
+
+            checkInput(cin, genre2, 1);
 
             dvd.addGenre(genre2);
 
@@ -552,11 +508,7 @@ void Library::cdList()
     cout << "Pour voir un cd, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
     cin >> articleId;
 
-    if (cin.fail() || articleId < 0)
-    {
-        cout << "Merci d'entrer un ID valide" << endl;
-        return;
-    }
+    checkInput(cin, articleId, 0);
 
     seeCd(articleId);
 }
@@ -611,11 +563,7 @@ void Library::editCd(Cd& cd)
     int choice;
     cin >> choice;
 
-    if (cin.fail() || choice < 1)
-    {
-        cout << "Merci d'entrer un choix valide" << endl;
-        return;
-    }
+    checkInput(cin, choice, 1);
 
     switch (choice)
     {
@@ -624,11 +572,7 @@ void Library::editCd(Cd& cd)
             int newArtist;
             cin >> newArtist;
 
-            if (cin.fail() || newArtist < 1)
-            {
-                cout << "Merci d'entrer un ID valide" << endl;
-                return;
-            }
+            checkInput(cin, newArtist, 1);
 
             cd.setAuthorId(newArtist);
             break;
@@ -653,11 +597,7 @@ void Library::editCd(Cd& cd)
             int newLength;
             cin >> newLength;
 
-            if (cin.fail() || newLength < 1)
-            {
-                cout << "Merci d'entrer une duree valide" << endl;
-                return;
-            }
+            checkInput(cin, newLength, 1);
 
             cd.setLength(newLength);
             break;
@@ -676,21 +616,15 @@ void Library::editCd(Cd& cd)
 
             cout << "ID genre 1" << endl;
             cin >> genre1;
-            if (cin.fail() || genre1 < 1)
-            {
-                cout << "Merci d'entrer un ID" << endl;
-                return;
-            }
+
+            checkInput(cin, genre1, 1);
 
             cd.addGenre(genre1);
 
             cout << "ID genre 2" << endl;
             cin >> genre2;
-            if (cin.fail() || genre1 < 1)
-            {
-                cout << "Merci d'entrer un ID" << endl;
-                return;
-            }
+
+            checkInput(cin, genre2, 1);
 
             cd.addGenre(genre2);
 
@@ -725,11 +659,7 @@ void Library::userList()
     cout << "Pour modifier un utilisateur, tapez son ID, et 0 pour revenir au menu" << endl;
     cin >> userId;
 
-    if (cin.fail() || userId < 0)
-    {
-        cout << "Merci d'entrer un ID valide" << endl;
-        return;
-    }
+    checkInput(cin, userId, 0);
 
     editUser(userId);
 }
@@ -769,11 +699,7 @@ void Library::editUser(int userId)
     int choice;
     cin >> choice;
 
-    if (cin.fail() || choice < 1)
-    {
-        cout << "Merci d'entrer un choix valide" << endl;
-        return;
-    }
+    checkInput(cin, choice, 1);
 
     switch (choice)
     {
@@ -820,6 +746,7 @@ void Library::editUser(int userId)
             int newIsAdmin;
             cout << "Tapez 0 pour un utilisateur lambda, 1 pour un administrateur" << endl;
             cin >> newIsAdmin;
+            checkInput(cin, newIsAdmin, 0);
             userToEdit.setAdmin(newIsAdmin);
             break;
         }
@@ -827,11 +754,7 @@ void Library::editUser(int userId)
         {
             int newQuota;
             cin >> newQuota;
-            if (cin.fail() || newQuota < 0)
-            {
-                cout << "Merci d'entrer un choix valide" << endl;
-                return;
-            }
+            checkInput(cin, newQuota, 0);
             userToEdit.setQuota(newQuota);
             break;
         }
@@ -861,11 +784,7 @@ void Library::deleteUser()
     cout << "Rentrez l'ID de l'utilisateur a supprimer" << endl;
     cin >> userId;
 
-    if (cin.fail() || userId < 1)
-    {
-        cout << "Merci d'entrer un ID valide" << endl;
-        return;
-    }
+    checkInput(cin, userId, 1);
 
     if (userId != _currentUser.getId())
     {
@@ -904,11 +823,7 @@ void Library::artistList()
     cout << "Pour voir un artiste, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
     cin >> artistId;
 
-    if (cin.fail() || artistId < 0)
-    {
-        cout << "Merci d'entrer un ID valide" << endl;
-        return;
-    }
+    checkInput(cin, artistId, 0);
 
     seeArtist(artistId);
 }
@@ -1029,11 +944,7 @@ void Library::editArtist(Artist& artist)
     int choice;
     cin >> choice;
 
-    if (cin.fail() || choice < 1)
-    {
-        cout << "Merci d'entrer un choix valide" << endl;
-        return;
-    }
+    checkInput(cin, choice, 1);
 
     switch (choice)
     {

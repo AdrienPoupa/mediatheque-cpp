@@ -29,6 +29,8 @@ class Library {
 
         bool isAdmin();
 
+        void checkInput(std::istream& stream, int intToCheck, int minValue);
+
         void displayMenu();
         void redirectChoice(int choice);
 
