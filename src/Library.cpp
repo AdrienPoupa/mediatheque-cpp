@@ -16,6 +16,7 @@ Library* Library::getSingleton()
 
 Library::Library()
 {
+    cout << "Bienvenue dans votre mediatheque !" << endl;
 }
 
 Library::~Library()
@@ -30,7 +31,6 @@ bool Library::isAdmin()
 
 void Library::open()
 {
-    cout << "Ouverture de la mediatheque." << endl;
     cout << "Liste des comptes disponibles pour l'ouverture:" << endl;
 
     map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname");
@@ -63,6 +63,7 @@ void Library::open()
     {
         cout << "Identification reussie!" << endl;
         displayMenu();
+        return;
     }
     else
     {
@@ -205,6 +206,7 @@ void Library::seeBook(int bookId)
     if (bookId == 0)
     {
         displayMenu();
+        return;
     }
 
     Book bookToDisplay(bookId);
@@ -212,26 +214,27 @@ void Library::seeBook(int bookId)
 
     if (isAdmin())
     {
-        cout << "Voulez-vous modifier ce livre ? Tapez 'Oui' le cas echeant, 'Non' sinon" << endl;
+        cout << "Voulez-vous modifier ce livre ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
         string choice;
         cin >> choice;
 
-        if (choice == "Oui")
+        if (choice == "o")
         {
             editBook(bookToDisplay);
         }
 
-        cout << "Voulez-vous supprimer ce livre ? Tapez 'Oui' le cas echeant, 'Non' sinon" << endl;
+        cout << "Voulez-vous supprimer ce livre ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
         string choice2;
         cin >> choice2;
 
-        if (choice2 == "Oui")
+        if (choice2 == "o")
         {
             bookToDisplay.remove();
         }
     }
 
     displayMenu();
+    return;
 }
 
 void Library::editBook(Book& book)
@@ -341,6 +344,7 @@ void Library::editBook(Book& book)
     cout << "Sauvegarde..." << endl;
     book.save();
     displayMenu();
+    return;
 }
 
 void Library::dvdList()
@@ -382,6 +386,7 @@ void Library::seeDvd(int dvdId)
     if (dvdId == 0)
     {
         displayMenu();
+        return;
     }
 
     Dvd dvdToDisplay(dvdId);
@@ -389,26 +394,27 @@ void Library::seeDvd(int dvdId)
 
     if (isAdmin())
     {
-        cout << "Voulez-vous modifier ce DVD ? Tapez 'Oui' le cas echeant, 'Non' sinon" << endl;
+        cout << "Voulez-vous modifier ce DVD ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
         string choice;
         cin >> choice;
 
-        if (choice == "Oui")
+        if (choice == "o")
         {
             editDvd(dvdToDisplay);
         }
 
-        cout << "Voulez-vous supprimer ce DVD ? Tapez 'Oui' le cas echeant, 'Non' sinon" << endl;
+        cout << "Voulez-vous supprimer ce DVD ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
         string choice2;
         cin >> choice2;
 
-        if (choice2 == "Oui")
+        if (choice2 == "o")
         {
             dvdToDisplay.remove();
         }
     }
 
     displayMenu();
+    return;
 }
 
 void Library::editDvd(Dvd& dvd)
@@ -518,6 +524,7 @@ void Library::editDvd(Dvd& dvd)
     cout << "Sauvegarde..." << endl;
     dvd.save();
     displayMenu();
+    return;
 }
 
 void Library::cdList()
@@ -559,6 +566,7 @@ void Library::seeCd(int cdId)
     if (cdId == 0)
     {
         displayMenu();
+        return;
     }
 
     Cd cdToDisplay(cdId);
@@ -566,26 +574,27 @@ void Library::seeCd(int cdId)
 
     if (isAdmin())
     {
-        cout << "Voulez-vous modifier ce CD ? Tapez 'Oui' le cas echeant, 'Non' sinon" << endl;
+        cout << "Voulez-vous modifier ce CD ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
         string choice;
         cin >> choice;
 
-        if (choice == "Oui")
+        if (choice == "o")
         {
             editCd(cdToDisplay);
         }
 
-        cout << "Voulez-vous supprimer ce CD ? Tapez 'Oui' le cas echeant, 'Non' sinon" << endl;
+        cout << "Voulez-vous supprimer ce CD ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
         string choice2;
         cin >> choice2;
 
-        if (choice2 == "Oui")
+        if (choice2 == "o")
         {
             cdToDisplay.remove();
         }
     }
 
     displayMenu();
+    return;
 }
 
 void Library::editCd(Cd& cd)
@@ -695,27 +704,21 @@ void Library::editCd(Cd& cd)
     cout << "Sauvegarde..." << endl;
     cd.save();
     displayMenu();
+    return;
 }
 
 void Library::userList()
 {
     cout << "Liste des utilisateurs :" << endl << endl;
 
-    map<int, map<string, string>> users = BaseModel::select("users");
+    map<int, map<string, string>> users = BaseModel::select("users", "id");
 
-    int i = 1;
+    int totalUsers = users.size();
 
-    // Iterator, C++11 style :-)
-    // http://stackoverflow.com/questions/4844886/how-to-loop-through-a-c-map
-    for(auto const &ent1 : users)
+    for (int i = 1; i != totalUsers + 1; i++)
     {
-        cout << "Utilisateur " << i << endl;
-        for(auto const &ent2 : ent1.second)
-        {
-            cout << ent2.first << " : " << ent2.second << " " << endl;
-        }
-        cout << endl;
-        i++;
+        User currentUser(stoi(users[i]["id"]));
+        cout << currentUser << endl;
     }
 
     int userId;
@@ -739,6 +742,7 @@ void Library::addThing()
     newThing.save();
 
     displayMenu();
+    return;
 }
 
 void Library::editUser(int userId)
@@ -746,6 +750,7 @@ void Library::editUser(int userId)
     if (userId == 0)
     {
         displayMenu();
+        return;
     }
 
     User userToEdit(userId);
@@ -846,6 +851,7 @@ void Library::editUser(int userId)
     cout << "Sauvegarde..." << endl;
     userToEdit.save();
     displayMenu();
+    return;
 }
 
 void Library::deleteUser()
@@ -872,6 +878,7 @@ void Library::deleteUser()
     }
 
     displayMenu();
+    return;
 }
 
 void Library::artistList()
@@ -911,6 +918,7 @@ void Library::seeArtist(int artistId)
     if (artistId == 0)
     {
         displayMenu();
+        return;
     }
 
     Artist artistToDisplay(artistId);
@@ -918,20 +926,20 @@ void Library::seeArtist(int artistId)
 
     if (isAdmin())
     {
-        cout << "Voulez-vous modifier cet artiste ? Tapez 'Oui' le cas echeant, 'Non' sinon" << endl;
+        cout << "Voulez-vous modifier cet artiste ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
         string choice;
         cin >> choice;
 
-        if (choice == "Oui")
+        if (choice == "o")
         {
             editArtist(artistToDisplay);
         }
 
-        cout << "Voulez-vous supprimer cet artiste ? Tapez 'Oui' le cas echeant, 'Non' sinon" << endl;
+        cout << "Voulez-vous supprimer cet artiste ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
         string choice2;
         cin >> choice2;
 
-        if (choice2 == "Oui")
+        if (choice2 == "o")
         {
             artistToDisplay.remove();
         }
@@ -942,6 +950,7 @@ void Library::seeArtist(int artistId)
     filmography(artistToDisplay);
 
     displayMenu();
+    return;
 }
 
 void Library::biography(Artist& artist)
@@ -1067,23 +1076,27 @@ void Library::editArtist(Artist& artist)
     cout << "Sauvegarde..." << endl;
     artist.save();
     displayMenu();
+    return;
 }
 
 void Library::borrowArticle()
 {
     // TODO
     displayMenu();
+    return;
 }
 
 void Library::returnArticle()
 {
     // TODO
     displayMenu();
+    return;
 }
 
 void Library::listTransactions()
 {
     // TODO
     displayMenu();
+    return;
 }
 
