@@ -155,7 +155,7 @@ bool User::remove()
 
 ostream& operator<< (ostream& stream, const User& user)
 {
-    stream << "ID #" << user._id << " " << user._firstName << " " << user._lastName << endl;
+    stream << user._id << ". " << user._firstName << " " << user._lastName << endl;
     stream << "Anniversaire: " << user._birthDate << endl;
     stream << "Telephone: " << user._phone << endl;
     stream << "Adresse: " << user._address << endl;

@@ -61,7 +61,7 @@ void Address::setStreetName(const string& streetName)
 
 ostream& operator<< (ostream& stream, const Address& adresse)
 {
-    stream << adresse._houseNumber << endl << adresse._streetName << endl << adresse._postalCode << endl << adresse._town << endl << adresse._country;
+    stream << adresse._houseNumber << " " << adresse._streetName << ", " << adresse._postalCode << " " << adresse._town << ", " << adresse._country;
     return stream;
 }
 
