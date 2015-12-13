@@ -77,31 +77,30 @@ void Library::displayMenu()
 
     cout << endl;
     cout << "Menu : tapez le numero de l'action choisie" << endl;
+    cout << "0. Quitter" << endl;
     cout << "1. Liste des livres" << endl;
     cout << "2. Liste des dvds" << endl;
     cout << "3. Liste des cds" << endl;
-    cout << "4. Emprunter un article" << endl;
-    cout << "5. Restituer un emprunt" << endl;
+    cout << "4. Liste des artistes" << endl;
+    cout << "5. Emprunter un article" << endl;
+    cout << "6. Restituer un emprunt" << endl;
 
     if (isAdmin())
     {
         cout << endl << "Menu Administrateur" << endl;
-        cout << "6. Liste des utilisateurs" << endl;
-        cout << "7. Ajouter un utilisateur" << endl;
-        cout << "8. Supprimer un utilisateur" << endl;
-        cout << "9. Ajouter un livre" << endl;
-        cout << "10. Ajouter un cd" << endl;
-        cout << "11. Ajouter un dvd" << endl;
-        cout << "12. Liste des artistes" << endl;
+        cout << "7. Liste des utilisateurs" << endl;
+        cout << "8. Ajouter un utilisateur" << endl;
+        cout << "9. Supprimer un utilisateur" << endl;
+        cout << "10. Ajouter un livre" << endl;
+        cout << "11. Ajouter un cd" << endl;
+        cout << "12. Ajouter un dvd" << endl;
         cout << "13. Ajouter un artiste" << endl;
         cout << "14. Emprunts en cours" << endl;
     }
 
-    cout << "42. Quitter" << endl;
-
     cin >> choice;
 
-    if (cin.fail() || choice < 1)
+    if (cin.fail() || choice < 0)
     {
         cout << "Merci d'entrer un choix valide" << endl;
         return;
@@ -115,6 +114,9 @@ void Library::redirectChoice(int choice)
     switch (choice)
     {
         // User action
+        case 0:
+            return;
+            break;
         case 1:
             bookList();
             break;
@@ -125,41 +127,38 @@ void Library::redirectChoice(int choice)
             cdList();
             break;
         case 4:
-            borrowArticle();
+            artistList();
             break;
         case 5:
+            borrowArticle();
+            break;
+        case 6:
             returnArticle();
             break;
         // Admin action - we need an extra check
-        case 6:
+        case 7:
             (isAdmin()) ? userList() : displayMenu();
             break;
-        case 7:
+        case 8:
             (isAdmin()) ? addThing<User>() : displayMenu();
             break;
-        case 8:
+        case 9:
             (isAdmin()) ? deleteUser() : displayMenu();
             break;
-        case 9:
+        case 10:
             (isAdmin()) ? addThing<Book>() : displayMenu();
             break;
-        case 10:
+        case 11:
             (isAdmin()) ? addThing<Cd>() : displayMenu();
             break;
-        case 11:
-            (isAdmin()) ? addThing<Dvd>() : displayMenu();
-            break;
         case 12:
-            (isAdmin()) ? artistList() : displayMenu();
+            (isAdmin()) ? addThing<Dvd>() : displayMenu();
             break;
         case 13:
             (isAdmin()) ? addThing<Artist>() : displayMenu();
             break;
         case 14:
             (isAdmin()) ? listTransactions() : displayMenu();
-            break;
-        case 42:
-            return;
             break;
         default:
             (isAdmin()) ? displayMenu() : displayMenu();
@@ -698,18 +697,6 @@ void Library::editCd(Cd& cd)
     displayMenu();
 }
 
-void Library::borrowArticle()
-{
-    // TODO
-    displayMenu();
-}
-
-void Library::returnArticle()
-{
-    // TODO
-    displayMenu();
-}
-
 void Library::userList()
 {
     cout << "Liste des utilisateurs :" << endl << endl;
@@ -1023,9 +1010,76 @@ void Library::filmography(Artist& artist)
 
 void Library::editArtist(Artist& artist)
 {
+    cout << "Modification d'un artiste" << endl;
 
+    cout << "1. Modifier le prenom" << endl;
+    cout << "2. Modifier le nom" << endl;
+    cout << "3. Modifier la date de naissance" << endl;
+    cout << "4. Modifier la nationalite" << endl;
+
+    int choice;
+    cin >> choice;
+
+    if (cin.fail() || choice < 1)
+    {
+        cout << "Merci d'entrer un choix valide" << endl;
+        return;
+    }
+
+    switch (choice)
+    {
+        case 1:
+        {
+            string newName;
+            cin.ignore(1, '\n');
+            getline(cin, newName, '\n');
+            artist.setFirstName(newName);
+            break;
+        }
+        case 2:
+        {
+            string newLastName;
+            cin.ignore(1, '\n');
+            getline(cin, newLastName, '\n');
+            artist.setLastName(newLastName);
+            break;
+        }
+        case 3:
+        {
+            Date newBirthDate;
+            cin >> newBirthDate;
+            artist.setBirthDate(newBirthDate);
+            break;
+        }
+        case 4:
+        {
+            string newNationality;
+            cin.ignore(1, '\n');
+            getline(cin, newNationality, '\n');
+            artist.setNationality(newNationality);
+            break;
+        }
+        default:
+            editArtist(artist);
+            break;
+    }
+
+    cout << "Sauvegarde..." << endl;
+    artist.save();
+    displayMenu();
 }
 
+void Library::borrowArticle()
+{
+    // TODO
+    displayMenu();
+}
+
+void Library::returnArticle()
+{
+    // TODO
+    displayMenu();
+}
 
 void Library::listTransactions()
 {
