@@ -136,25 +136,25 @@ void Library::redirectChoice(int choice)
             (isAdmin()) ? userList() : displayMenu();
             break;
         case 7:
-            (isAdmin()) ? addUser() : displayMenu();
+            (isAdmin()) ? addThing<User>() : displayMenu();
             break;
         case 8:
             (isAdmin()) ? deleteUser() : displayMenu();
             break;
         case 9:
-            (isAdmin()) ? addBook() : displayMenu();
+            (isAdmin()) ? addThing<Book>() : displayMenu();
             break;
         case 10:
-            (isAdmin()) ? addCd() : displayMenu();
+            (isAdmin()) ? addThing<Cd>() : displayMenu();
             break;
         case 11:
-            (isAdmin()) ? addDvd() : displayMenu();
+            (isAdmin()) ? addThing<Dvd>() : displayMenu();
             break;
         case 12:
             (isAdmin()) ? artistList() : displayMenu();
             break;
         case 13:
-            (isAdmin()) ? addArtist() : displayMenu();
+            (isAdmin()) ? addThing<Artist>() : displayMenu();
             break;
         case 14:
             (isAdmin()) ? deleteArtist() : displayMenu();
@@ -235,15 +235,6 @@ void Library::seeBook(int bookId)
             bookToDisplay.remove();
         }
     }
-
-    displayMenu();
-}
-
-void Library::addBook()
-{
-    Book myNewBook;
-    cin >> myNewBook;
-    myNewBook.save();
 
     displayMenu();
 }
@@ -425,15 +416,6 @@ void Library::seeDvd(int dvdId)
     displayMenu();
 }
 
-void Library::addDvd()
-{
-    Dvd myNewDvd;
-    cin >> myNewDvd;
-    myNewDvd.save();
-
-    displayMenu();
-}
-
 void Library::editDvd(Dvd& dvd)
 {
     cout << "Modification d'un DVD" << endl;
@@ -611,15 +593,6 @@ void Library::seeCd(int cdId)
     displayMenu();
 }
 
-void Library::addCd()
-{
-    Cd myNewCd;
-    cin >> myNewCd;
-    myNewCd.save();
-
-    displayMenu();
-}
-
 void Library::editCd(Cd& cd)
 {
     cout << "Modification d'un CD" << endl;
@@ -775,11 +748,12 @@ void Library::userList()
     editUser(userId);
 }
 
-void Library::addUser()
+template <class T>
+void Library::addThing()
 {
-    User newUser;
-    cin >> newUser;
-    newUser.save();
+    T newThing;
+    cin >> newThing;
+    newThing.save();
 
     displayMenu();
 }
@@ -913,11 +887,6 @@ void Library::deleteUser()
 }
 
 void Library::artistList()
-{
-
-}
-
-void Library::addArtist()
 {
 
 }

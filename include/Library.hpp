@@ -34,21 +34,17 @@ class Library {
 
         void bookList();
         void seeBook(int bookId);
-        void addBook();
         void editBook(Book& book);
 
         void dvdList();
         void seeDvd(int dvdId);
-        void addDvd();
         void editDvd(Dvd& dvd);
 
         void cdList();
         void seeCd(int cdId);
-        void addCd();
         void editCd(Cd& cd);
 
         void userList();
-        void addUser();
         void editUser(int userId);
         void deleteUser();
 
@@ -56,6 +52,9 @@ class Library {
         void addArtist();
         void editArtist(int artistId);
         void deleteArtist();
+
+        template <class T>
+        void addThing();
 
         void borrowArticle();
         void returnArticle();
