@@ -401,6 +401,7 @@ void Library::editDvd(Dvd& dvd)
     cout << "4. Modifier la duree" << endl;
     cout << "5. Modifier le studio" << endl;
     cout << "6. Modifier les genres" << endl;
+    cout << "7. Modifier le casting" << endl;
 
     int choice;
     cin >> choice;
@@ -469,6 +470,27 @@ void Library::editDvd(Dvd& dvd)
             checkInput(cin, genre2, 1);
 
             dvd.addGenre(genre2);
+
+            break;
+        }
+        case 7:
+        {
+            cout << "Le casting actuel est supprime et remplace par celui que vous allez rentrer" << endl;
+            dvd.deleteCasting();
+
+            int artistId = 0;
+
+            cout << "ID de l'artiste a rajouter au casting" << endl;
+            cin >> artistId;
+
+            do {
+                checkInput(cin, artistId, 1);
+
+                dvd.addCasting(artistId);
+
+                cout << "ID de l'artiste a rajouter au casting, 0 pour arreter" << endl;
+                cin >> artistId;
+            } while (artistId != 0);
 
             break;
         }

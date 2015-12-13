@@ -126,7 +126,7 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
         {
             SQLite::Database db("mediatheque.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
 
-            string queryString = "INSERT INTO " + table + "(";
+            string queryString = "INSERT OR IGNORE INTO " + table + "(";
 
             for(auto const& elem: data){
                 if(elem.first != "id"){

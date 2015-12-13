@@ -53,11 +53,14 @@ Dvd::Dvd(int id)
     }
 }
 
-void Dvd::addCasting(Artist* artist)
+void Dvd::addCasting(int artistId)
 {
-    // TODO
-    _casting.insert(artist);
-    save();
+    _casting.push_back(artistId);
+}
+
+vector<int> Dvd::getCasting() const
+{
+    return _casting;
 }
 
 bool Dvd::save()
@@ -76,14 +79,37 @@ bool Dvd::save()
 
     int res = BaseModel::save(_dbTable, data);
 
-    // TODO: save castings ...
-
     if(_id == 0)
     {
         _id = res["id"];
     }
 
+    for (const auto& elem: _casting) {
+        // Check if the entry is already in DB
+        map<int, map<string, string>> casting = BaseModel::select("castings", "id", "WHERE artist_id=" + to_string(elem) + " AND dvd_id=" + to_string(_id));
+
+        // Insert if not
+        if (casting.empty())
+        {
+            BaseModel::save("castings", {
+                {"id", {to_string(0), "int"}},
+                {"artist_id", {to_string(elem), "int"}},
+                {"dvd_id", {to_string(_id), "int"}}
+            });
+        }
+    }
+
     return (bool) res;
+}
+
+void Dvd::deleteCasting()
+{
+    _casting.clear();
+
+    SQLite::Database db("mediatheque.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
+    SQLite::Statement   query(db, "DELETE FROM castings WHERE dvd_id=?");
+    query.bind(1, (int) _id);
+    query.exec();
 }
 
 bool Dvd::remove()
@@ -97,6 +123,7 @@ ostream& operator<< (ostream& stream, Dvd& dvd)
 
     stream << "ID #" << dvd._id << " : " << dvd._title << endl;
     stream << "Metteur en scene : " << director.getFirstName() << " "  << director.getLastName() << endl;
+    // TODO: casting
     stream << "Studio : " << dvd._studio << endl;
     stream << "Date de sortie : " << dvd._release << endl;
     stream << "Duree : " << dvd._length << endl;
@@ -121,6 +148,7 @@ istream& operator>> (istream& stream, Dvd& dvd)
     cout << "Duree" << endl;
     stream >> dvd._length;
     dvd.displayGenreFromCli(stream);
+    // TODO: casting
 
     dvd._author = new Artist(dvd._authorId);
 

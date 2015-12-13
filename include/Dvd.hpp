@@ -1,6 +1,8 @@
 #ifndef DVD_H
 #define DVD_H
 
+#include <vector>
+
 #include "Cd.hpp"
 #include "Artist.hpp"
 
@@ -10,15 +12,16 @@ class Dvd : public Cd
         static std::string _dbTable;
 
     protected:
-        std::set<Artist*> _casting; // do not save
+        std::vector<int> _casting; // do not save
 
     public:
         Dvd();
         Dvd(int id);
         virtual ~Dvd();
 
-        std::set<Artist*> getCasting() const; // TODO
-        void addCasting(Artist* artist);
+        std::vector<int> getCasting() const;
+        void addCasting(int artistId);
+        void deleteCasting();
 
         bool save();
         bool remove();
