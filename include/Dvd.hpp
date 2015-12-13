@@ -22,6 +22,7 @@ class Dvd : public Cd
         std::vector<int> getCasting() const;
         void addCasting(int artistId);
         void deleteCasting();
+        void displayCasting();
 
         bool save();
         bool remove();

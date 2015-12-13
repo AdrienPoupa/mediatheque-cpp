@@ -84,6 +84,7 @@ bool Dvd::save()
         _id = res["id"];
     }
 
+    // Iterator, C++11 style :-)
     for (const auto& elem: _casting) {
         // Check if the entry is already in DB
         map<int, map<string, string>> casting = BaseModel::select("castings", "id", "WHERE artist_id=" + to_string(elem) + " AND dvd_id=" + to_string(_id));
@@ -117,16 +118,39 @@ bool Dvd::remove()
     return BaseModel::remove(_dbTable, _id);
 }
 
+void Dvd::displayCasting()
+{
+    map<int, map<string, string>> casting = BaseModel::select("castings", "artist_id", "WHERE dvd_id=" + to_string(_id));
+
+    if (!casting.empty())
+    {
+        cout << "Casting : ";
+        int totalCasting = casting.size();
+        for (int i = 1; i != totalCasting + 1; i++)
+        {
+            Artist actor(stoi(casting[i]["artist_id"]));
+            cout << actor.getFirstName() << " " << actor.getLastName();
+
+            // Add a comma as long as we didn't reach the last item
+            if (i != totalCasting)
+            {
+                cout << ", ";
+            }
+        }
+        cout << endl;
+    }
+}
+
 ostream& operator<< (ostream& stream, Dvd& dvd)
 {
     Artist director(dvd._authorId);
 
     stream << "ID #" << dvd._id << " : " << dvd._title << endl;
     stream << "Metteur en scene : " << director.getFirstName() << " "  << director.getLastName() << endl;
-    // TODO: casting
+    dvd.displayCasting();
     stream << "Studio : " << dvd._studio << endl;
     stream << "Date de sortie : " << dvd._release << endl;
-    stream << "Duree : " << dvd._length << endl;
+    stream << "Duree : " << dvd._length << " minutes" << endl;
     dvd.displayGenres(stream);
 
     return stream;
@@ -145,10 +169,22 @@ istream& operator>> (istream& stream, Dvd& dvd)
     getline(stream, dvd._studio, '\n');
     cout << "Date de sortie" << endl;
     stream >> dvd._release;
-    cout << "Duree" << endl;
+    cout << "Duree en minutes" << endl;
     stream >> dvd._length;
     dvd.displayGenreFromCli(stream);
-    // TODO: casting
+
+    int artistId = 0;
+
+    cout << "ID de l'artiste a rajouter au casting, 0 pour ne pas rentrer de casting" << endl;
+    stream >> artistId;
+
+    while (artistId != 0)
+    {
+        dvd._casting.push_back(artistId);
+
+        cout << "ID de l'artiste a rajouter au casting, 0 pour arreter" << endl;
+        stream >> artistId;
+    }
 
     dvd._author = new Artist(dvd._authorId);
 
