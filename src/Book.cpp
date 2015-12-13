@@ -41,9 +41,12 @@ Book::Book(int id)
         _authorId = stoi(data["author"]);
         _editor = data["editor"];
         _pages = stoi(data["pages"]);
+        retrieveGenreFromDB(data);
     }
-
-    retrieveGenreFromDB(data);
+    else
+    {
+        throw invalid_argument("Merci d'entrer un livre valide");
+    }
 }
 
 Book::~Book()

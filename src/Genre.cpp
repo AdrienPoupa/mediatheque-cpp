@@ -32,6 +32,10 @@ Genre::Genre(int id)
         _id = id;
         _name = data["genre"];
     }
+    else
+    {
+        throw invalid_argument("Merci d'entrer un genre valide");
+    }
 }
 
 int Genre::getId()

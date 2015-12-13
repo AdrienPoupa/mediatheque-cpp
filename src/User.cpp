@@ -57,6 +57,10 @@ User::User(int id) // Get a person from an ID provided by DB
         _quota = stoi(data["quota"]);
         _password = data["password"];
     }
+    else
+    {
+        throw invalid_argument("Merci d'entrer un utilisateur valide");
+    }
 }
 
 User::~User()

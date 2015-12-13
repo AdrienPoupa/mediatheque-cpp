@@ -40,9 +40,12 @@ Cd::Cd(int id)
         _release = Date(data["release"]);
         _length = stoi(data["length"]);
         _studio = data["studio"];
+        retrieveGenreFromDB(data);
     }
-
-    retrieveGenreFromDB(data);
+    else
+    {
+        throw invalid_argument("Merci d'entrer un cd valide");
+    }
 }
 
 Cd::~Cd()

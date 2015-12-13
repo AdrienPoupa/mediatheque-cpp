@@ -39,6 +39,10 @@ Artist::Artist(int id) // Get a person from an ID provided by DB
         _birthDate = Date(data["birthdate"]);
         _nationality = data["nationality"];
     }
+    else
+    {
+        throw invalid_argument("Merci d'entrer un artiste valide");
+    }
 }
 
 std::string Artist::getNationality() const
