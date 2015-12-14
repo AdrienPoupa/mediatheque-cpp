@@ -98,6 +98,7 @@ std::istream& operator>>(std::istream& is, Artist& me)
 bool Artist::save()
 {
     int res = BaseModel::save(_dbTable, {
+
         {"id", {to_string(_id), "int"}},
         {"name", {_firstName, "string"}},
         {"surname", {_lastName, "string"}},
