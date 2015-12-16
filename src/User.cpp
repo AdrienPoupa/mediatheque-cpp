@@ -25,7 +25,8 @@ using namespace std;
 
 string User::_dbTable = "users";
 
-User::User(std::string firstName, std::string lastName, Date birthDate, string phone, int isAdmin, int quota, string password):
+User::User(const std::string firstName, const std::string lastName, const Date birthDate, const string phone,
+           const int isAdmin, const int quota, const string password):
     Person(firstName, lastName, birthDate), _phone(phone), _isAdmin(isAdmin), _quota(quota), _password(password)
 {
 
@@ -41,7 +42,7 @@ User::User()
     _phone = "Inconnu";
 }
 
-User::User(int id) // Get a person from an ID provided by DB
+User::User(const int id) // Get a person from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
 
@@ -68,22 +69,22 @@ User::~User()
 
 }
 
-string User::getPhone()
+string User::getPhone() const
 {
     return _phone;
 }
 
-void User::setPhone(string phone)
+void User::setPhone(const string phone)
 {
     _phone = phone;
 }
 
-void User::setPassword(string password)
+void User::setPassword(const string password)
 {
     _password = sha256(password);
 }
 
-bool User::checkPassword(string password)
+bool User::checkPassword(const string password) const
 {
     if (sha256(password) == _password)
     {
@@ -93,22 +94,22 @@ bool User::checkPassword(string password)
     return false;
 }
 
-Address User::getAddress()
+Address User::getAddress() const
 {
     return _address;
 }
 
-void User::setAddress(Address address)
+void User::setAddress(const Address address)
 {
     _address = address;
 }
 
-bool User::isAdmin()
+bool User::isAdmin() const
 {
     return (bool) _isAdmin;
 }
 
-void User::setAdmin(int isAdmin)
+void User::setAdmin(const int isAdmin)
 {
     if (isAdmin == 0 || isAdmin == 1)
     {
@@ -116,40 +117,47 @@ void User::setAdmin(int isAdmin)
     }
 }
 
-int User::getQuota()
+int User::getQuota() const
 {
     return _quota;
 }
 
-void User::setQuota(int quota)
+void User::setQuota(const int quota)
 {
     _quota = quota;
 }
 
-bool User::checkQuota(){
-    return true;//Transaction::byUser(_id, true).size() < _quota;
+bool User::checkQuota() const
+{
+    return true;//Transaction::byUser(_id, true).size() < _quota; // TODO
 }
 
+bool User::borrow(Article* art, const string type)
+{
+    if(checkQuota())
+    {
 
-
-bool User::borrow(Article* art, string type){
-    if(checkQuota()){
         Transaction t(art->getId(), type, _id);
-        if(t.save()){
+
+        if(t.save())
+        {
             cout << "Emprunt validé !" << endl;
             // update borrowable of article
             (*art).setBorrowable(false);
             (*art).save();
-            
+
             // update quota
             _quota -= 1;
             save();
+
             return true;
         }
+
         return false;
     }
     else{
         cout << "Vous avez trop d'emprunts en cours. Ramenez vos articles empruntés si vous voulez emprunter cet article" << endl;
+
         return false;
     }
 }

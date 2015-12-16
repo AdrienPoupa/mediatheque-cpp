@@ -2,14 +2,14 @@
 
 using namespace std;
 
-Person::Person(std::string lastName, std::string firstName) :
+Person::Person(const string lastName, const string firstName) :
     _lastName(lastName), _firstName(firstName)
 {
     Date(1, 1, 1900);
     _id = 0; // No ID for now
 }
 
-Person::Person(std::string lastName, std::string firstName, Date birthDate) :
+Person::Person(const string lastName, const string firstName, Date birthDate) :
     _lastName(lastName), _firstName(firstName), _birthDate(birthDate)
 {
     _id = 0; // No ID for now
@@ -25,22 +25,22 @@ unsigned int Person::getId() const
     return _id;
 }
 
-std::string Person::getLastName() const
+string Person::getLastName() const
 {
     return _lastName;
 }
 
-void Person::setLastName(std::string lastName)
+void Person::setLastName(const string lastName)
 {
     _lastName = lastName;
 }
 
-void Person::setFirstName(std::string firstName)
+void Person::setFirstName(const string firstName)
 {
     _firstName = firstName;
 }
 
-std::string Person::getFirstName() const
+string Person::getFirstName() const
 {
     return _firstName;
 }
@@ -50,7 +50,7 @@ Date Person::getBirthDate() const
     return _birthDate;
 }
 
-void Person::setBirthDate(Date birthDate)
+void Person::setBirthDate(const Date birthDate)
 {
     _birthDate = birthDate;
 }

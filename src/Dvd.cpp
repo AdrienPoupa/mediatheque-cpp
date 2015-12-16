@@ -53,7 +53,7 @@ Dvd::Dvd(int id)
     }
 }
 
-void Dvd::addCasting(int artistId)
+void Dvd::addCasting(const int artistId)
 {
     _casting.push_back(artistId);
 }
@@ -118,7 +118,7 @@ bool Dvd::remove()
     return BaseModel::remove(_dbTable, _id);
 }
 
-void Dvd::displayCasting()
+void Dvd::displayCasting() const
 {
     map<int, map<string, string>> casting = BaseModel::select("castings", "artist_id", "dvd_id=" + to_string(_id));
 

@@ -29,44 +29,44 @@ class Library {
 
         bool isAdmin();
 
-        void checkInput(std::istream& stream, int intToCheck, int minValue);
+        void checkInput(std::istream& stream, const int intToCheck, const int minValue) const;
 
         void displayMenu();
         void redirectChoice(int choice);
-    
-        bool affichageChoixSee(std::string typeChoix, std::string typeArticle);
-    void seeArticleMenu(Article * art, std::string type);
-    
-        void searchList();
+
+        bool affichageChoixSee(std::string typeChoix, std::string typeArticle) const;
+        void seeArticleMenu(Article * art, std::string type);
+
+        void searchList() const;
 
         void bookList();
-        void seeBook(int bookId);
+        void seeBook(const int bookId);
         void editBook(Book& book);
 
         void dvdList();
-        void seeDvd(int dvdId);
+        void seeDvd(const int dvdId);
         void editDvd(Dvd& dvd);
 
         void cdList();
-        void seeCd(int cdId);
+        void seeCd(const int cdId);
         void editCd(Cd& cd);
 
         void userList();
-        void editUser(int userId);
+        void editUser(const int userId);
         void deleteUser();
 
         void artistList();
-        void seeArtist(int artistId);
+        void seeArtist(const int artistId);
         void editArtist(Artist& artist);
 
-        void bibliography(Artist& artist);
-        void discography(Artist& artist);
-        void filmography(Artist& artist);
+        void bibliography(Artist& artist) const;
+        void discography(Artist& artist) const;
+        void filmography(Artist& artist) const;
 
         template <class T>
         void addThing();
 
-        void borrowArticle(Article* art = nullptr, std::string type = NULL);
+        void borrowArticle(Article* art = nullptr, const std::string type = NULL);
         void returnArticle();
         void listTransactions();
 

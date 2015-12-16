@@ -46,11 +46,11 @@ bool Library::isAdmin()
     return _currentUser.isAdmin();
 }
 
-void Library::checkInput(istream& stream, int intToCheck, int minValue)
+void Library::checkInput(istream& stream, const int intToCheck, const int minValue) const
 {
     if (stream.fail() || intToCheck < minValue)
     {
-        throw invalid_argument("Merci d'entrer un choix valide");
+        throw("Merci d'entrer un choix valide");
     }
 }
 
@@ -127,7 +127,7 @@ void Library::displayMenu()
     redirectChoice(choice);
 }
 
-void Library::redirectChoice(int choice)
+void Library::redirectChoice(const int choice)
 {
     switch (choice)
     {
@@ -184,16 +184,17 @@ void Library::redirectChoice(int choice)
     }
 }
 
-void Library::searchList(){
+void Library::searchList() const
+{
     cout << "Rechercher dans la médiatheque:" << endl;
     string query;
-    
+
     // saisie de la recherche par l'utilisateur (ensemble de mots)
-    
+
     // saisie des filtres (type d'article, artistes, genre)
-    
+
     // Select * FROM filtre WHERE filtre LIKE mot
-    
+
     // affichage selon le type de recherche.
     /*
      On peut aussi demander les filtres avant, et faire differente fonction qui traite chaque table de la DB
@@ -230,7 +231,7 @@ void Library::bookList()
     seeBook(articleId);
 }
 
-void Library::seeBook(int bookId)
+void Library::seeBook(const int bookId)
 {
     if (bookId == 0)
     {
@@ -240,9 +241,9 @@ void Library::seeBook(int bookId)
 
     Book bookToDisplay(bookId);
     cout << bookToDisplay << endl;
-    
+
     seeArticleMenu(&bookToDisplay, "livre");
-    
+
     displayMenu();
     return;
 }
@@ -379,9 +380,9 @@ void Library::seeDvd(int dvdId)
 
     Dvd dvdToDisplay(dvdId);
     cout << dvdToDisplay << endl;
-    
+
     seeArticleMenu(&dvdToDisplay, "DVD");
-    
+
     displayMenu();
     return;
 }
@@ -530,12 +531,13 @@ void Library::cdList()
     seeCd(articleId);
 }
 
-void Library::seeArticleMenu(Article * art, string type){
-    
+void Library::seeArticleMenu(Article * art, const string type)
+{
+
     if(art->getBorrowable()){
         if(affichageChoixSee("emprunter", type)) borrowArticle(art, type);
     }
-    
+
     if (isAdmin())
     {
         if (affichageChoixSee("modifier", type))
@@ -554,7 +556,7 @@ void Library::seeArticleMenu(Article * art, string type){
                 editBook(tmp);
             }
         }
-        
+
         if (affichageChoixSee("supprimer", type))
         {
             art->remove();
@@ -562,8 +564,9 @@ void Library::seeArticleMenu(Article * art, string type){
     }
 }
 
-bool Library::affichageChoixSee(string typeChoix, string typeArticle){
-    
+bool Library::affichageChoixSee(const string typeChoix, const string typeArticle) const
+{
+
     string choice = "";
     do {
         cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' le cash échéant, 'n' sinon" << endl;
@@ -573,7 +576,7 @@ bool Library::affichageChoixSee(string typeChoix, string typeArticle){
     return choice=="o";
 }
 
-void Library::seeCd(int cdId)
+void Library::seeCd(const int cdId)
 {
     if (cdId == 0)
     {
@@ -583,7 +586,7 @@ void Library::seeCd(int cdId)
 
     Cd cdToDisplay(cdId);
     cout << cdToDisplay << endl;
-    
+
     seeArticleMenu(&cdToDisplay, "CD");
 
     displayMenu();
@@ -869,7 +872,7 @@ void Library::artistList()
     seeArtist(artistId);
 }
 
-void Library::seeArtist(int artistId)
+void Library::seeArtist(const int artistId)
 {
     if (artistId == 0)
     {
@@ -909,7 +912,7 @@ void Library::seeArtist(int artistId)
     return;
 }
 
-void Library::bibliography(Artist& artist)
+void Library::bibliography(Artist& artist) const
 {
     cout << "Bibliographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
 
@@ -931,7 +934,7 @@ void Library::bibliography(Artist& artist)
     }
 }
 
-void Library::discography(Artist& artist)
+void Library::discography(Artist& artist) const
 {
     cout << "Discographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
 
@@ -952,7 +955,7 @@ void Library::discography(Artist& artist)
     }
 }
 
-void Library::filmography(Artist& artist)
+void Library::filmography(Artist& artist) const
 {
     cout << "Filmographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
 
@@ -1031,11 +1034,11 @@ void Library::editArtist(Artist& artist)
     return;
 }
 
-void Library::borrowArticle(Article* art, string type)
+void Library::borrowArticle(Article* art, const string type)
 {
-    
+
     _currentUser.borrow(art, type);
-    
+
     displayMenu();
     return;
 }

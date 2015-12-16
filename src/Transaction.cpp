@@ -19,7 +19,7 @@ string Transaction::_dbTable = "transactions";
  - date_returned: DATE
  */
 
-Transaction::Transaction(int articleId, string type, int userId){
+Transaction::Transaction(const int articleId, const string type, const int userId){
     _articleId = articleId;
     _type = type;
     _userId = userId;
@@ -27,14 +27,16 @@ Transaction::Transaction(int articleId, string type, int userId){
     _finish = NULL;
 }
 
-Transaction::Transaction(Article *article, string type, User user, Date beginning, Date finish) :
+Transaction::Transaction(Article *article, const string type, const User user, const Date beginning, const Date finish) :
     _article(article), _type(type), _user(user), _beginning(beginning), _finish(finish)
 {
     _articleId = article->getId();
     _userId = user.getId();
 }
 
-Transaction::Transaction(int id, int article_id, string type, int borrower_id, Date date_beginning, Date date_returned, bool returned){
+Transaction::Transaction(const int id, const int article_id, const string type, const int borrower_id,
+                         const Date date_beginning, const Date date_returned, const bool returned)
+{
     _id = id;
     _articleId = article_id;
     _type = type;
@@ -116,7 +118,8 @@ void Transaction::setType(string const type)
 }
 
 // TODO: day/month/year
-void Transaction::displayTransactions(string current, int day_borrowed, int month_borrowed, int year_borrowed, int day_returned, int month_returned, int year_returned)
+void Transaction::displayTransactions(const string current, const int day_borrowed, const int month_borrowed, const int year_borrowed,
+                                      const int day_returned, const int month_returned, const int year_returned)
 {
     string condition = (current == "current") ? "AND returned=0" : "";
 
@@ -158,21 +161,21 @@ void Transaction::displayTransactions(string current, int day_borrowed, int mont
     }
 }
 
-list<Transaction> Transaction::byUser(int userId, bool active){
-    
+list<Transaction> Transaction::byUser(const int userId, const bool active){
+
     string condition = active ? " AND returned is false" : "";
     SQLite::Database dbTransaction("mediatheque.db3");
-    
+
     SQLite::Statement query(dbTransaction, "SELECT id, article_id, type, borrower_id, date_borrowed, date_returned, returned FROM transactions WHERE borrower_id =" + to_string(userId) + condition);
-    
+
     list<Transaction> res;
-    
+
     while (query.executeStep())
     {
         Transaction tmp(query.getColumn(0).getInt(), query.getColumn(1).getInt(), query.getColumn(2).getText(), query.getColumn(3).getInt(), Date(query.getColumn(4).getText()), Date(query.getColumn(5).getText()), (bool)query.getColumn(6).getInt());
         res.push_back(tmp);
     }
-    
+
     return res;
 }
 
@@ -193,11 +196,11 @@ bool Transaction::save()
         {"date_borrowed", {_beginning.dateToDB(), "string"}},
         {"returned", {to_string(_returned), "int"}},
     };
-    
+
     if(_id != 0){
         tmp.insert({"date_returned", { _finish.dateToDB(), "string"}});
     }
-    
+
     int res = BaseModel::save("transactions", tmp);
 
     if(_id == 0)

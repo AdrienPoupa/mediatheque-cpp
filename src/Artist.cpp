@@ -41,7 +41,7 @@ Artist::Artist(int id) // Get a person from an ID provided by DB
     }
     else
     {
-        throw invalid_argument("Merci d'entrer un artiste valide");
+        throw("Merci d'entrer un artiste valide");
     }
 }
 

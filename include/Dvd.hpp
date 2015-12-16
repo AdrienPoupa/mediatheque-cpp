@@ -20,9 +20,9 @@ class Dvd : public Cd
         virtual ~Dvd();
 
         std::vector<int> getCasting() const;
-        void addCasting(int artistId);
+        void addCasting(const int artistId);
         void deleteCasting();
-        void displayCasting();
+        void displayCasting() const;
 
         bool save();
         bool remove();

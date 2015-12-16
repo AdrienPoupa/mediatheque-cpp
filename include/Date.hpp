@@ -10,17 +10,22 @@
 
 class Date
 {
- public:
-    Date (int day = -1, int month = -1, int year = -1);
-    Date (std::string dateDB);
-    int getMonth();
-    void setMonth(int month);
-    int daysSoFar();
-    friend std::ostream& operator<< (std::ostream& stream, const Date& date);
-    friend std::istream& operator>> (std::istream& stream, Date& date);
-    std::string dateToDB();
- private:
-    int _month, _day, _year;
+    public:
+        Date(const int day = -1, const int month = -1, const int year = -1);
+        Date(const std::string dateDB);
+
+        int getMonth() const;
+        void setMonth(const int month);
+
+        int daysSoFar() const;
+
+        std::string dateToDB() const;
+
+        friend std::ostream& operator<< (std::ostream& stream, const Date& date);
+        friend std::istream& operator>> (std::istream& stream, Date& date);
+
+    private:
+        int _month, _day, _year;
 };
 
 

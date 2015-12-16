@@ -17,10 +17,10 @@ class Genre {
 
     public:
         Genre(const std::string name = "Inconnu");
-        Genre(int id);
+        Genre(const int id);
         ~Genre();
 
-        int getId();
+        int getId() const;
 
         void setName(const std::string name);
         std::string getName() const;
