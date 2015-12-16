@@ -1,6 +1,15 @@
 #include "Library.hpp"
+#include <fstream>
 
 using namespace std;
+
+class NoDbException: public exception
+{
+    virtual const char* what() const throw()
+    {
+        return "No DB file available.";
+    }
+} NoDb;
 
 Library* Library::singleton = NULL;
 
@@ -8,7 +17,15 @@ Library* Library::getSingleton()
 {
     if (singleton == NULL)
     {
-        singleton = new Library();
+        // check if mediatheque.db3 exist
+        ifstream mfile("mediatheque.db3");
+        if(mfile){
+            singleton = new Library();
+            mfile.close();
+        }
+        else{
+            throw NoDb;
+        }
     }
 
     return singleton;
