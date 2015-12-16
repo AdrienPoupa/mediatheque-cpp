@@ -6,20 +6,41 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <chrono>
+#include <map>
 
 using namespace std;
 
 Date::Date (int month, int day, int year)
 {
-   static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    
+    if(month != -1 && day != -1 && year != -1){
+        _month = max(1, month);
+        _month = min(_month,12);
+        
+        _day = max(1, day);
+        _day = min(_day, length[_month]);
+        
+        _year = max(1, year);
+    }
+    else{
+        
+        map<string, int> months = {{"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4}, {"Mai", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8}, {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}};
+    
+        std::chrono::time_point<std::chrono::system_clock> end;
+        end = std::chrono::system_clock::now();
+        
+        time_t end_time = std::chrono::system_clock::to_time_t(end);
+        
+        string timeStr = std::ctime(&end_time);
+        
+        _month = months.at(timeStr.substr(4, 3));
+        _day = stoi(timeStr.substr(7, 3));
+        _year =  stoi(timeStr.substr(20, 4));
+    }
 
-   _month = max(1, month);
-   _month = min(_month,12);
-
-   _day = max(1, day);
-   _day = min(_day, length[_month]);
-
-   _year = max(1, year);
+    
 }
 
 Date::Date (string dateDB)

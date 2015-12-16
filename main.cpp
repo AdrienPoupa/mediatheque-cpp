@@ -9,22 +9,19 @@ using namespace std;
 
 int main()
 {
+    
     try{
-        Library *towerOfBabel = Library::getSingleton();
+        Library * towerOfBabel = Library::getSingleton();
         
-        try
-        {
-            towerOfBabel->open();
-        }
-        catch (const std::invalid_argument& e)
-        {
-            cout << e.what() << endl;
-        }
+        towerOfBabel->open();
         
         delete towerOfBabel;
-
     }
     catch (const exception& e)
+    {
+        cout << e.what() << endl;
+    }
+    catch (const std::invalid_argument& e)
     {
         cout << e.what() << endl;
     }

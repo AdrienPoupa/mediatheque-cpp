@@ -10,17 +10,22 @@
 #include "Dvd.hpp"
 #include "Date.hpp"
 #include "User.hpp"
+#include <list>
 
 class Transaction {
     private:
         Article *_article;
+        int _articleId, _userId;
+        bool _returned = false;
         std::string _type = "Book";
         User _user;
         Date _beginning, _finish;
         int _id = 0;
         static std::string _dbTable;
     public:
+        Transaction(int articleId, std::string type, int userId);
         Transaction(Article *article, std::string type, User user, Date beginning, Date finish);
+        Transaction(int id, int article_id, std::string type, int borrower_id, Date date_beginning, Date date_returned, bool returned);
         //Transaction(unsigned int id);
         virtual ~Transaction();
 
@@ -42,6 +47,8 @@ class Transaction {
         static void displayCurrentTransactions();
         static void displayTransactions(std::string current = "current", int day_borrowed = 0, int month_borrowed = 0, int year_borrowed = 0, int day_returned = 0, int month_returned = 0, int year_returned = 0);
         //Transaction getTransaction(int id);
+    
+        static std::list<Transaction> byUser(int userId, bool active);
 
         bool save();
         bool remove();

@@ -2,6 +2,7 @@
 #include "Address.hpp"
 #include "BaseModel.hpp"
 #include "sha256.h"
+#include "Transaction.hpp"
 
 using namespace std;
 
@@ -124,6 +125,23 @@ int User::getQuota()
 void User::setQuota(int quota)
 {
     _quota = quota;
+}
+
+bool User::checkQuota(){
+    return true;//Transaction::byUser(_id, true).size() < _quota;
+}
+
+bool User::borrow(Article* art, string type){
+    if(checkQuota()){
+        
+        Transaction t(art, type, (*this), Date(), NULL);
+        t.save();
+        return true;
+    }
+    else{
+        cout << "Vous avez trop d'emprunts en cours. Ramenez vos articles empruntés si vous voulez emprunter cet article" << endl;
+        return false;
+    }
 }
 
 bool User::save()

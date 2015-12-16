@@ -42,6 +42,9 @@ class User: public Person {
 
         int getQuota();
         void setQuota(int quota);
+        bool checkQuota();
+    
+        bool borrow(Article* art, std::string type);
 
         bool save();
         bool remove();

@@ -184,6 +184,22 @@ void Library::redirectChoice(int choice)
     }
 }
 
+void Library::searchList(){
+    cout << "Rechercher dans la médiatheque:" << endl;
+    string query;
+    
+    // saisie de la recherche par l'utilisateur (ensemble de mots)
+    
+    // saisie des filtres (type d'article, artistes, genre)
+    
+    // Select * FROM filtre WHERE filtre LIKE mot
+    
+    // affichage selon le type de recherche.
+    /*
+     On peut aussi demander les filtres avant, et faire differente fonction qui traite chaque table de la DB
+     */
+}
+
 void Library::bookList()
 {
     cout << "Liste des livres dans la mediatheque:" << endl;
@@ -382,6 +398,17 @@ void Library::seeDvd(int dvdId)
 
     Dvd dvdToDisplay(dvdId);
     cout << dvdToDisplay << endl;
+    
+    if(dvdToDisplay.getBorrowable()){
+        cout << "Voulez-vous emprunter ce DVD ? Tapez 'o' le cash échéant, 'n' sinon" << endl;
+        string choice;
+        cin >> choice;
+        
+        if (choice == "o")
+        {
+            borrowArticle(&dvdToDisplay, "dvd");
+        }
+    }
 
     if (isAdmin())
     {
@@ -899,7 +926,7 @@ void Library::seeArtist(int artistId)
         }
     }
 
-    biography(artistToDisplay);
+    bibliography(artistToDisplay);
     discography(artistToDisplay);
     filmography(artistToDisplay);
 
@@ -907,9 +934,9 @@ void Library::seeArtist(int artistId)
     return;
 }
 
-void Library::biography(Artist& artist)
+void Library::bibliography(Artist& artist)
 {
-    cout << "Biographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
+    cout << "Bibliographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
 
     map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "WHERE author=" + to_string(artist.getId()));
 
@@ -1029,9 +1056,17 @@ void Library::editArtist(Artist& artist)
     return;
 }
 
-void Library::borrowArticle()
+void Library::borrowArticle(Article* art, string type)
 {
-    // TODO
+    // gestion du quota:  TODO
+    
+//    try{
+//        _currentUser.borrow(art);
+//    }
+//    catch(exception& e){
+//        
+//    }
+    
     displayMenu();
     return;
 }

@@ -33,6 +33,8 @@ class Library {
 
         void displayMenu();
         void redirectChoice(int choice);
+    
+        void searchList();
 
         void bookList();
         void seeBook(int bookId);
@@ -54,14 +56,14 @@ class Library {
         void seeArtist(int artistId);
         void editArtist(Artist& artist);
 
-        void biography(Artist& artist);
+        void bibliography(Artist& artist);
         void discography(Artist& artist);
         void filmography(Artist& artist);
 
         template <class T>
         void addThing();
 
-        void borrowArticle();
+        void borrowArticle(Article* art = nullptr, std::string type = NULL);
         void returnArticle();
         void listTransactions();
 
