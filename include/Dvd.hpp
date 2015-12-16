@@ -18,6 +18,8 @@ class Dvd : public Cd
         Dvd();
         Dvd(int id);
         virtual ~Dvd();
+    
+        void deserialization(std::map<std::string, std::string> data);
 
         std::vector<int> getCasting() const;
         void addCasting(const int artistId);
@@ -26,7 +28,7 @@ class Dvd : public Cd
 
         bool save();
         bool remove();
-
+    
         friend std::ostream& operator<< (std::ostream& stream, Dvd& dvd);
         friend std::istream& operator>> (std::istream& stream, Dvd& dvd);
 };

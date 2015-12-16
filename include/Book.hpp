@@ -18,8 +18,6 @@ public:
     Book(int id);
     ~Book();
     
-    void init(std::map<std::string, std::string> data);
-    
     void deserialization(std::map<std::string, std::string> data);
 
     int getPages() const;
@@ -27,8 +25,6 @@ public:
 
     std::string getEditor() const;
     void setEditor(const std::string& editor);
-    
-    void shortDisplay() const;
 
     bool save();
     bool remove();

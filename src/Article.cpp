@@ -7,6 +7,14 @@ Article::~Article()
 
 }
 
+void Article::deserialization(map<string, string> data){
+    //empty
+}
+
+void Article::init(map<string, string> data){
+    this->deserialization(data);
+}
+
 void Article::addGenre(int genreId)
 {
     if (_genres.size() < 2)
@@ -85,8 +93,8 @@ void Article::retrieveGenreFromDB(map<string, string> data)
 
     if(!data.empty())
     {
-        genre1 = stoi(data["genre1"]);
-        genre2 = stoi(data["genre2"]);
+        genre1 = data.find("genre1")!= data.end() ? stoi(data["genre1"]) : 0;
+        genre2 = data.find("genre2")!= data.end() ? stoi(data["genre2"]) : 0;
     }
 
     if (genre1 != 0)
@@ -136,6 +144,14 @@ void Article::addGenreToDB(map<string, vector<string>>& data)
 
     data["genre1"] = {to_string(genre1), "int"};
     data["genre2"] = {to_string(genre2), "int"};
+}
+
+void Article::shortDisplay() const{
+    cout << _id << ". " << _title << " (" << _release << ")";
+    if(_authorId){
+        cout <<  " par " << _author->getFirstName() << " " << _author->getLastName();
+    }
+    cout << endl;
 }
 
 ostream& Article::displayGenres(ostream& stream)

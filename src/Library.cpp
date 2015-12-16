@@ -141,10 +141,10 @@ void Library::redirectChoice(const int choice)
             getListArticle<Book>();
             break;
         case 2:
-            dvdList();
+            getListArticle<Dvd>();
             break;
         case 3:
-            cdList();
+            getListArticle<Cd>();
             break;
         case 4:
             artistList();
@@ -265,7 +265,7 @@ void Library::searchList()
 
 template <class T>
 void Library::getListArticle(){
-    map<string, vector<string>> liaison = {{"books", {"livre", "id, title, author, release"}}, {"cds", {"CD", ""}}, {"dvds", {"DVD", ""}}};
+    map<string, vector<string>> liaison = {{"books", {"livre", "id, title, author, release"}}, {"cds", {"CD", "*"}}, {"dvds", {"DVD", "*"}}};
     string type = "books";
     
     if(std::is_same<T, Cd>::value){

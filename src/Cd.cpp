@@ -53,6 +53,26 @@ Cd::~Cd()
     //dtor
 }
 
+void Cd::deserialization(map<string, string> data){
+    if(!data.empty())
+    {
+        _id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
+        _borrowable = data.find("borrowable")!= data.end() ? data["borrowable"] != "0" : true;
+        _title = data["title"];
+        _release = Date(data["release"]);
+        if(data.find("artist")!= data.end()){
+            _authorId = stoi(data["artist"]);
+            _author = new Artist(stoi(data["artist"]));
+        }
+        else{
+            _authorId = 0;
+        }
+        _studio = data["studio"];
+        _length = data.find("length")!= data.end() ? stoi(data["length"]) : 0;
+        retrieveGenreFromDB(data);
+    }
+}
+
 string Cd::getStudio() const
 {
     return _studio;

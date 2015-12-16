@@ -17,6 +17,8 @@ class Cd : public Article
         Cd();
         Cd(int id);
         virtual ~Cd();
+    
+        void deserialization(std::map<std::string, std::string> data);
 
         std::string getStudio() const;
         void setStudio(const std::string& studio);
