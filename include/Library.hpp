@@ -42,7 +42,7 @@ class Library {
     
         bool affichageChoixSee(std::string typeChoix, std::string typeArticle) const;
     
-        void searchList() const;
+        void searchList();
 
         void bookList();
         void editBook(Book& book);

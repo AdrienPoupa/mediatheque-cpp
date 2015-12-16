@@ -107,18 +107,19 @@ void Library::displayMenu()
     cout << "4. Liste des artistes" << endl;
     cout << "5. Emprunter un article" << endl;
     cout << "6. Restituer un emprunt" << endl;
+    cout << "7. Chercher un article" << endl;
 
     if (isAdmin())
     {
         cout << endl << "Menu Administrateur" << endl;
-        cout << "7. Liste des utilisateurs" << endl;
-        cout << "8. Ajouter un utilisateur" << endl;
-        cout << "9. Supprimer un utilisateur" << endl;
-        cout << "10. Ajouter un livre" << endl;
-        cout << "11. Ajouter un cd" << endl;
-        cout << "12. Ajouter un dvd" << endl;
-        cout << "13. Ajouter un artiste" << endl;
-        cout << "14. Emprunts en cours" << endl;
+        cout << "8. Liste des utilisateurs" << endl;
+        cout << "9. Ajouter un utilisateur" << endl;
+        cout << "10. Supprimer un utilisateur" << endl;
+        cout << "11. Ajouter un livre" << endl;
+        cout << "12. Ajouter un cd" << endl;
+        cout << "13. Ajouter un dvd" << endl;
+        cout << "14. Ajouter un artiste" << endl;
+        cout << "15. Emprunts en cours" << endl;
     }
 
     cin >> choice;
@@ -154,29 +155,32 @@ void Library::redirectChoice(const int choice)
         case 6:
             returnArticle();
             break;
-        // Admin action - we need an extra check
         case 7:
+            searchList();
+            break;
+        // Admin action - we need an extra check
+        case 8:
             (isAdmin()) ? userList() : displayMenu();
             break;
-        case 8:
+        case 9:
             (isAdmin()) ? addThing<User>() : displayMenu();
             break;
-        case 9:
+        case 10:
             (isAdmin()) ? deleteUser() : displayMenu();
             break;
-        case 10:
+        case 11:
             (isAdmin()) ? addThing<Book>() : displayMenu();
             break;
-        case 11:
+        case 12:
             (isAdmin()) ? addThing<Cd>() : displayMenu();
             break;
-        case 12:
+        case 13:
             (isAdmin()) ? addThing<Dvd>() : displayMenu();
             break;
-        case 13:
+        case 14:
             (isAdmin()) ? addThing<Artist>() : displayMenu();
             break;
-        case 14:
+        case 15:
             (isAdmin()) ? listTransactions() : displayMenu();
             break;
         default:
@@ -185,10 +189,64 @@ void Library::redirectChoice(const int choice)
     }
 }
 
-void Library::searchList() const
+void Library::searchList()
 {
-    cout << "Rechercher dans la médiatheque:" << endl;
+    cout << "Rechercher dans la mediatheque : rentrez le titre de l'article recherche" << endl;
     string query;
+    cin.ignore(1, '\n');
+    getline(cin, query, '\n');
+
+    cout << "Livres trouves" << endl;
+
+    map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "title LIKE '%" + query + "%'");
+
+    int totalBooks = bibliography.size();
+
+    if (totalBooks == 0)
+    {
+        cout << "Aucun livre dans la mediatheque" << endl;
+    }
+
+    for (int i = 1; i != totalBooks + 1; i++)
+    {
+        Artist writer(stoi(bibliography[i]["author"]));
+        Date release(bibliography[i]["release"]);
+        cout << bibliography[i]["id"] << ". " << bibliography[i]["title"] << " (" << release << ")" << endl;
+    }
+
+    cout << "CDs trouves" << endl;
+
+    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "title LIKE '%" + query + "%'");
+
+    int totalCds = cds.size();
+
+    if (totalCds == 0)
+    {
+        cout << "Aucun cd dans la mediatheque" << endl;
+    }
+
+    for (int i = 1; i != totalCds + 1; i++)
+    {
+        Date release(cds[i]["release"]);
+        cout << cds[i]["id"] << ". " << cds[i]["title"] << " (" << release << ")" << endl;
+    }
+
+    cout << "DVDs trouves" << endl;
+
+    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "title LIKE '%" + query + "%'");
+
+    int totalDvds = dvds.size();
+
+    if (totalDvds == 0)
+    {
+        cout << "Aucun dvd dans la mediatheque" << endl;
+    }
+
+    for (int i = 1; i != totalDvds + 1; i++)
+    {
+        Date release(dvds[i]["release"]);
+        cout << dvds[i]["id"] << ". " << dvds[i]["title"] << " (" << release << ")" << endl;
+    }
 
     // saisie de la recherche par l'utilisateur (ensemble de mots)
 
@@ -200,6 +258,9 @@ void Library::searchList() const
     /*
      On peut aussi demander les filtres avant, et faire differente fonction qui traite chaque table de la DB
      */
+
+     displayMenu();
+     return;
 }
 
 template <class T>
@@ -605,11 +666,11 @@ bool Library::affichageChoixSee(const string typeChoix, const string typeArticle
 
     string choice = "";
     do {
-        cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' le cash échéant, 'n' sinon" << endl;
+        cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' le si oui, 'n' sinon" << endl;
         cin >> choice;
-    }while(choice != "o" && choice !="n");
+    } while(choice != "o" && choice !="n");
 
-    return choice=="o";
+    return choice == "o";
 }
 
 void Library::editCd(Cd& cd)
