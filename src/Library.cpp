@@ -913,7 +913,7 @@ void Library::bibliography(Artist& artist)
 {
     cout << "Bibliographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
 
-    map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "WHERE author=" + to_string(artist.getId()));
+    map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "author=" + to_string(artist.getId()));
 
     int totalBooks = bibliography.size();
 
@@ -935,7 +935,7 @@ void Library::discography(Artist& artist)
 {
     cout << "Discographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
 
-    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "WHERE artist=" + to_string(artist.getId()));
+    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "artist=" + to_string(artist.getId()));
 
     int totalCds = cds.size();
 
@@ -956,7 +956,7 @@ void Library::filmography(Artist& artist)
 {
     cout << "Filmographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
 
-    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "WHERE director=" + to_string(artist.getId()));
+    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "director=" + to_string(artist.getId()));
 
     int totalDvds = dvds.size();
 

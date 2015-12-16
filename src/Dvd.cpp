@@ -87,7 +87,7 @@ bool Dvd::save()
     // Iterator, C++11 style :-)
     for (const auto& elem: _casting) {
         // Check if the entry is already in DB
-        map<int, map<string, string>> casting = BaseModel::select("castings", "id", "WHERE artist_id=" + to_string(elem) + " AND dvd_id=" + to_string(_id));
+        map<int, map<string, string>> casting = BaseModel::select("castings", "id", "artist_id=" + to_string(elem) + " AND dvd_id=" + to_string(_id));
 
         // Insert if not
         if (casting.empty())
@@ -120,7 +120,7 @@ bool Dvd::remove()
 
 void Dvd::displayCasting()
 {
-    map<int, map<string, string>> casting = BaseModel::select("castings", "artist_id", "WHERE dvd_id=" + to_string(_id));
+    map<int, map<string, string>> casting = BaseModel::select("castings", "artist_id", "dvd_id=" + to_string(_id));
 
     if (!casting.empty())
     {
