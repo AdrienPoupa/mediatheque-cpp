@@ -17,6 +17,12 @@ class Date
         int getMonth() const;
         void setMonth(const int month);
 
+        int getDay() const;
+        void setDay(const int day);
+
+        int getYear() const;
+        void setYear(const int year);
+
         int daysSoFar() const;
 
         std::string dateToDB() const;

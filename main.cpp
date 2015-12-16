@@ -9,12 +9,12 @@ using namespace std;
 
 int main()
 {
-    
-    try{
+    try
+    {
         Library * towerOfBabel = Library::getSingleton();
-        
+
         towerOfBabel->open();
-        
+
         delete towerOfBabel;
     }
     catch (const exception& e)
