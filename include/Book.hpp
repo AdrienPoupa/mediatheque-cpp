@@ -16,10 +16,11 @@ protected:
 public:
     Book();
     Book(int id);
-    Book(std::map<std::string, std::string> data);
     ~Book();
     
-    static void deserialization(std::map<std::string, std::string> data, Book instance);
+    void init(std::map<std::string, std::string> data);
+    
+    void deserialization(std::map<std::string, std::string> data);
 
     int getPages() const;
     void setPages(const int& pages);

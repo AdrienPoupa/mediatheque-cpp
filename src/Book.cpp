@@ -28,10 +28,6 @@ Book::Book()
 
 }
 
-Book::Book(map<string, string> data){
-    deserialization(data, *this);
-}
-
 Book::Book(int id)
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
@@ -58,16 +54,26 @@ Book::~Book()
 
 }
 
-void Book::deserialization(map<string, string> data, Book instance){
+void Book::init(map<string, string> data){
+    this->deserialization(data);
+}
+
+void Book::deserialization(map<string, string> data){
     if(!data.empty())
     {
-        instance._id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
-        instance._borrowable = data.find("borrowable")!= data.end() ? data["borrowable"] != "0" : true;
-        instance._title = data["title"];
-        instance._release = Date(data["release"]);
-        instance._authorId = data.find("author")!= data.end() ? stoi(data["author"]) : 0;
-        instance._editor = data["editor"];
-        instance._pages = data.find("pages")!= data.end() ? stoi(data["pages"]) : 0;
+        _id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
+        _borrowable = data.find("borrowable")!= data.end() ? data["borrowable"] != "0" : true;
+        _title = data["title"];
+        _release = Date(data["release"]);
+        if(data.find("author")!= data.end()){
+            _authorId = stoi(data["author"]);
+            _author = new Artist(stoi(data["author"]));
+        }
+        else{
+            _authorId = 0;
+        }
+        _editor = data["editor"];
+        _pages = data.find("pages")!= data.end() ? stoi(data["pages"]) : 0;
         //instance.retrieveGenreFromDB(data);
     }
 }
@@ -122,7 +128,11 @@ bool Book::remove()
 }
 
 void Book::shortDisplay() const{
-    cout << _id << ". " << _title << " (" << _release << ") par " << _author->getFirstName() << " " << _author->getLastName() << endl;
+    cout << _id << ". " << _title << " (" << _release << ")";
+    if(_authorId){
+        cout <<  " par " << _author->getFirstName() << " " << _author->getLastName();
+    }
+    cout << endl;
 }
 
 ostream& operator<< (ostream& stream, Book& book)

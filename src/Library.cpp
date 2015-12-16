@@ -213,7 +213,9 @@ void Library::getListArticle(){
     else if(std::is_same<T, Dvd>::value){
         type = "dvds";
     }
-    // etendre au User et Artist
+    
+    // étendre au User et Artist, pareil pour seeX
+    
     cout << "Liste des " + liaison.at(type)[0] + "s" + " dans la mediatheque:" << endl;
     
     map<int, map<string, string>> articles = BaseModel::select(type, liaison.at(type)[1], "borrowable IS 1");
@@ -229,9 +231,9 @@ void Library::getListArticle(){
     set<int> ids = set<int>();
     for (int i = 1; i != totalCount + 1; i++)
     {
-        cout << "debut" << endl;
-        T(articles[i]).shortDisplay();
-        cout << "La" << endl;
+        T tmp = T();
+        tmp.init(articles[i]);
+        tmp.shortDisplay();
         ids.insert(stoi(articles[i]["id"]));
     }
     
@@ -239,7 +241,7 @@ void Library::getListArticle(){
     do{
         cout << "Pour voir un " + liaison.at(type)[0] + ", puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
         cin >> articleId;
-    }while(!(ids.find(articleId) != ids.end()));
+    }while(articleId != 0 && !(ids.find(articleId) != ids.end()));
     
     seeArticle<T>(articleId);
     
