@@ -37,7 +37,7 @@ class Library {
         bool affichageChoixSee(std::string typeChoix, std::string typeArticle) const;
         void seeArticleMenu(Article * art, std::string type);
 
-        void searchList() const;
+        void searchList();
 
         void bookList();
         void seeBook(const int bookId);
