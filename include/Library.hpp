@@ -34,21 +34,22 @@ class Library {
         void displayMenu();
         void redirectChoice(int choice);
     
+        template <class T>
+        void seeArticle(int id);
+        template <class T>
+        void getList();
         bool affichageChoixSee(std::string typeChoix, std::string typeArticle);
-    void seeArticleMenu(Article * art, std::string type);
+    
     
         void searchList();
 
         void bookList();
-        void seeBook(int bookId);
         void editBook(Book& book);
 
         void dvdList();
-        void seeDvd(int dvdId);
         void editDvd(Dvd& dvd);
 
         void cdList();
-        void seeCd(int cdId);
         void editCd(Cd& cd);
 
         void userList();

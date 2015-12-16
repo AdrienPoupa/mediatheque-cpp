@@ -1,5 +1,6 @@
 #include "Library.hpp"
 #include <fstream>
+#include <set>
 
 using namespace std;
 
@@ -200,6 +201,104 @@ void Library::searchList(){
      */
 }
 
+template <class T>
+void Library::getList(){
+    map<string, vector<string>> liaison = {{"books", {"livre", "id, title, author, release"}}, {"cds", {"CD", ""}}, {"dvds", {"DVD", ""}}};
+    string type = "books";
+    
+    if(std::is_same<T, Cd>::value){
+        type = "cds";
+    }
+    else if(std::is_same<T, Dvd>::value){
+        type = "dvds";
+    }
+    // etendre au User et Artist
+    cout << "Liste des " + liaison.at(type)[0] + "s" + " dans la mediatheque:" << endl;
+    
+    map<int, map<string, string>> articles = BaseModel::select(type, liaison.at(type)[1], "borrowable IS 1");
+    
+    int totalCount = articles.size();
+    
+    if (totalCount == 0)
+    {
+        cout << "Aucun " + liaison.at(type)[0] + " dans la mediatheque" << endl;
+        return;
+    }
+    
+    set<int> ids = set<int>();
+    for (int i = 1; i != totalCount + 1; i++)
+    {
+        T(articles[i]).shortDisplay();
+        ids.insert(stoi(articles[i]["id"]));
+    }
+    
+    int articleId;
+    do{
+        cout << "Pour voir un " + liaison.at(type)[0] + ", puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
+        cin >> articleId;
+    }while(!(ids.find(articleId) != ids.end()));
+    
+    seeArticle<T>(articleId);
+    
+}
+
+template <class T>
+void Library::seeArticle(int id){
+    
+    Article * art;
+    
+    if(id == 0){
+        displayMenu();
+        return;
+    }
+    
+    string type = "livre";
+    
+    if(std::is_same<T, Cd>::value){
+        type = "CD";
+        art = new Cd(id);
+    }
+    else if(std::is_same<T, Dvd>::value){
+        type = "DVD";
+        art  = new Dvd(id);
+    }
+    else{
+        art = new Book(id);
+    }
+    
+    if(art->getBorrowable()){
+        if(affichageChoixSee("emprunter", type)) borrowArticle(art, type);
+    }
+    
+    if (isAdmin())
+    {
+        if (affichageChoixSee("modifier", type))
+        {
+            if(type == "CD"){
+                Cd tmp = dynamic_cast<Cd&>(*art);
+                editCd(tmp);
+            }
+            else if(type == "DVD"){
+                Dvd tmp = dynamic_cast<Dvd&>(*art);
+                editDvd(tmp);
+                
+            }
+            else{
+                Book tmp = dynamic_cast<Book&>(*art);
+                editBook(tmp);
+            }
+        }
+        
+        if (affichageChoixSee("supprimer", type))
+        {
+            art->remove();
+        }
+    }
+    
+    displayMenu();
+    return;
+}
+
 void Library::bookList()
 {
     cout << "Liste des livres dans la mediatheque:" << endl;
@@ -227,24 +326,7 @@ void Library::bookList()
 
     checkInput(cin, articleId, 0);
 
-    seeBook(articleId);
-}
-
-void Library::seeBook(int bookId)
-{
-    if (bookId == 0)
-    {
-        displayMenu();
-        return;
-    }
-
-    Book bookToDisplay(bookId);
-    cout << bookToDisplay << endl;
-    
-    seeArticleMenu(&bookToDisplay, "livre");
-    
-    displayMenu();
-    return;
+    seeArticle<Book>(articleId);
 }
 
 void Library::editBook(Book& book)
@@ -343,7 +425,7 @@ void Library::dvdList()
 {
     cout << "Liste des dvds dans la mediatheque:" << endl;
 
-    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, director, release", "borrowable=1");
+    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, director, release", "borrowable IS 1");
 
     int totalDvds = dvds.size();
 
@@ -366,24 +448,7 @@ void Library::dvdList()
 
     checkInput(cin, articleId, 0);
 
-    seeDvd(articleId);
-}
-
-void Library::seeDvd(int dvdId)
-{
-    if (dvdId == 0)
-    {
-        displayMenu();
-        return;
-    }
-
-    Dvd dvdToDisplay(dvdId);
-    cout << dvdToDisplay << endl;
-    
-    seeArticleMenu(&dvdToDisplay, "DVD");
-    
-    displayMenu();
-    return;
+    seeArticle<Dvd>(articleId);
 }
 
 void Library::editDvd(Dvd& dvd)
@@ -504,7 +569,7 @@ void Library::cdList()
 {
     cout << "Liste des cds dans la mediatheque:" << endl;
 
-    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, artist, release", "borrowable=1");
+    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, artist, release", "borrowable IS 1");
 
     int totalCds = cds.size();
 
@@ -527,39 +592,7 @@ void Library::cdList()
 
     checkInput(cin, articleId, 0);
 
-    seeCd(articleId);
-}
-
-void Library::seeArticleMenu(Article * art, string type){
-    
-    if(art->getBorrowable()){
-        if(affichageChoixSee("emprunter", type)) borrowArticle(art, type);
-    }
-    
-    if (isAdmin())
-    {
-        if (affichageChoixSee("modifier", type))
-        {
-            if(type == "CD"){
-                Cd tmp = dynamic_cast<Cd&>(*art);
-                editCd(tmp);
-            }
-            else if(type == "DVD"){
-                Dvd tmp = dynamic_cast<Dvd&>(*art);
-                editDvd(tmp);
-
-            }
-            else{
-                Book tmp = dynamic_cast<Book&>(*art);
-                editBook(tmp);
-            }
-        }
-        
-        if (affichageChoixSee("supprimer", type))
-        {
-            art->remove();
-        }
-    }
+    seeArticle<Cd>(articleId);
 }
 
 bool Library::affichageChoixSee(string typeChoix, string typeArticle){
@@ -571,23 +604,6 @@ bool Library::affichageChoixSee(string typeChoix, string typeArticle){
     }while(choice != "o" && choice !="n");
 
     return choice=="o";
-}
-
-void Library::seeCd(int cdId)
-{
-    if (cdId == 0)
-    {
-        displayMenu();
-        return;
-    }
-
-    Cd cdToDisplay(cdId);
-    cout << cdToDisplay << endl;
-    
-    seeArticleMenu(&cdToDisplay, "CD");
-
-    displayMenu();
-    return;
 }
 
 void Library::editCd(Cd& cd)

@@ -28,6 +28,10 @@ Book::Book()
 
 }
 
+Book::Book(map<string, string> data){
+    deserialization(data, *this);
+}
+
 Book::Book(int id)
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
@@ -52,6 +56,20 @@ Book::Book(int id)
 Book::~Book()
 {
 
+}
+
+void Book::deserialization(map<string, string> data, Book instance){
+    if(!data.empty())
+    {
+        instance._id = stoi(data["id"]);
+        instance._borrowable = data["borrowable"] != "0";
+        instance._title = data["title"];
+        instance._release = Date(data["release"]);
+        instance._authorId = stoi(data["author"]);
+        instance._editor = data["editor"];
+        instance._pages = stoi(data["pages"]);
+        instance.retrieveGenreFromDB(data);
+    }
 }
 
 int Book::getPages() const
@@ -101,6 +119,10 @@ bool Book::save()
 bool Book::remove()
 {
     return BaseModel::remove(_dbTable, _id);
+}
+
+void Book::shortDisplay() const{
+    cout << _id << ". " << _title << " (" << _release << ") par " << _author->getFirstName() << " " << _author->getLastName() << endl;
 }
 
 ostream& operator<< (ostream& stream, Book& book)
