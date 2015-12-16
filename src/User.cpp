@@ -36,8 +36,7 @@ User::User()
     _firstName = "John";
     _lastName = "Doe";
 
-    Date mock(1, 1, 1);
-    _birthDate = mock;
+    _birthDate = Date();
 
     _phone = "Inconnu";
 }
@@ -131,18 +130,33 @@ bool User::checkQuota(){
     return true;//Transaction::byUser(_id, true).size() < _quota;
 }
 
+
+
 bool User::borrow(Article* art, string type){
     if(checkQuota()){
-        
-        Transaction t(art, type, (*this), Date(), NULL);
-        t.save();
-        return true;
+        Transaction t(art->getId(), type, _id);
+        if(t.save()){
+            cout << "Emprunt validé !" << endl;
+            // update borrowable of article
+            (*art).setBorrowable(false);
+            (*art).save();
+            
+            // update quota
+            _quota -= 1;
+            save();
+            return true;
+        }
+        return false;
     }
     else{
         cout << "Vous avez trop d'emprunts en cours. Ramenez vos articles empruntés si vous voulez emprunter cet article" << endl;
         return false;
     }
 }
+
+//bool User::returnArticle(){
+//    return true;
+//}
 
 bool User::save()
 {

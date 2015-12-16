@@ -39,8 +39,10 @@ map<int, map<string, string>> BaseModel::select(const string& table, const strin
     try
     {
         SQLite::Database db("mediatheque.db3");
+        
+        cout << "SELECT " + fields + " FROM " + table + (where.length() != 0 ? " WHERE " + where : "") << endl;
 
-        SQLite::Statement query(db, "SELECT " + fields + " FROM " + table + " " + where);
+        SQLite::Statement query(db, "SELECT " + fields + " FROM " + table + (where.length() != 0 ? " WHERE " + where : ""));
 
         int resultCount = 0;
         while (query.executeStep())

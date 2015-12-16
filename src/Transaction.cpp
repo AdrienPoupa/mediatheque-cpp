@@ -24,7 +24,7 @@ Transaction::Transaction(int articleId, string type, int userId){
     _type = type;
     _userId = userId;
     _beginning = Date();
-    
+    _finish = NULL;
 }
 
 Transaction::Transaction(Article *article, string type, User user, Date beginning, Date finish) :
@@ -185,17 +185,20 @@ Transaction Transaction::displayTransaction(int id)
 
 bool Transaction::save()
 {
-    int res = BaseModel::save("transactions", {
+    map<string, vector<string> > tmp = {
         {"id", {to_string(_id), "int"}},
-        {"article_id", {to_string(_article ? _article->getId() : _articleId), "int"}},
-        //{"borrower_id", {to_string(_user ? _user.getId() : _userId), "int"}},
-        {"borrower_id", {to_string(_user.getId()), "int"}},
+        {"article_id", {to_string(_articleId), "int"}},
+        {"borrower_id", {to_string(_userId), "int"}},
         {"type", {_type, "string"}},
         {"date_borrowed", {_beginning.dateToDB(), "string"}},
         {"returned", {to_string(_returned), "int"}},
-        {"date_returned", { _finish.dateToDB(), "string"}},
-        //{"date_returned", {_finish ? _finish.dateToDB(): "null", "string"}},
-    });
+    };
+    
+    if(_id != 0){
+        tmp.insert({"date_returned", { _finish.dateToDB(), "string"}});
+    }
+    
+    int res = BaseModel::save("transactions", tmp);
 
     if(_id == 0)
     {
@@ -220,6 +223,6 @@ istream& operator>>(istream& is, Transaction& transaction)
 {
     cout << "Saisie d'une transaction" << endl;
     cout << "Utilisateur emprunteur:" << endl;
-    is >> transaction._user; // TODO: sélection d'un utilisateur existant en DB
+    //is >> transaction._user; // TODO: sélection d'un utilisateur existant en DB
     return is;
 }

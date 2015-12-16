@@ -21,8 +21,4 @@ int main()
     {
         cout << e.what() << endl;
     }
-    catch (const std::invalid_argument& e)
-    {
-        cout << e.what() << endl;
-    }
 }

@@ -34,6 +34,9 @@ class Library {
         void displayMenu();
         void redirectChoice(int choice);
     
+        bool affichageChoixSee(std::string typeChoix, std::string typeArticle);
+    void seeArticleMenu(Article * art, std::string type);
+    
         void searchList();
 
         void bookList();
