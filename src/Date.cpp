@@ -102,6 +102,26 @@ void Date::setMonth(const int month)
    _month = min(month, 12);
 }
 
+void Date::setDay(const int day)
+{
+   _day = day;
+}
+
+int Date::getDay() const
+{
+   return _day;
+}
+
+void Date::setYear(const int year)
+{
+   _year = year;
+}
+
+int Date::getYear() const
+{
+   return _year;
+}
+
 // Returns YEAR-MM-DAY to store in DB
 string Date::dateToDB() const
 {

@@ -24,7 +24,7 @@ Transaction::Transaction(const int articleId, const string type, const int userI
     _type = type;
     _userId = userId;
     _beginning = Date();
-    _finish = NULL;
+    _finish = Date(_beginning.getMonth()+1, _beginning.getDay(), _beginning.getYear()); // By default, allow a month
 }
 
 Transaction::Transaction(Article *article, const string type, const User user, const Date beginning, const Date finish) :
