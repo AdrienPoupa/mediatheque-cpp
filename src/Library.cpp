@@ -50,7 +50,7 @@ void Library::checkInput(istream& stream, const int intToCheck, const int minVal
 {
     if (stream.fail() || intToCheck < minValue)
     {
-        throw("Merci d'entrer un choix valide");
+        throw invalid_argument("Merci d'entrer un choix valide");
     }
 }
 
