@@ -29,19 +29,20 @@ class Library {
 
         bool isAdmin();
 
-        void checkInput(std::istream& stream, int intToCheck, int minValue);
+        void checkInput(std::istream& stream, const int intToCheck, const int minValue) const;
 
         void displayMenu();
         void redirectChoice(int choice);
     
         template <class T>
         void seeArticle(int id);
+    
         template <class T>
-        void getList();
-        bool affichageChoixSee(std::string typeChoix, std::string typeArticle);
+        void getListArticle();
     
+        bool affichageChoixSee(std::string typeChoix, std::string typeArticle) const;
     
-        void searchList();
+        void searchList() const;
 
         void bookList();
         void editBook(Book& book);
@@ -53,21 +54,21 @@ class Library {
         void editCd(Cd& cd);
 
         void userList();
-        void editUser(int userId);
+        void editUser(const int userId);
         void deleteUser();
 
         void artistList();
-        void seeArtist(int artistId);
+        void seeArtist(const int artistId);
         void editArtist(Artist& artist);
 
-        void bibliography(Artist& artist);
-        void discography(Artist& artist);
-        void filmography(Artist& artist);
+        void bibliography(Artist& artist) const;
+        void discography(Artist& artist) const;
+        void filmography(Artist& artist) const;
 
         template <class T>
         void addThing();
 
-        void borrowArticle(Article* art = nullptr, std::string type = NULL);
+        void borrowArticle(Article* art = nullptr, const std::string type = NULL);
         void returnArticle();
         void listTransactions();
 

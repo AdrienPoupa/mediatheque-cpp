@@ -61,14 +61,14 @@ Book::~Book()
 void Book::deserialization(map<string, string> data, Book instance){
     if(!data.empty())
     {
-        instance._id = stoi(data["id"]);
-        instance._borrowable = data["borrowable"] != "0";
+        instance._id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
+        instance._borrowable = data.find("borrowable")!= data.end() ? data["borrowable"] != "0" : true;
         instance._title = data["title"];
         instance._release = Date(data["release"]);
-        instance._authorId = stoi(data["author"]);
+        instance._authorId = data.find("author")!= data.end() ? stoi(data["author"]) : 0;
         instance._editor = data["editor"];
-        instance._pages = stoi(data["pages"]);
-        instance.retrieveGenreFromDB(data);
+        instance._pages = data.find("pages")!= data.end() ? stoi(data["pages"]) : 0;
+        //instance.retrieveGenreFromDB(data);
     }
 }
 
@@ -96,7 +96,7 @@ bool Book::save()
 {
     map<string, vector<string>> data = {
         {"id", {to_string(_id), "int"}},
-        {"borrowable", {to_string(_borrowable), "boolean"}},
+        {"borrowable", {_borrowable ? "1" : "0", "boolean"}},
         {"title", {_title, "string"}},
         {"release", {_release.dateToDB(), "string"}},
         {"author", {to_string(_authorId), "int"}},

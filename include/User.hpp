@@ -22,29 +22,29 @@ class User: public Person {
         static std::string _dbTable;
 
     public:
-        User(std::string firstName, std::string lastName, Date birthDate,
-             std::string phone = "Inconnu", int _isAdmin = 0, int _quota = 1, std::string password = "");
+        User(const std::string firstName, const std::string lastName, const Date birthDate,
+             const std::string phone = "Inconnu", const int _isAdmin = 0, const int _quota = 1, const std::string password = "");
         User();
         ~User();
         User(int id); // Get a person from an ID provided by DB
 
-        std::string getPhone();
-        void setPhone(std::string phone);
+        std::string getPhone() const ;
+        void setPhone(const std::string phone);
 
-        void setPassword(std::string password);
-        bool checkPassword(std::string password);
+        void setPassword(const std::string password);
+        bool checkPassword(const std::string password) const;
 
-        Address getAddress();
-        void setAddress(Address address);
+        Address getAddress()const ;
+        void setAddress(const Address address);
 
-        bool isAdmin();
-        void setAdmin(int isAdmin);
+        bool isAdmin()const ;
+        void setAdmin(const int isAdmin);
 
-        int getQuota();
-        void setQuota(int quota);
-        bool checkQuota();
-    
-        bool borrow(Article* art, std::string type);
+        int getQuota()const;
+        void setQuota(const int quota);
+        bool checkQuota() const;
+
+        bool borrow(Article* art, const std::string type);
 
         bool save();
         bool remove();

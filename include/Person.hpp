@@ -15,19 +15,19 @@ protected:
     Date _birthDate;
 
 public:
-    Person(std::string lastName = "John", std::string firstName = "Doe");
-    Person(std::string lastName, std::string firstName, Date birthDate);
+    Person(const std::string lastName = "John", const std::string firstName = "Doe");
+    Person(const std::string lastName, const std::string firstName, const Date birthDate);
 
-    virtual unsigned int getId() const;
+    unsigned int getId() const;
 
-    virtual std::string getLastName() const;
-    virtual void setLastName(std::string lastName);
+    std::string getLastName() const;
+    void setLastName(const std::string lastName);
 
-    virtual std::string getFirstName() const;
-    virtual void setFirstName(std::string firstName);
+    std::string getFirstName() const;
+    void setFirstName(const std::string firstName);
 
-    virtual Date getBirthDate() const;
-    virtual void setBirthDate(Date birthDate);
+    Date getBirthDate() const;
+    void setBirthDate(const Date birthDate);
 
     // DB
     virtual bool save() = 0;

@@ -23,7 +23,7 @@ Genre::~Genre()
 
 }
 
-Genre::Genre(int id)
+Genre::Genre(const int id)
 {
     map<string, string> data = BaseModel::getById("genres", id);
 
@@ -38,7 +38,7 @@ Genre::Genre(int id)
     }
 }
 
-int Genre::getId()
+int Genre::getId() const
 {
     return _id;
 }

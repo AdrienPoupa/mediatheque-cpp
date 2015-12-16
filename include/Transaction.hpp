@@ -23,9 +23,9 @@ class Transaction {
         int _id = 0;
         static std::string _dbTable;
     public:
-        Transaction(int articleId, std::string type, int userId);
-        Transaction(Article *article, std::string type, User user, Date beginning, Date finish);
-        Transaction(int id, int article_id, std::string type, int borrower_id, Date date_beginning, Date date_returned, bool returned);
+        Transaction(const int articleId, const std::string type, const int userId);
+        Transaction(Article *article, const std::string type, const User user, const Date beginning, const Date finish);
+        Transaction(const int id, const int article_id, const std::string type, const int borrower_id, const Date date_beginning, const Date date_returned, const bool returned);
         //Transaction(unsigned int id);
         virtual ~Transaction();
 
@@ -45,10 +45,12 @@ class Transaction {
         void setType(std::string const type);
 
         static void displayCurrentTransactions();
-        static void displayTransactions(std::string current = "current", int day_borrowed = 0, int month_borrowed = 0, int year_borrowed = 0, int day_returned = 0, int month_returned = 0, int year_returned = 0);
+        static void displayTransactions(const std::string current = "current", const int day_borrowed = 0,
+                                        const int month_borrowed = 0, const int year_borrowed = 0,
+                                        const int day_returned = 0, const int month_returned = 0, const int year_returned = 0);
         //Transaction getTransaction(int id);
-    
-        static std::list<Transaction> byUser(int userId, bool active);
+
+        static std::list<Transaction> byUser(const int userId, const bool active);
 
         bool save();
         bool remove();

@@ -47,7 +47,7 @@ bool Library::isAdmin()
     return _currentUser.isAdmin();
 }
 
-void Library::checkInput(istream& stream, int intToCheck, int minValue)
+void Library::checkInput(istream& stream, const int intToCheck, const int minValue) const
 {
     if (stream.fail() || intToCheck < minValue)
     {
@@ -128,7 +128,7 @@ void Library::displayMenu()
     redirectChoice(choice);
 }
 
-void Library::redirectChoice(int choice)
+void Library::redirectChoice(const int choice)
 {
     switch (choice)
     {
@@ -137,7 +137,7 @@ void Library::redirectChoice(int choice)
             return;
             break;
         case 1:
-            bookList();
+            getListArticle<Book>();
             break;
         case 2:
             dvdList();
@@ -185,16 +185,17 @@ void Library::redirectChoice(int choice)
     }
 }
 
-void Library::searchList(){
+void Library::searchList() const
+{
     cout << "Rechercher dans la médiatheque:" << endl;
     string query;
-    
+
     // saisie de la recherche par l'utilisateur (ensemble de mots)
-    
+
     // saisie des filtres (type d'article, artistes, genre)
-    
+
     // Select * FROM filtre WHERE filtre LIKE mot
-    
+
     // affichage selon le type de recherche.
     /*
      On peut aussi demander les filtres avant, et faire differente fonction qui traite chaque table de la DB
@@ -202,7 +203,7 @@ void Library::searchList(){
 }
 
 template <class T>
-void Library::getList(){
+void Library::getListArticle(){
     map<string, vector<string>> liaison = {{"books", {"livre", "id, title, author, release"}}, {"cds", {"CD", ""}}, {"dvds", {"DVD", ""}}};
     string type = "books";
     
@@ -228,7 +229,9 @@ void Library::getList(){
     set<int> ids = set<int>();
     for (int i = 1; i != totalCount + 1; i++)
     {
+        cout << "debut" << endl;
         T(articles[i]).shortDisplay();
+        cout << "La" << endl;
         ids.insert(stoi(articles[i]["id"]));
     }
     
@@ -595,8 +598,9 @@ void Library::cdList()
     seeArticle<Cd>(articleId);
 }
 
-bool Library::affichageChoixSee(string typeChoix, string typeArticle){
-    
+bool Library::affichageChoixSee(const string typeChoix, const string typeArticle) const
+{
+
     string choice = "";
     do {
         cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' le cash échéant, 'n' sinon" << endl;
@@ -885,7 +889,7 @@ void Library::artistList()
     seeArtist(artistId);
 }
 
-void Library::seeArtist(int artistId)
+void Library::seeArtist(const int artistId)
 {
     if (artistId == 0)
     {
@@ -925,11 +929,11 @@ void Library::seeArtist(int artistId)
     return;
 }
 
-void Library::bibliography(Artist& artist)
+void Library::bibliography(Artist& artist) const
 {
     cout << "Bibliographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
 
-    map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "WHERE author=" + to_string(artist.getId()));
+    map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "author=" + to_string(artist.getId()));
 
     int totalBooks = bibliography.size();
 
@@ -947,11 +951,11 @@ void Library::bibliography(Artist& artist)
     }
 }
 
-void Library::discography(Artist& artist)
+void Library::discography(Artist& artist) const
 {
     cout << "Discographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
 
-    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "WHERE artist=" + to_string(artist.getId()));
+    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "artist=" + to_string(artist.getId()));
 
     int totalCds = cds.size();
 
@@ -968,11 +972,11 @@ void Library::discography(Artist& artist)
     }
 }
 
-void Library::filmography(Artist& artist)
+void Library::filmography(Artist& artist) const
 {
     cout << "Filmographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
 
-    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "WHERE director=" + to_string(artist.getId()));
+    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "director=" + to_string(artist.getId()));
 
     int totalDvds = dvds.size();
 
@@ -1047,11 +1051,11 @@ void Library::editArtist(Artist& artist)
     return;
 }
 
-void Library::borrowArticle(Article* art, string type)
+void Library::borrowArticle(Article* art, const string type)
 {
-    
+
     _currentUser.borrow(art, type);
-    
+
     displayMenu();
     return;
 }
