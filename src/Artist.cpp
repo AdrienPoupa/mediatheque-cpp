@@ -69,6 +69,134 @@ void removeArticles(const Article& article)
     // TODO
 }
 
+void Artist::bibliography() const
+{
+    cout << "Bibliographie de " << getFirstName() << " " << getLastName() << endl;
+
+    map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "author=" + to_string(getId()));
+
+    int totalCount = (int)bibliography.size();
+
+    if (totalCount == 0)
+    {
+        cout << "Aucun livre dans la mediatheque" << endl;
+        return;
+    }
+
+    for (int i = 1; i != totalCount + 1; i++)
+    {
+        Artist writer(stoi(bibliography[i]["author"]));
+        Date release(bibliography[i]["release"]);
+        cout << bibliography[i]["id"] << ". " << bibliography[i]["title"] << " (" << release << ")" << endl;
+    }
+}
+
+void Artist::discography() const
+{
+    cout << "Discographie de " << getFirstName() << " " << getLastName() << endl;
+
+    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "artist=" + to_string(getId()));
+
+    int totalCds = (int)cds.size();
+
+    if (totalCds == 0)
+    {
+        cout << "Aucun cd dans la mediatheque" << endl;
+        return;
+    }
+
+    for (int i = 1; i != totalCds + 1; i++)
+    {
+        Date release(cds[i]["release"]);
+        cout << cds[i]["id"] << ". " << cds[i]["title"] << " (" << release << ")" << endl;
+    }
+}
+
+void Artist::filmography() const
+{
+    cout << "Filmographie de " << getFirstName() << " " << getLastName() << endl;
+
+    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "director=" + to_string(getId()));
+
+    int totalDvds = (int)dvds.size();
+
+    if (totalDvds == 0)
+    {
+        cout << "Aucun dvd dans la mediatheque" << endl;
+        return;
+    }
+
+    for (int i = 1; i != totalDvds + 1; i++)
+    {
+        Date release(dvds[i]["release"]);
+        cout << dvds[i]["id"] << ". " << dvds[i]["title"] << " (" << release << ")" << endl;
+    }
+}
+
+void Artist::edit()
+{
+    int choice;
+
+    do
+    {
+        cout << "Modification d'un artiste" << endl;
+
+        cout << "1. Modifier le prenom" << endl;
+        cout << "2. Modifier le nom" << endl;
+        cout << "3. Modifier la date de naissance" << endl;
+        cout << "4. Modifier la nationalite" << endl;
+        cout << "0. Annuler" << endl;
+        cout << "Choix: ";
+        cin >> choice;
+    } while(choice < 0 && choice > 4);
+
+    switch (choice)
+    {
+        case 1:
+        {
+            string newName;
+            cin.ignore(1, '\n');
+            getline(cin, newName, '\n');
+            setFirstName(newName);
+            break;
+        }
+        case 2:
+        {
+            string newLastName;
+            cin.ignore(1, '\n');
+            getline(cin, newLastName, '\n');
+            setLastName(newLastName);
+            break;
+        }
+        case 3:
+        {
+            Date newBirthDate;
+            cin >> newBirthDate;
+            setBirthDate(newBirthDate);
+            break;
+        }
+        case 4:
+        {
+            string newNationality;
+            cin.ignore(1, '\n');
+            getline(cin, newNationality, '\n');
+            setNationality(newNationality);
+            break;
+        }
+        default:
+            return;
+            break;
+    }
+
+    if (choice != 0)
+    {
+        cout << "Sauvegarde..." << endl;
+        save();
+    }
+
+    return;
+}
+
 
 std::ostream& operator<<(std::ostream& os, const Artist& me)
 {

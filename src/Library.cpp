@@ -335,7 +335,7 @@ void Library::getListArticle()
 }
 
 template <class T>
-void Library::seeArticle(int id)
+void Library::seeArticle(const int id)
 {
     Article * art;
 
@@ -616,9 +616,9 @@ void Library::seeArtist(const int artistId)
     Artist artistToDisplay(artistId);
     cout << artistToDisplay << endl;
 
-    bibliography(artistToDisplay);
-    discography(artistToDisplay);
-    filmography(artistToDisplay);
+    artistToDisplay.bibliography();
+    artistToDisplay.discography();
+    artistToDisplay.filmography();
 
     if (isAdmin())
     {
@@ -628,7 +628,7 @@ void Library::seeArtist(const int artistId)
 
         if (choice == "o")
         {
-            editArtist(artistToDisplay);
+            artistToDisplay.edit();
         }
 
         cout << "Voulez-vous supprimer cet artiste ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
@@ -644,135 +644,8 @@ void Library::seeArtist(const int artistId)
     return;
 }
 
-void Library::bibliography(Artist& artist) const
+void Library::borrowedMenu()
 {
-    cout << "Bibliographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
-
-    map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "author=" + to_string(artist.getId()));
-
-    int totalCount = (int)bibliography.size();
-
-    if (totalCount == 0)
-    {
-        cout << "Aucun livre dans la mediatheque" << endl;
-        return;
-    }
-
-    for (int i = 1; i != totalCount + 1; i++)
-    {
-        Artist writer(stoi(bibliography[i]["author"]));
-        Date release(bibliography[i]["release"]);
-        cout << bibliography[i]["id"] << ". " << bibliography[i]["title"] << " (" << release << ")" << endl;
-    }
-}
-
-void Library::discography(Artist& artist) const
-{
-    cout << "Discographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
-
-    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "artist=" + to_string(artist.getId()));
-
-    int totalCds = (int)cds.size();
-
-    if (totalCds == 0)
-    {
-        cout << "Aucun cd dans la mediatheque" << endl;
-        return;
-    }
-
-    for (int i = 1; i != totalCds + 1; i++)
-    {
-        Date release(cds[i]["release"]);
-        cout << cds[i]["id"] << ". " << cds[i]["title"] << " (" << release << ")" << endl;
-    }
-}
-
-void Library::filmography(Artist& artist) const
-{
-    cout << "Filmographie de " << artist.getFirstName() << " " << artist.getLastName() << endl;
-
-    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "director=" + to_string(artist.getId()));
-
-    int totalDvds = (int)dvds.size();
-
-    if (totalDvds == 0)
-    {
-        cout << "Aucun dvd dans la mediatheque" << endl;
-        return;
-    }
-
-    for (int i = 1; i != totalDvds + 1; i++)
-    {
-        Date release(dvds[i]["release"]);
-        cout << dvds[i]["id"] << ". " << dvds[i]["title"] << " (" << release << ")" << endl;
-    }
-}
-
-void Library::editArtist(Artist& artist)
-{
-
-    int choice;
-
-    do{
-        cout << "Modification d'un artiste" << endl;
-
-        cout << "1. Modifier le prenom" << endl;
-        cout << "2. Modifier le nom" << endl;
-        cout << "3. Modifier la date de naissance" << endl;
-        cout << "4. Modifier la nationalite" << endl;
-        cout << "0. Annuler" << endl;
-        cout << "Choix: ";
-        cin >> choice;
-    } while(choice < 0 && choice > 4);
-
-    switch (choice)
-    {
-        case 1:
-        {
-            string newName;
-            cin.ignore(1, '\n');
-            getline(cin, newName, '\n');
-            artist.setFirstName(newName);
-            break;
-        }
-        case 2:
-        {
-            string newLastName;
-            cin.ignore(1, '\n');
-            getline(cin, newLastName, '\n');
-            artist.setLastName(newLastName);
-            break;
-        }
-        case 3:
-        {
-            Date newBirthDate;
-            cin >> newBirthDate;
-            artist.setBirthDate(newBirthDate);
-            break;
-        }
-        case 4:
-        {
-            string newNationality;
-            cin.ignore(1, '\n');
-            getline(cin, newNationality, '\n');
-            artist.setNationality(newNationality);
-            break;
-        }
-        default:
-            return;
-            break;
-    }
-
-    if (choice != 0)
-    {
-        cout << "Sauvegarde..." << endl;
-        artist.save();
-    }
-
-    return;
-}
-
-void Library::borrowedMenu() {
     cout << "Mes emprunts en cours" << endl;
 
     map<int, map<string, string>> transactions = BaseModel::select("transactions", "*", "borrower_id=" + to_string(_currentUser.getId()) +" AND returned=0");
@@ -797,7 +670,8 @@ void Library::borrowedMenu() {
     }
 
     int empruntId;
-    do{
+    do
+    {
         cout << "Pour voir un emprunt, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
         cin >> empruntId;
     } while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
@@ -894,7 +768,8 @@ void Library::listTransactions()
     }
 
     int empruntId;
-    do{
+    do
+    {
         cout << "Pour voir un emprunt, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
         cin >> empruntId;
     } while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));

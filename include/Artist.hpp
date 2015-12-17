@@ -31,13 +31,18 @@ public:
     void addArticles(const Article& article);
     void removeArticles(const Article& article);
 
-    friend std::ostream& operator<<(std::ostream& os, const Artist& me);
-    friend std::istream& operator>>(std::istream& is, Artist& me);
+    void bibliography() const;
+    void discography() const;
+    void filmography() const;
+
+    void edit();
 
     // DB method
     bool save();
     bool remove();
 
+    friend std::ostream& operator<<(std::ostream& os, const Artist& me);
+    friend std::istream& operator>>(std::istream& is, Artist& me);
 
     ~Artist();
 };
