@@ -346,12 +346,12 @@ void Library::getListArticle(bool askEdit)
             cin >> articleId;
         } while(articleId != 0 && !(ids.find(articleId) != ids.end()));
 
-        seeArticle<T>(articleId);
+        seeEntity<T>(articleId);
     }
 }
 
 template <class T>
-void Library::seeArticle(int id)
+void Library::seeEntity(int id)
 {
     void * art = nullptr;
     Article * artCast = nullptr;

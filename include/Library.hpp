@@ -38,7 +38,7 @@ class Library {
         void redirectChoice(const int choice);
 
         template <class T>
-        void seeArticle(const int id);
+        void seeEntity(const int id);
 
         template <class T>
         void getListArticle(bool askEdit = true);
