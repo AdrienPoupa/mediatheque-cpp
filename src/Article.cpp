@@ -7,7 +7,8 @@ Article::~Article()
 
 }
 
-void Article::deserialization(map<string, string> data){
+void Article::deserialization(map<string, string> data)
+{
     //empty
 }
 
@@ -91,7 +92,7 @@ void Article::retrieveGenreFromDB(map<string, string> data)
 {
     int genre1 = 0, genre2 = 0;
 
-    if(!data.empty())
+    if (!data.empty())
     {
         genre1 = data.find("genre1")!= data.end() && data["genre1"] != "" ? stoi(data["genre1"]) : 0;
         genre2 = data.find("genre2")!= data.end() && data["genre2"] != "" ? stoi(data["genre2"]) : 0;
@@ -148,7 +149,8 @@ void Article::addGenreToDB(map<string, vector<string>>& data)
 
 void Article::shortDisplay() const{
     cout << _id << ". " << _title << " (" << _release << ")";
-    if(_authorId){
+    if (_authorId)
+    {
         cout <<  " par " << _author->getFirstName() << " " << _author->getLastName();
     }
     cout << endl;

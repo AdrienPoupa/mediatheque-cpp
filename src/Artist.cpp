@@ -1,8 +1,6 @@
 #include <iostream>
 
 #include "Artist.hpp"
-#include "BaseModel.hpp"
-#include "Position.hpp"
 
 using namespace std;
 
@@ -31,7 +29,7 @@ Artist::Artist(int id) // Get a person from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
 
-    if(!data.empty())
+    if (!data.empty())
     {
         _id = id;
         _firstName = data["name"];
@@ -61,7 +59,7 @@ std::set<Article*> Artist::getArticles() const
 }
 
 
-void addArticles(const Article& article, const Position& position)
+void addArticles(const Article& article)
 {
     // TODO?
 }
@@ -106,7 +104,7 @@ bool Artist::save()
         {"nationality", {_nationality, "string"}}
     });
 
-    if(_id == 0)
+    if (_id == 0)
     {
         _id = res["id"];
     }

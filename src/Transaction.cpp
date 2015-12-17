@@ -1,5 +1,4 @@
 #include "Transaction.hpp"
-#include "Library.hpp"
 
 using namespace std;
 
@@ -20,11 +19,13 @@ string Transaction::_dbTable = "transactions";
  - date_returned: DATE
  */
 
-Transaction::Transaction(){
+Transaction::Transaction()
+{
     // empty
 }
 
-Transaction::Transaction(const int articleId, const int type, const int userId){
+Transaction::Transaction(const int articleId, const int type, const int userId)
+{
     _articleId = articleId;
     _type = type;
     _userId = userId;
@@ -39,10 +40,11 @@ Transaction::Transaction(Article *article, const int type, const User user, cons
     _userId = user.getId();
 }
 
-Transaction::Transaction(const unsigned int id){
+Transaction::Transaction(const unsigned int id)
+{
     map<string, string> data = BaseModel::getById(_dbTable, id);
 
-    if(!data.empty())
+    if (!data.empty())
     {
         deserialization(data);
     }
@@ -95,36 +97,50 @@ Transaction::~Transaction()
 
 }
 
-void Transaction::init(map<string, string> data){
+void Transaction::init(map<string, string> data)
+{
     this->deserialization(data);
 }
 
-void Transaction::deserialization(map<string, string> data){
-    if(!data.empty())
+void Transaction::deserialization(map<string, string> data)
+{
+    if (!data.empty())
     {
         _id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
         _type = data.find("type")!= data.end() ? stoi(data["type"]): 0;
-        if(data.find("article_id")!= data.end()){
+        if (data.find("article_id")!= data.end())
+        {
             _articleId = stoi(data["article_id"]);
-            if(_type == Util::Types::Book){
+
+            if (_type == Util::Types::Book)
+            {
                 _article = new Book(stoi(data["article_id"]));
             }
-            else if(_type == Util::Types::Cd){
+            else if (_type == Util::Types::Cd)
+            {
                 _article = new Cd(stoi(data["article_id"]));
             }
-            else{
+            else
+            {
                 _article = new Dvd(stoi(data["article_id"]));
             }
         }
-        else{
+        else
+        {
             _articleId = 0;
         }
-        if(data.find("borrower_id")!= data.end()){
+
+        if (data.find("borrower_id")!= data.end())
+        {
             _userId = stoi(data["borrower_id"]);
             _user = User(_userId);
         }
+
         _beginning = Date(data["date_borrowed"]);
-        _finish = data["date_returned"] == "" ? NULL: Date(data["date_returned"]);
+        Date finishDefault;
+        finishDefault = _beginning;
+        finishDefault.setMonth(_beginning.getMonth() + 1);
+        _finish = data["date_returned"] == "" ? finishDefault: Date(data["date_returned"]);
         _returned = data["returned"] == "0";
     }
 }
@@ -243,7 +259,8 @@ void Transaction::displayTransactions(const string current, const int day_borrow
     }
 }
 
-list<Transaction> Transaction::byUser(const int userId, const bool active){
+list<Transaction> Transaction::byUser(const int userId, const bool active)
+{
 
     string condition = active ? " AND returned is false" : "";
     SQLite::Database dbTransaction("mediatheque.db3");
@@ -279,13 +296,14 @@ bool Transaction::save()
         {"returned", {to_string(_returned), "int"}},
     };
 
-    if(_id != 0){
+    if (_id != 0)
+    {
         tmp.insert({"date_returned", { _finish.dateToDB(), "string"}});
     }
 
     int res = BaseModel::save("transactions", tmp);
 
-    if(_id == 0)
+    if (_id == 0)
     {
         _id = res;
     }
@@ -300,7 +318,8 @@ bool Transaction::remove()
 
 void Transaction::shortDisplay() const{
     cout << _id << ". ";
-    if(_articleId != 0){
+    if (_articleId != 0)
+    {
         cout << _article->getTitle();
     }
     else{

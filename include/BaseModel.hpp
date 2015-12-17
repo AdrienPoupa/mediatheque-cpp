@@ -4,6 +4,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <iostream>
 
 #include "../sqlite/SQLiteCpp.h"
 

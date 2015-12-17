@@ -2,6 +2,7 @@
 #define Library_hpp
 
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <set>
 
@@ -13,7 +14,9 @@
 #include "Person.hpp"
 #include "Artist.hpp"
 #include "User.hpp"
+#include "Util.hpp"
 #include "../sqlite/SQLiteCpp.h"
+#include "Transaction.hpp"
 
 class Library {
     User _currentUser;
@@ -31,8 +34,6 @@ class Library {
 
         bool connect();
 
-        bool checkInput(std::istream& stream, const int intToCheck, const int minValue) const;
-
         int displayMenu();
         void redirectChoice(int choice);
 
@@ -45,12 +46,6 @@ class Library {
         bool affichageChoixSee(std::string typeChoix, std::string typeArticle) const;
 
         void searchList();
-
-        void editBook(Book& book);
-
-        void editDvd(Dvd& dvd);
-
-        void editCd(Cd& cd);
 
         void userList();
         void editUser(const int userId);
@@ -75,24 +70,6 @@ class Library {
 
         static Library* singleton;
 };
-
-class Util{
-public:
-    enum Types{Book, Cd, Dvd};
-    static std::string getTypesString(Types type){
-        switch(type){
-            case Types::Book:
-                return "livre";
-                break;
-            case Types::Cd:
-                return "Cd";
-                break;
-            default:
-                return "Dvd";
-        }
-    }
-};
-
 
 
 #endif /* Library_hpp */

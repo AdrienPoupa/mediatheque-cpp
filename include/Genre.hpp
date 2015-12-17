@@ -10,6 +10,8 @@
 
 #include "../sqlite/SQLiteCpp.h"
 
+#include "BaseModel.hpp"
+
 class Genre {
     private:
         std::string _name = "Inconnu";

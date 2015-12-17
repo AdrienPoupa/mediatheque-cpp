@@ -2,12 +2,6 @@
 //
 
 #include "Date.hpp"
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <string>
-#include <chrono>
-#include <map>
 
 using namespace std;
 
@@ -15,7 +9,8 @@ Date::Date (const int month, const int day, const int year)
 {
     static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-    if(month != -1 && day != -1 && year != -1){
+    if (month != -1 && day != -1 && year != -1)
+    {
         _month = max(1, month);
         _month = min(_month,12);
 
@@ -24,8 +19,8 @@ Date::Date (const int month, const int day, const int year)
 
         _year = max(1, year);
     }
-    else{
-
+    else
+    {
         map<string, int> months = {{"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4}, {"Mai", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8}, {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}};
 
         std::chrono::time_point<std::chrono::system_clock> end;
@@ -43,7 +38,8 @@ Date::Date (const int month, const int day, const int year)
 
 }
 
-int getYearFromStr(string date){
+int getYearFromStr(string date)
+{
     ostringstream ss1;
     ss1 << date.substr(0,4);
     string yearString = ss1.str();
@@ -55,7 +51,8 @@ int getYearFromStr(string date){
     return year;
 }
 
-int getMonthFromStr(string date){
+int getMonthFromStr(string date)
+{
     ostringstream ss2;
     ss2 << date.substr(5,2);
     string monthString = ss2.str();
@@ -65,13 +62,14 @@ int getMonthFromStr(string date){
     ss22 >> month;
     month = max(1, month);
     month = min(month,12);
-    
+
     return month;
 }
 
-int getDayFromStr(string date, int month){
+int getDayFromStr(string date, int month)
+{
     static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-    
+
     ostringstream ss3;
     ss3 << date.substr(8,2);
     string dayString = ss3.str();
@@ -87,6 +85,7 @@ int getDayFromStr(string date, int month){
 
 Date::Date (const string dateDB)
 {
+    
     if(dateDB == "0000-00-00"){
         _year = -1;
         _month = -1;
@@ -114,9 +113,6 @@ Date::Date (const string dateDB)
             _day = -1;
         }
     }
-    
-
-    
 }
 
 int Date::daysSoFar() const
@@ -222,7 +218,6 @@ istream& operator>> (istream& stream, Date& date)
         stream >> date._year;
     }while(date._year < -1 && date._year > 9000);
     
-
     // Redundant with constructor, should we do something about it ?
     static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
     date._day = min(date._day, length[date._month]);

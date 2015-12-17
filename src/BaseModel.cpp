@@ -1,10 +1,9 @@
 #include "BaseModel.hpp"
 
-#include <iostream>
-
 using namespace std;
 
-map<string, string> BaseModel::getById(const string& table, const int& id){
+map<string, string> BaseModel::getById(const string& table, const int& id)
+{
 
     map<string, string> data = map<string, string>();
 
@@ -19,7 +18,8 @@ map<string, string> BaseModel::getById(const string& table, const int& id){
         while (query.executeStep())
         {
             resultCount++;
-            for(int i = 0; i < query.getColumnCount(); i ++){
+            for(int i = 0; i < query.getColumnCount(); i ++)
+            {
                 data.insert({query.getColumnName(i), query.getColumn(i).getText()});
             }
         }
@@ -32,14 +32,15 @@ map<string, string> BaseModel::getById(const string& table, const int& id){
     }
 }
 
-map<int, map<string, string>> BaseModel::select(const string& table, const string& fields, const string& where){
+map<int, map<string, string>> BaseModel::select(const string& table, const string& fields, const string& where)
+{
 
     map<int, map<string, string>> data = map<int, map<string, string>>();
 
     try
     {
         SQLite::Database db("mediatheque.db3");
-        
+
         //cout << "SELECT " + fields + " FROM " + table + (where.length() != 0 ? " WHERE " + where : "") << endl;
 
         SQLite::Statement query(db, "SELECT " + fields + " FROM " + table + (where.length() != 0 ? " WHERE " + where : ""));
@@ -48,7 +49,8 @@ map<int, map<string, string>> BaseModel::select(const string& table, const strin
         while (query.executeStep())
         {
             resultCount++;
-            for(int i = 0; i < query.getColumnCount(); i ++){
+            for(int i = 0; i < query.getColumnCount(); i ++)
+            {
                 data[resultCount].insert({query.getColumnName(i), query.getColumn(i).getText()});
             }
         }
@@ -61,7 +63,8 @@ map<int, map<string, string>> BaseModel::select(const string& table, const strin
     }
 }
 
-int BaseModel::save(const string& table, map<string, vector<string>> data){
+int BaseModel::save(const string& table, map<string, vector<string>> data)
+{
 
     /*
      data : {
@@ -79,8 +82,10 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
 
             string queryString = "UPDATE " + table + " SET ";
 
-            for(auto const& elem : data){
-                if(elem.first != "id"){
+            for(auto const& elem : data)
+            {
+                if (elem.first != "id")
+                {
                     queryString += elem.first.c_str();
                     queryString += "=?, ";
                 }
@@ -95,17 +100,20 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
             SQLite::Statement query(db, queryString);
 
             int n = 1;
-            for(auto const& elem : data){
-                if(elem.first != "id"){
-                    if(elem.second[1] == "string"){
+            for(auto const& elem : data)
+            {
+                if (elem.first != "id")
+                {
+                    if (elem.second[1] == "string")
+                    {
                         query.bind(n, elem.second[0]);
                     }
-                    else if(elem.second[1] == "int"){
+                    else if (elem.second[1] == "int")
+                    {
                         query.bind(n, stoi(elem.second[0]));
                     }
                     n++;
                 }
-
             }
 
             // queryString: UPDATE table SET attr1=val1, attr2=val2, attr3=val3 WHERE id=_idval
@@ -130,8 +138,10 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
 
             string queryString = "INSERT OR IGNORE INTO " + table + "(";
 
-            for(auto const& elem: data){
-                if(elem.first != "id"){
+            for(auto const& elem: data)
+            {
+                if (elem.first != "id")
+                {
                     queryString += elem.first + ", ";
                 }
             }
@@ -141,8 +151,10 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
 
             queryString += "VALUES( ";
 
-            for(auto const& elem: data){
-                if(elem.first != "id"){
+            for(auto const& elem: data)
+            {
+                if (elem.first != "id")
+                {
                     queryString += "?, ";
                 }
             }
@@ -155,12 +167,16 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
             SQLite::Statement query(db, queryString);
 
             int n = 1;
-            for(auto const& elem : data){
-                if(elem.first != "id"){
-                    if(elem.second[1] == "string"){
+            for(auto const& elem : data)
+            {
+                if (elem.first != "id")
+                {
+                    if (elem.second[1] == "string")
+                    {
                         query.bind(n, elem.second[0]);
                     }
-                    else if(elem.second[1] == "int"){
+                    else if (elem.second[1] == "int")
+                    {
                         query.bind(n, stoi(elem.second[0]));
                     }
                     n++;
@@ -181,10 +197,12 @@ int BaseModel::save(const string& table, map<string, vector<string>> data){
     }
 }
 
-bool BaseModel::remove(const string& table, const int& id){
+bool BaseModel::remove(const string& table, const int& id)
+{
 
     // We cannot delete a non-existing field
-    if(id == 0){
+    if (id == 0)
+    {
         return false;
     }
 

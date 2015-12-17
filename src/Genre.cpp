@@ -1,5 +1,4 @@
 #include "Genre.hpp"
-#include "BaseModel.hpp"
 
 using namespace std;
 
@@ -27,7 +26,7 @@ Genre::Genre(const int id)
 {
     map<string, string> data = BaseModel::getById("genres", id);
 
-    if(!data.empty())
+    if (!data.empty())
     {
         _id = id;
         _name = data["genre"];
@@ -60,7 +59,7 @@ bool Genre::save()
         {"genre", {_name, "string"}},
     });
 
-    if(_id == 0)
+    if (_id == 0)
     {
         _id = res["id"];
     }
