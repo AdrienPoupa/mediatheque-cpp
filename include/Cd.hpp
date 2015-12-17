@@ -17,7 +17,7 @@ class Cd : public Article
         Cd();
         Cd(int id);
         virtual ~Cd();
-    
+
         void deserialization(std::map<std::string, std::string> data);
 
         std::string getStudio() const;
@@ -25,6 +25,8 @@ class Cd : public Article
 
         unsigned int getLength() const;
         void setLength(const unsigned int& length);
+
+        void edit();
 
         bool save();
         bool remove();

@@ -6,6 +6,7 @@
 #include <set>
 #include <map>
 
+#include "BaseModel.hpp"
 #include "Article.hpp"
 #include "Person.hpp"
 

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 
+#include "BaseModel.hpp"
 #include "Date.hpp"
 #include "Genre.hpp"
 #include "Person.hpp"
@@ -23,11 +24,11 @@ protected:
 
 public:
     virtual ~Article();
-    
+
     void init(std::map<std::string, std::string> data);
 
     unsigned int getId() const;
-    
+
     virtual void deserialization(std::map<std::string, std::string> data);
 
     bool getBorrowable() const;
@@ -49,10 +50,12 @@ public:
 
     void retrieveGenreFromDB(std::map<std::string, std::string> data);
     void addGenreToDB(std::map<std::string, std::vector<std::string>>& data);
-    
+
     void shortDisplay() const;
     std::ostream& displayGenres(std::ostream& stream);
     std::istream& displayGenreFromCli(std::istream& stream);
+
+    virtual void edit() = 0;
 
     virtual bool save() = 0;
     virtual bool remove() = 0;

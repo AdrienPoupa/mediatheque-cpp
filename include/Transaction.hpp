@@ -12,7 +12,7 @@
 #include "Dvd.hpp"
 #include "Date.hpp"
 #include "User.hpp"
-
+#include "Library.hpp"
 
 class Transaction {
     private:

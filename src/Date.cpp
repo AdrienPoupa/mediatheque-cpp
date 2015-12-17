@@ -2,12 +2,6 @@
 //
 
 #include "Date.hpp"
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <string>
-#include <chrono>
-#include <map>
 
 using namespace std;
 
@@ -15,7 +9,8 @@ Date::Date (const int month, const int day, const int year)
 {
     static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-    if(month != -1 && day != -1 && year != -1){
+    if (month != -1 && day != -1 && year != -1)
+    {
         _month = max(1, month);
         _month = min(_month,12);
 

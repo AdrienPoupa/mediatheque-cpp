@@ -16,7 +16,7 @@
  */
 
 #include "Cd.hpp"
-#include "BaseModel.hpp"
+#include "Util.hpp"
 
 using namespace std;
 
@@ -31,7 +31,7 @@ Cd::Cd(int id)
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
 
-    if(!data.empty())
+    if (!data.empty())
     {
         _id = id;
         _authorId = stoi(data["artist"]);
@@ -53,20 +53,25 @@ Cd::~Cd()
     //dtor
 }
 
-void Cd::deserialization(map<string, string> data){
-    if(!data.empty())
+void Cd::deserialization(map<string, string> data)
+{
+    if (!data.empty())
     {
         _id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
         _borrowable = data.find("borrowable")!= data.end() ? data["borrowable"] != "0" : true;
         _title = data["title"];
         _release = Date(data["release"]);
-        if(data.find("artist")!= data.end()){
+
+        if (data.find("artist")!= data.end())
+        {
             _authorId = stoi(data["artist"]);
             _author = new Artist(stoi(data["artist"]));
         }
-        else{
+        else
+        {
             _authorId = 0;
         }
+
         _studio = data["studio"];
         _length = data.find("length")!= data.end() ? stoi(data["length"]) : 0;
         retrieveGenreFromDB(data);
@@ -93,6 +98,101 @@ void Cd::setLength(const unsigned int& length)
     _length = length;
 }
 
+void Cd::edit()
+{
+    int choice;
+
+    do
+    {
+        cout << "Modification d'un CD" << endl;
+
+        cout << "1. Modifier l'artiste" << endl;
+        cout << "2. Modifier le titre" << endl;
+        cout << "3. Modifier la date de sortie" << endl;
+        cout << "4. Modifier la duree" << endl;
+        cout << "5. Modifier le studio" << endl;
+        cout << "6. Modifier les genres" << endl;
+        cout << "0. Annuler" << endl;
+        cout << "Choix: ";
+        cin >> choice;
+
+    } while(choice < 0 && choice > 6);
+
+    switch (choice)
+    {
+        case 1:
+        {
+            int newArtist;
+            cin >> newArtist;
+
+            Util::checkInput(cin, newArtist, 1);
+
+            setAuthorId(newArtist);
+            break;
+        }
+        case 2:
+        {
+            string newTitle;
+            cin.ignore(1, '\n');
+            getline(cin, newTitle, '\n');
+            setTitle(newTitle);
+            break;
+        }
+        case 3:
+        {
+            Date newReleaseDate;
+            cin >> newReleaseDate;
+            setRelease(newReleaseDate);
+            break;
+        }
+        case 4:
+        {
+            int newLength;
+            cin >> newLength;
+
+            Util::checkInput(cin, newLength, 1);
+
+            setLength(newLength);
+            break;
+        }
+        case 5:
+        {
+            string newStudio;
+            cin.ignore(1, '\n');
+            getline(cin, newStudio, '\n');
+            setStudio(newStudio);
+            break;
+        }
+        case 6:
+        {
+            int genre1 = 0, genre2 = 0;
+
+            cout << "ID genre 1" << endl;
+            cin >> genre1;
+
+            Util::checkInput(cin, genre1, 1);
+
+            addGenre(genre1);
+
+            cout << "ID genre 2" << endl;
+            cin >> genre2;
+
+            Util::checkInput(cin, genre2, 1);
+
+            addGenre(genre2);
+
+            break;
+        }
+        default:
+            return;
+            break;
+    }
+
+    cout << "Sauvegarde..." << endl;
+    save();
+    return;
+}
+
 bool Cd::save()
 {
     map<string, vector<string>> data = {
@@ -109,7 +209,7 @@ bool Cd::save()
 
     int res = BaseModel::save(_dbTable, data);
 
-    if(_id == 0)
+    if (_id == 0)
     {
         _id = res;
     }

@@ -1,7 +1,4 @@
 #include "Library.hpp"
-#include <fstream>
-#include <set>
-#include "Transaction.hpp"
 
 using namespace std;
 
@@ -21,11 +18,13 @@ Library* Library::getSingleton()
     {
         // check if mediatheque.db3 exist
         ifstream mfile("mediatheque.db3");
-        if(mfile){
+        if (mfile)
+        {
             singleton = new Library();
             mfile.close();
         }
-        else{
+        else
+        {
             throw NoDb;
         }
     }
@@ -48,31 +47,29 @@ bool Library::isAdmin()
     return _currentUser.isAdmin();
 }
 
-bool Library::checkInput(istream& stream, const int intToCheck, const int minValue) const
+void Library::run()
 {
-    return !(stream.fail() || intToCheck < minValue); //"Merci d'entrer un choix valide"
-}
-
-void Library::run(){
 
     // connection
     bool connected = connect();
-    
-    if(!connected){
-        cout << "Vous avez echoue votre authentification." << endl;
+
+    if (!connected)
+    {
+        cout << "L'authentification a echoue." << endl;
         return;
     }
     // boucle tant que l'utilisateur ne quitte pas le programme
     bool quit = false;
 
-    while(!quit){
+    while(!quit)
+    {
         int choice = displayMenu();
-        if(choice)
+        if (choice)
             redirectChoice(choice);
         else
             quit = true;
     }
-    
+
     cout << "A bientot !" << endl;
 }
 
@@ -99,18 +96,20 @@ bool Library::connect()
 
         correctId = userIds.find(idToOpen) != userIds.end();
 
-        if(!correctId){
+        if (!correctId)
+        {
             cout << "Identifiant inconnu ..." << endl;
         }
 
-    }while(!correctId);
+    } while(!correctId);
 
     User accountToOpen(idToOpen);
     _currentUser = accountToOpen;
 
     int essai = 3;
     bool correctPass = false;
-    while(!correctPass && essai > 0){
+    while(!correctPass && essai > 0)
+    {
         cout << "Identification: rentrez votre mot de passe" << endl;
         string inputPassword;
         cin >> inputPassword;
@@ -118,10 +117,12 @@ bool Library::connect()
         correctPass = _currentUser.checkPassword(inputPassword);
         essai--;
 
-        if(correctPass){
+        if (correctPass)
+        {
             cout << "Identification reussie!" << endl;
         }
-        else{
+        else
+        {
             cout << "Erreur dans votre mot de passe." << endl;
         }
     }
@@ -133,7 +134,8 @@ int Library::displayMenu()
 
     int choice;
 
-    do{
+    do
+    {
         cout << endl;
         cout << "Menu : tapez le numero de l'action choisie" << endl;
         cout << "0. Quitter" << endl;
@@ -155,11 +157,11 @@ int Library::displayMenu()
             cout << "12. Ajouter un artiste" << endl;
             cout << "13. Emprunts en cours" << endl;
         }
-        
+
         cout << "Choix: " << endl;
         cin >> choice;
-        
-    }while(choice < 0 && ((isAdmin() && choice > 13) || choice > 7));
+
+    } while(choice < 0 && ((isAdmin() && choice > 13) || choice > 7));
 
     return choice;
 }
@@ -293,14 +295,17 @@ void Library::searchList()
 }
 
 template <class T>
-void Library::getListArticle(){
+void Library::getListArticle()
+{
     map<string, vector<string>> liaison = {{"books", {"livre", "id, title, author, release"}}, {"cds", {"CD", "*"}}, {"dvds", {"DVD", "*"}}};
     string type = "books";
 
-    if(std::is_same<T, Cd>::value){
+    if (std::is_same<T, Cd>::value)
+    {
         type = "cds";
     }
-    else if(std::is_same<T, Dvd>::value){
+    else if (std::is_same<T, Dvd>::value)
+    {
         type = "dvds";
     }
 
@@ -338,48 +343,55 @@ void Library::getListArticle(){
 }
 
 template <class T>
-void Library::seeArticle(int id){
-
+void Library::seeArticle(int id)
+{
     Article * art;
 
-    if(id == 0){
+    if (id == 0)
+    {
         return;
     }
 
     Util::Types type = Util::Types::Book;
 
-    if(std::is_same<T, Cd>::value){
+    if (std::is_same<T, Cd>::value)
+    {
         type = Util::Types::Cd;
         art = new Cd(id);
     }
-    else if(std::is_same<T, Dvd>::value){
+    else if (std::is_same<T, Dvd>::value)
+    {
         type = Util::Types::Dvd;
         art  = new Dvd(id);
     }
-    else{
+    else
+    {
         art = new Book(id);
     }
 
-    if(art->getBorrowable()){
-        if(affichageChoixSee("emprunter", Util::getTypesString(type))) borrowArticle(art, type);
+    if (art->getBorrowable())
+    {
+        if (affichageChoixSee("emprunter", Util::getTypesString(type))) borrowArticle(art, type);
     }
 
     if (isAdmin())
     {
         if (affichageChoixSee("modifier", Util::getTypesString(type)))
         {
-            if(type == Util::Types::Cd){
+            if (type == Util::Types::Cd)
+            {
                 Cd tmp = dynamic_cast<Cd&>(*art);
-                editCd(tmp);
+                tmp.edit();
             }
-            else if(type == Util::Types::Cd){
+            else if (type == Util::Types::Cd)
+            {
                 Dvd tmp = dynamic_cast<Dvd&>(*art);
-                editDvd(tmp);
-
+                tmp.edit();
             }
-            else{
+            else
+            {
                 Book tmp = dynamic_cast<Book&>(*art);
-                editBook(tmp);
+                tmp.edit();
             }
         }
 
@@ -413,309 +425,6 @@ bool Library::affichageChoixSee(const string typeChoix, const string typeArticle
     return choice == "o";
 }
 
-void Library::editBook(Book& book)
-{
-    int choice;
-
-    do{
-        cout << "Modification d'un livre" << endl;
-
-        cout << "1. Modifier l'auteur" << endl;
-        cout << "2. Modifier le titre" << endl;
-        cout << "3. Modifier la date de sortie" << endl;
-        cout << "4. Modifier le nombre de pages" << endl;
-        cout << "5. Modifier l'editeur" << endl;
-        cout << "6. Modifier les genres" << endl;
-        cout << "0. Annuler" << endl;
-        cout << "Choix: ";
-        cin >> choice;
-    }while(choice < 0 && choice > 6);
-
-    switch (choice)
-    {
-        case 1:
-        {
-            int newArtist;
-            cin >> newArtist;
-
-            checkInput(cin, newArtist, 1);
-
-            book.setAuthorId(newArtist);
-            break;
-        }
-        case 2:
-        {
-            string newTitle;
-            cin.ignore(1, '\n');
-            getline(cin, newTitle, '\n');
-            book.setTitle(newTitle);
-            break;
-        }
-        case 3:
-        {
-            Date newReleaseDate;
-            cin >> newReleaseDate;
-            book.setRelease(newReleaseDate);
-            break;
-        }
-        case 4:
-        {
-            int newPages;
-            cin >> newPages;
-
-            checkInput(cin, newPages, 1);
-
-            book.setPages(newPages);
-            break;
-        }
-        case 5:
-        {
-            string newEditor;
-            cin.ignore(1, '\n');
-            getline(cin, newEditor, '\n');
-            book.setEditor(newEditor);
-            break;
-        }
-        case 6:
-        {
-            int genre1 = 0, genre2 = 0;
-
-            cout << "ID genre 1" << endl;
-            cin >> genre1;
-
-            checkInput(cin, genre1, 1);
-
-            book.addGenre(genre1);
-
-            cout << "ID genre 2" << endl;
-            cin >> genre2;
-
-            checkInput(cin, genre2, 1);
-
-            book.addGenre(genre2);
-
-            break;
-        }
-        default:
-            return;
-            break;
-    }
-
-    cout << "Sauvegarde..." << endl;
-    book.save();
-    return;
-}
-
-void Library::editDvd(Dvd& dvd)
-{
-
-    int choice;
-
-    do{
-        cout << "Modification d'un DVD" << endl;
-
-        cout << "1. Modifier le realisateur" << endl;
-        cout << "2. Modifier le titre" << endl;
-        cout << "3. Modifier la date de sortie" << endl;
-        cout << "4. Modifier la duree" << endl;
-        cout << "5. Modifier le studio" << endl;
-        cout << "6. Modifier les genres" << endl;
-        cout << "7. Modifier le casting" << endl;
-        cout << "0. Annuler" << endl;
-        cout << "Choix: ";
-        cin >> choice;
-    }while(choice < 0 && choice > 7);
-
-    switch (choice)
-    {
-        case 1:
-        {
-            int newArtist;
-            cin >> newArtist;
-
-            checkInput(cin, newArtist, 1);
-
-            dvd.setAuthorId(newArtist);
-            break;
-        }
-        case 2:
-        {
-            string newTitle;
-            cin.ignore(1, '\n');
-            getline(cin, newTitle, '\n');
-            dvd.setTitle(newTitle);
-            break;
-        }
-        case 3:
-        {
-            Date newReleaseDate;
-            cin >> newReleaseDate;
-            dvd.setRelease(newReleaseDate);
-            break;
-        }
-        case 4:
-        {
-            int newLength;
-            cin >> newLength;
-
-            checkInput(cin, newLength, 1);
-
-            dvd.setLength(newLength);
-            break;
-        }
-        case 5:
-        {
-            string newStudio;
-            cin.ignore(1, '\n');
-            getline(cin, newStudio, '\n');
-            dvd.setStudio(newStudio);
-            break;
-        }
-        case 6:
-        {
-            int genre1 = 0, genre2 = 0;
-
-            cout << "ID genre 1" << endl;
-            cin >> genre1;
-
-            checkInput(cin, genre1, 1);
-
-            dvd.addGenre(genre1);
-
-            cout << "ID genre 2" << endl;
-            cin >> genre2;
-
-            checkInput(cin, genre2, 1);
-
-            dvd.addGenre(genre2);
-
-            break;
-        }
-        case 7:
-        {
-            cout << "Le casting actuel est supprime et remplace par celui que vous allez rentrer" << endl;
-            dvd.deleteCasting();
-
-            int artistId = 0;
-
-            cout << "ID de l'artiste a rajouter au casting" << endl;
-            cin >> artistId;
-
-            do {
-                checkInput(cin, artistId, 1);
-
-                dvd.addCasting(artistId);
-
-                cout << "ID de l'artiste a rajouter au casting, 0 pour arreter" << endl;
-                cin >> artistId;
-            } while (artistId != 0);
-
-            break;
-        }
-        default:
-            return;
-            break;
-    }
-
-    cout << "Sauvegarde..." << endl;
-    dvd.save();
-    return;
-}
-
-
-void Library::editCd(Cd& cd)
-{
-    int choice;
-    do{
-        cout << "Modification d'un CD" << endl;
-
-        cout << "1. Modifier l'artiste" << endl;
-        cout << "2. Modifier le titre" << endl;
-        cout << "3. Modifier la date de sortie" << endl;
-        cout << "4. Modifier la duree" << endl;
-        cout << "5. Modifier le studio" << endl;
-        cout << "6. Modifier les genres" << endl;
-        cout << "0. Annuler" << endl;
-        cout << "Choix: ";
-        cin >> choice;
-
-    }while(choice < 0 && choice > 6);
-
-    switch (choice)
-    {
-        case 1:
-        {
-            int newArtist;
-            cin >> newArtist;
-
-            checkInput(cin, newArtist, 1);
-
-            cd.setAuthorId(newArtist);
-            break;
-        }
-        case 2:
-        {
-            string newTitle;
-            cin.ignore(1, '\n');
-            getline(cin, newTitle, '\n');
-            cd.setTitle(newTitle);
-            break;
-        }
-        case 3:
-        {
-            Date newReleaseDate;
-            cin >> newReleaseDate;
-            cd.setRelease(newReleaseDate);
-            break;
-        }
-        case 4:
-        {
-            int newLength;
-            cin >> newLength;
-
-            checkInput(cin, newLength, 1);
-
-            cd.setLength(newLength);
-            break;
-        }
-        case 5:
-        {
-            string newStudio;
-            cin.ignore(1, '\n');
-            getline(cin, newStudio, '\n');
-            cd.setStudio(newStudio);
-            break;
-        }
-        case 6:
-        {
-            int genre1 = 0, genre2 = 0;
-
-            cout << "ID genre 1" << endl;
-            cin >> genre1;
-
-            checkInput(cin, genre1, 1);
-
-            cd.addGenre(genre1);
-
-            cout << "ID genre 2" << endl;
-            cin >> genre2;
-
-            checkInput(cin, genre2, 1);
-
-            cd.addGenre(genre2);
-
-            break;
-        }
-        default:
-            return;
-            break;
-    }
-
-    cout << "Sauvegarde..." << endl;
-    cd.save();
-    return;
-}
-
 void Library::userList()
 {
     cout << "Liste des utilisateurs :" << endl << endl;
@@ -738,7 +447,7 @@ void Library::userList()
         cin >> userId;
     }while(userIds.find(userId) == userIds.end() && userId != 0);
 
-    if(userId == 0) return;
+    if (userId == 0) return;
 
     editUser(userId);
 }
@@ -817,7 +526,7 @@ void Library::editUser(int userId)
             int newIsAdmin;
             cout << "Tapez 0 pour un utilisateur lambda, 1 pour un administrateur" << endl;
             cin >> newIsAdmin;
-            checkInput(cin, newIsAdmin, 0);
+            Util::checkInput(cin, newIsAdmin, 0);
             userToEdit.setAdmin(newIsAdmin);
             break;
         }
@@ -825,7 +534,7 @@ void Library::editUser(int userId)
         {
             int newQuota;
             cin >> newQuota;
-            checkInput(cin, newQuota, 0);
+            Util::checkInput(cin, newQuota, 0);
             userToEdit.setQuota(newQuota);
             break;
         }
@@ -846,7 +555,8 @@ void Library::editUser(int userId)
             break;
     }
 
-    if(choice != 9 && choice != 0 ){
+    if (choice != 9 && choice != 0 )
+    {
         cout << "Sauvegarde..." << endl;
         userToEdit.save();
     }
@@ -896,7 +606,8 @@ void Library::artistList()
         cin >> artistId;
     }while(artistIds.find(artistId) == artistIds.end() && artistId != 0);
 
-    if(artistId == 0){
+    if (artistId == 0)
+    {
         return;
     }
 
@@ -1060,7 +771,8 @@ void Library::editArtist(Artist& artist)
             break;
     }
 
-    if(choice != 0){
+    if (choice != 0)
+    {
         cout << "Sauvegarde..." << endl;
         artist.save();
     }
@@ -1097,19 +809,21 @@ void Library::borrowedMenu() {
         cout << "Pour voir un emprunt, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
         cin >> empruntId;
     }while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
-    
-    if(empruntId == 0) return;
-    
+
+    if (empruntId == 0) return;
+
     seeEmprunt(trs.at(empruntId));
 }
 
 void Library::seeEmprunt(Transaction tr, bool adminMode)
 {
-    if(adminMode){
+    if (adminMode)
+    {
         // editTransaction
         cout << "fonctionnalite d'edition non disponible ..." << endl;
     }
-    else if(affichageChoixSee("rendre", Util::getTypesString(Util::Types(tr.getType())))){
+    else if (affichageChoixSee("rendre", Util::getTypesString(Util::Types(tr.getType()))))
+    {
         returnArticle(&tr);
     }
 }
@@ -1130,14 +844,14 @@ void Library::returnArticle(Transaction *t)
 
 void Library::listTransactions()
 {
-    /* 
-     recherche d'emprunts : 
+    /*
+     recherche d'emprunts :
      # filtre:
         - fini/en cours/tous;
         - date
      */
     int choice;
-    
+
     do{
         cout << "Emprunts: choix du filtre" << endl;
         cout << "1. En cours" << endl;
@@ -1147,11 +861,12 @@ void Library::listTransactions()
         cout << "Choix: " << endl;
         cin >> choice;
     }while(choice < 0 && choice > 3);
-    
-    if(choice == 0) return;
-    
+
+    if (choice == 0) return;
+
     string filter = "";
-    switch(choice){
+    switch(choice)
+    {
         case 1:
             // En cours
             filter = "returned=0";
@@ -1164,17 +879,17 @@ void Library::listTransactions()
             // Tous = No filter
             break;
     }
-    
+
     map<int, map<string, string>> transactions = BaseModel::select("transactions", "*", filter);
-    
+
     int totalCount = (int)transactions.size();
-    
+
     if (totalCount == 0)
     {
         cout << "Aucun emprunt en cours" << endl;
         return;
     }
-    
+
     set<int> ids = set<int>();
     map<int, Transaction> trs = map<int, Transaction>();
     for (int i = 1; i != totalCount + 1; i++)
@@ -1185,13 +900,13 @@ void Library::listTransactions()
         trs.insert(pair<int, Transaction>(tmp.getId(), tmp));
         ids.insert(tmp.getId());
     }
-    
+
     int empruntId;
     do{
         cout << "Pour voir un emprunt, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
         cin >> empruntId;
     }while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
-    
+
     seeEmprunt(trs.at(empruntId), true);
 }
 

@@ -47,7 +47,7 @@ User::User(const int id) // Get a person from an ID provided by DB
 {
     map<string, string> data = BaseModel::getById(_dbTable, id);
 
-    if(!data.empty())
+    if (!data.empty())
     {
         _id = id;
         _firstName = data["name"];
@@ -135,12 +135,12 @@ bool User::checkQuota() const
 
 bool User::borrow(Article* art, const int type)
 {
-    if(checkQuota())
+    if (checkQuota())
     {
 
         Transaction t(art->getId(), type, _id);
 
-        if(t.save())
+        if (t.save())
         {
             cout << "Emprunt validé !" << endl;
             // update borrowable of article
@@ -163,21 +163,26 @@ bool User::borrow(Article* art, const int type)
     }
 }
 
-bool User::returnArticle(Transaction * t){
+bool User::returnArticle(Transaction * t)
+{
     Article * art;
-    if(t->getType() == Util::Types::Book){
+    if (t->getType() == Util::Types::Book)
+    {
         art = new Book(t->getArticleId());
     }
-    else if(t->getType() == Util::Types::Cd){
+    else if (t->getType() == Util::Types::Cd)
+    {
         art = new Cd(t->getArticleId());
     }
-    else {
+    else
+    {
         art = new Dvd(t->getArticleId());
     }
     
     t->setReturned(true);
     
-    if(t->save()){
+    if (t->save())
+    {
         cout << "Rendu validé!" << endl;
         art->setBorrowable(true);
         art->save();
@@ -205,7 +210,7 @@ bool User::save()
         {"password", {_password, "string"}}
     });
 
-    if(_id == 0)
+    if (_id == 0)
     {
         _id = res["id"];
     }
