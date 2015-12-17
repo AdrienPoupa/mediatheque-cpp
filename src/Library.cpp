@@ -453,7 +453,7 @@ void Library::editBook(Book& book)
         }
         case 3:
         {
-            Date newReleaseDate;
+            string newReleaseDate;
             cin >> newReleaseDate;
             book.setRelease(newReleaseDate);
             break;
@@ -548,7 +548,7 @@ void Library::editDvd(Dvd& dvd)
         }
         case 3:
         {
-            Date newReleaseDate;
+            string newReleaseDate;
             cin >> newReleaseDate;
             dvd.setRelease(newReleaseDate);
             break;
@@ -663,7 +663,7 @@ void Library::editCd(Cd& cd)
         }
         case 3:
         {
-            Date newReleaseDate;
+            string newReleaseDate;
             cin >> newReleaseDate;
             cd.setRelease(newReleaseDate);
             break;

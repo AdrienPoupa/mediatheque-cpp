@@ -67,12 +67,12 @@ vector<int> Article::getGenres() const
     return _genres;
 }
 
-Date Article::getRelease() const
+string Article::getRelease() const
 {
     return _release;
 }
 
-void Article::setRelease(const Date& newRelease)
+void Article::setRelease(const string newRelease)
 {
     _release = newRelease;
 }
@@ -93,8 +93,8 @@ void Article::retrieveGenreFromDB(map<string, string> data)
 
     if(!data.empty())
     {
-        genre1 = data.find("genre1")!= data.end() ? stoi(data["genre1"]) : 0;
-        genre2 = data.find("genre2")!= data.end() ? stoi(data["genre2"]) : 0;
+        genre1 = data.find("genre1")!= data.end() && data["genre1"] != "" ? stoi(data["genre1"]) : 0;
+        genre2 = data.find("genre2")!= data.end() && data["genre2"] != "" ? stoi(data["genre2"]) : 0;
     }
 
     if (genre1 != 0)

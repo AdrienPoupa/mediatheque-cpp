@@ -43,37 +43,72 @@ Date::Date (const int month, const int day, const int year)
 
 }
 
+int getYearFromStr(string date){
+    ostringstream ss1;
+    ss1 << date.substr(0,4);
+    string yearString = ss1.str();
+    yearString.erase(0, yearString.find_first_not_of('0')); // Delete leading zeros
+    stringstream ss11(yearString); // Convert string back to int
+    int year;
+    ss11 >> year;
+    year = max(1, year);
+    return year;
+}
+
+int getMonthFromStr(string date){
+    ostringstream ss2;
+    ss2 << date.substr(5,2);
+    string monthString = ss2.str();
+    monthString.erase(0, monthString.find_first_not_of('0'));
+    istringstream ss22(monthString);
+    int month;
+    ss22 >> month;
+    month = max(1, month);
+    month = min(month,12);
+    
+    return month;
+}
+
+int getDayFromStr(string date, int month){
+    static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    
+    ostringstream ss3;
+    ss3 << date.substr(8,2);
+    string dayString = ss3.str();
+    dayString.erase(0, dayString.find_first_not_of('0'));
+    istringstream ss33(dayString);
+    int day;
+    ss33 >> day;
+    day = max(1, day);
+    day = min(day, length[month]);
+    return day;
+}
+
+
 Date::Date (const string dateDB)
 {
-    static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    if(dateDB.length() >= 4){
+        _year = getYearFromStr(dateDB);
+    }
+    else{
+        _year = -1;
+    }
+    
+    if(dateDB.length() >= 7){
+        _month = getMonthFromStr(dateDB);
+    }
+    else{
+        _month = -1;
+    }
+    
+    if(dateDB.length() >= 10){
+        _day = getDayFromStr(dateDB, _month == -1 ? 0 : _month);
+    }
+    else{
+        _day = -1;
+    }
 
-    // Too much redundant code here...
-
-    ostringstream ss1;
-    ss1 << dateDB.substr(0,4);
-    string _yearString = ss1.str();
-    _yearString.erase(0, _yearString.find_first_not_of('0')); // Delete leading zeros
-    stringstream ss11(_yearString); // Convert string back to int
-    ss11 >> _year;
-    _year = max(1, _year);
-
-    ostringstream ss2;
-    ss2 << dateDB.substr(5,2);
-    string _monthString = ss2.str();
-    _monthString.erase(0, _monthString.find_first_not_of('0'));
-    istringstream ss22(_monthString);
-    ss22 >> _month;
-    _month = max(1, _month);
-    _month = min(_month,12);
-
-    ostringstream ss3;
-    ss3 << dateDB.substr(8,2);
-    string _dayString = ss3.str();
-    _dayString.erase(0, _dayString.find_first_not_of('0'));
-    istringstream ss33(_dayString);
-    ss33 >> _day;
-    _day = max(1, _day);
-    _day = min(_day, length[_month]);
+    
 }
 
 int Date::daysSoFar() const
@@ -130,15 +165,15 @@ string Date::dateToDB() const
        http://stackoverflow.com/questions/26486419/c-save-int-with-leading-zeros-to-string-not-displaying-them
     */
     ostringstream ss1;
-    ss1 << setw(4) << setfill('0') << _year;
+    ss1 << setw(4) << setfill('0') << (_year == -1 ? 0 : _year);
     string year = ss1.str();
 
     ostringstream ss2;
-    ss2 << setw(2) << setfill('0') << _month;
+    ss2 << setw(2) << setfill('0') << (_month == -1 ? 0 : _month);
     string month = ss2.str();
 
     ostringstream ss3;
-    ss3 << setw(2) << setfill('0') << _day;
+    ss3 << setw(2) << setfill('0') << (_day == -1 ? 0 : _day);
     string day = ss3.str();
 
     return year + "-" + month + "-" + day;
@@ -151,7 +186,7 @@ ostream& operator<< (ostream& stream, const Date& date)
     "Mai", "Juin", "Juillet", "Aout", "Septembre",
     "Octobre", "Novembre", "Decembre"};
 
-    cout << date._day << ' ' << name[date._month] << ' ' << date._year;
+    cout << (date._day != -1 ? date._day : stoi("")) << ' ' << (date._month != -1 ? name[date._month] : "") << ' ' << (date._year != -1 ? date._year : stoi(""));
 
     return stream;
 }
@@ -160,12 +195,21 @@ istream& operator>> (istream& stream, Date& date)
 {
     int day, month, year;
 
-    cout << "Saisissez d'abord le jour (de 1 a 31) : " << endl;
-    stream >> day;
-    cout << "Saisissez ensuite le mois (de 1 a 12) : " << endl;
-    stream >> month;
-    cout << "Saisissez enfin l'annee : " << endl;
-    stream >> year;
+    do {
+        cout << "Saisissez d'abord le jour (de 1 a 31) : " << endl;
+        stream >> day;
+    }while(day < 1 && day > 31);
+    
+    do {
+        cout << "Saisissez ensuite le mois (de 1 a 12) : " << endl;
+        stream >> month;
+    }while(month < 1 && month > 12);
+    
+    do{
+        cout << "Saisissez enfin l'annee : " << endl;
+        stream >> year;
+    }while(year < 0 && year > 9000);
+    
 
     // Redundant with constructor, should we do something about it ?
     static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };

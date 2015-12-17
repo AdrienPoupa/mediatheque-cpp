@@ -53,7 +53,7 @@ void Book::deserialization(map<string, string> data){
         _id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
         _borrowable = data.find("borrowable")!= data.end() ? data["borrowable"] != "0" : true;
         _title = data["title"];
-        _release = Date(data["release"]);
+        _release = data["release"];
         if(data.find("author")!= data.end()){
             _authorId = stoi(data["author"]);
             _author = new Artist(stoi(data["author"]));
@@ -93,7 +93,7 @@ bool Book::save()
         {"id", {to_string(_id), "int"}},
         {"borrowable", {_borrowable ? "1" : "0", "int"}},
         {"title", {_title, "string"}},
-        {"release", {_release.dateToDB(), "string"}},
+        {"release", {_release, "string"}},
         {"author", {to_string(_authorId), "int"}},
         {"editor", {_editor, "string"}},
         {"pages", {to_string(_pages), "int"}},
