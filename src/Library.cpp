@@ -1,6 +1,7 @@
 #include "Library.hpp"
 #include <fstream>
 #include <set>
+#include "Transaction.hpp"
 
 using namespace std;
 
@@ -105,21 +106,20 @@ void Library::displayMenu()
     cout << "2. Liste des dvds" << endl;
     cout << "3. Liste des cds" << endl;
     cout << "4. Liste des artistes" << endl;
-    cout << "5. Emprunter un article" << endl;
-    cout << "6. Restituer un emprunt" << endl;
-    cout << "7. Chercher un article" << endl;
+    cout << "5. Mes emprunts" << endl;
+    cout << "6. Chercher un article" << endl;
 
     if (isAdmin())
     {
         cout << endl << "Menu Administrateur" << endl;
-        cout << "8. Liste des utilisateurs" << endl;
-        cout << "9. Ajouter un utilisateur" << endl;
-        cout << "10. Supprimer un utilisateur" << endl;
-        cout << "11. Ajouter un livre" << endl;
-        cout << "12. Ajouter un cd" << endl;
-        cout << "13. Ajouter un dvd" << endl;
-        cout << "14. Ajouter un artiste" << endl;
-        cout << "15. Emprunts en cours" << endl;
+        cout << "7. Liste des utilisateurs" << endl;
+        cout << "8. Ajouter un utilisateur" << endl;
+        cout << "9. Supprimer un utilisateur" << endl;
+        cout << "10. Ajouter un livre" << endl;
+        cout << "11. Ajouter un cd" << endl;
+        cout << "12. Ajouter un dvd" << endl;
+        cout << "13. Ajouter un artiste" << endl;
+        cout << "14. Emprunts en cours" << endl;
     }
 
     cin >> choice;
@@ -150,37 +150,34 @@ void Library::redirectChoice(const int choice)
             artistList();
             break;
         case 5:
-            borrowArticle();
+            borrowedMenu();
             break;
         case 6:
-            returnArticle();
-            break;
-        case 7:
             searchList();
             break;
         // Admin action - we need an extra check
-        case 8:
+        case 7:
             (isAdmin()) ? userList() : displayMenu();
             break;
-        case 9:
+        case 8:
             (isAdmin()) ? addThing<User>() : displayMenu();
             break;
-        case 10:
+        case 9:
             (isAdmin()) ? deleteUser() : displayMenu();
             break;
-        case 11:
+        case 10:
             (isAdmin()) ? addThing<Book>() : displayMenu();
             break;
-        case 12:
+        case 11:
             (isAdmin()) ? addThing<Cd>() : displayMenu();
             break;
-        case 13:
+        case 12:
             (isAdmin()) ? addThing<Dvd>() : displayMenu();
             break;
-        case 14:
+        case 13:
             (isAdmin()) ? addThing<Artist>() : displayMenu();
             break;
-        case 15:
+        case 14:
             (isAdmin()) ? listTransactions() : displayMenu();
             break;
         default:
@@ -318,14 +315,14 @@ void Library::seeArticle(int id){
         return;
     }
     
-    string type = "livre";
+    Util::Types type = Util::Types::Book;
     
     if(std::is_same<T, Cd>::value){
-        type = "CD";
+        type = Util::Types::Cd;
         art = new Cd(id);
     }
     else if(std::is_same<T, Dvd>::value){
-        type = "DVD";
+        type = Util::Types::Dvd;
         art  = new Dvd(id);
     }
     else{
@@ -333,18 +330,18 @@ void Library::seeArticle(int id){
     }
     
     if(art->getBorrowable()){
-        if(affichageChoixSee("emprunter", type)) borrowArticle(art, type);
+        if(affichageChoixSee("emprunter", Util::getTypesString(type))) borrowArticle(art, type);
     }
     
     if (isAdmin())
     {
-        if (affichageChoixSee("modifier", type))
+        if (affichageChoixSee("modifier", Util::getTypesString(type)))
         {
-            if(type == "CD"){
+            if(type == Util::Types::Cd){
                 Cd tmp = dynamic_cast<Cd&>(*art);
                 editCd(tmp);
             }
-            else if(type == "DVD"){
+            else if(type == Util::Types::Cd){
                 Dvd tmp = dynamic_cast<Dvd&>(*art);
                 editDvd(tmp);
                 
@@ -355,7 +352,7 @@ void Library::seeArticle(int id){
             }
         }
         
-        if (affichageChoixSee("supprimer", type))
+        if (affichageChoixSee("supprimer", Util::getTypesString(type)))
         {
             art->remove();
         }
@@ -363,36 +360,6 @@ void Library::seeArticle(int id){
     
     displayMenu();
     return;
-}
-
-void Library::bookList()
-{
-    cout << "Liste des livres dans la mediatheque:" << endl;
-
-    map<int, map<string, string>> books = BaseModel::select("books", "id, title, author, release", "borrowable IS 1");
-
-    int totalBooks = books.size();
-
-    if (totalBooks == 0)
-    {
-        cout << "Aucun livre dans la mediatheque" << endl;
-        return;
-    }
-
-    for (int i = 1; i != totalBooks + 1; i++)
-    {
-        Artist writer(stoi(books[i]["author"]));
-        Date release(books[i]["release"]);
-        cout << books[i]["id"] << ". " << books[i]["title"] << " (" << release << ") par " << writer.getFirstName() << " " << writer.getLastName() << endl;
-    }
-
-    int articleId;
-    cout << "Pour voir un livre, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
-    cin >> articleId;
-
-    checkInput(cin, articleId, 0);
-
-    seeArticle<Book>(articleId);
 }
 
 void Library::editBook(Book& book)
@@ -485,36 +452,6 @@ void Library::editBook(Book& book)
     book.save();
     displayMenu();
     return;
-}
-
-void Library::dvdList()
-{
-    cout << "Liste des dvds dans la mediatheque:" << endl;
-
-    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, director, release", "borrowable IS 1");
-
-    int totalDvds = dvds.size();
-
-    if (totalDvds == 0)
-    {
-        cout << "Aucun dvd dans la mediatheque" << endl;
-        return;
-    }
-
-    for (int i = 1; i != totalDvds + 1; i++)
-    {
-        Artist director(stoi(dvds[i]["director"]));
-        Date release(dvds[i]["release"]);
-        cout << dvds[i]["id"] << ". " << dvds[i]["title"] << " (" << release << ") par " << director.getFirstName() << " " << director.getLastName() << endl;
-    }
-
-    int articleId;
-    cout << "Pour voir un dvd, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
-    cin >> articleId;
-
-    checkInput(cin, articleId, 0);
-
-    seeArticle<Dvd>(articleId);
 }
 
 void Library::editDvd(Dvd& dvd)
@@ -631,35 +568,6 @@ void Library::editDvd(Dvd& dvd)
     return;
 }
 
-void Library::cdList()
-{
-    cout << "Liste des cds dans la mediatheque:" << endl;
-
-    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, artist, release", "borrowable IS 1");
-
-    int totalCds = cds.size();
-
-    if (totalCds == 0)
-    {
-        cout << "Aucun cd dans la mediatheque" << endl;
-        return;
-    }
-
-    for (int i = 1; i != totalCds + 1; i++)
-    {
-        Artist singer(stoi(cds[i]["artist"]));
-        Date release(cds[i]["release"]);
-        cout << cds[i]["id"] << ". " << cds[i]["title"] << " (" << release << ") par " << singer.getFirstName() << " " << singer.getLastName() << endl;
-    }
-
-    int articleId;
-    cout << "Pour voir un cd, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
-    cin >> articleId;
-
-    checkInput(cin, articleId, 0);
-
-    seeArticle<Cd>(articleId);
-}
 
 bool Library::affichageChoixSee(const string typeChoix, const string typeArticle) const
 {
@@ -1114,18 +1022,56 @@ void Library::editArtist(Artist& artist)
     return;
 }
 
-void Library::borrowArticle(Article* art, const string type)
-{
+void Library::borrowedMenu() const{
+    cout << "Mes emprunts en cours" << endl;
+    
+    map<int, map<string, string>> transactions = BaseModel::select("transactions", "*", "borrower_id=" + to_string(_currentUser.getId()));
+    
+    int totalCount = transactions.size();
+    
+    if (totalCount == 0)
+    {
+        cout << "Aucun emprunt en cours" << endl;
+        return;
+    }
+    
+    set<int> ids = set<int>();
+    map<int, Transaction> trs = map<int, Transaction>();
+    for (int i = 1; i != totalCount + 1; i++)
+    {
+        Transaction tmp = Transaction();
+        tmp.init(transactions[i]);
+        tmp.shortDisplay();
+        trs.insert(pair<int, Transaction>(tmp.getId(), tmp));
+        ids.insert(tmp.getId());
+    }
+    
+    int empruntId;
+    do{
+        cout << "Pour voir un emprunt, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
+        cin >> empruntId;
+    }while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
+    
+    seeEmprunt(trs.at(empruntId));
+}
 
+void Library::seeEmprunt(Transaction tr) const
+{
+    affichageChoixSee("rendre", Util::getTypesString(Util::Types(tr.getType())));
+}
+
+void Library::borrowArticle(Article* art, const int type)
+{
     _currentUser.borrow(art, type);
 
     displayMenu();
     return;
 }
 
-void Library::returnArticle()
+void Library::returnArticle(Transaction *t)
 {
-    // TODO
+    _currentUser.returnArticle(t);
+    
     displayMenu();
     return;
 }

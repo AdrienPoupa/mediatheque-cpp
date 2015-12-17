@@ -44,13 +44,10 @@ class Library {
     
         void searchList();
 
-        void bookList();
         void editBook(Book& book);
 
-        void dvdList();
         void editDvd(Dvd& dvd);
 
-        void cdList();
         void editCd(Cd& cd);
 
         void userList();
@@ -68,11 +65,32 @@ class Library {
         template <class T>
         void addThing();
 
-        void borrowArticle(Article* art = nullptr, const std::string type = NULL);
-        void returnArticle();
+        void borrowedMenu() const;
+        void seeEmprunt(Transaction tr) const;
+        void borrowArticle(Article* art = nullptr, const int type = 0);
+        void returnArticle(Transaction *t = nullptr);
         void listTransactions();
 
         static Library* singleton;
 };
+
+class Util{
+public:
+    enum Types{Book, Cd, Dvd};
+    static std::string getTypesString(Types type){
+        switch(type){
+            case Types::Book:
+                return "livre";
+                break;
+            case Types::Cd:
+                return "Cd";
+                break;
+            default:
+                return "Dvd";
+        }
+    }
+};
+
+
 
 #endif /* Library_hpp */

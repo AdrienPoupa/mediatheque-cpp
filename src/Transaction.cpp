@@ -1,4 +1,5 @@
 #include "Transaction.hpp"
+#include "Library.hpp"
 
 using namespace std;
 
@@ -19,7 +20,11 @@ string Transaction::_dbTable = "transactions";
  - date_returned: DATE
  */
 
-Transaction::Transaction(const int articleId, const string type, const int userId){
+Transaction::Transaction(){
+    // empty
+}
+
+Transaction::Transaction(const int articleId, const int type, const int userId){
     _articleId = articleId;
     _type = type;
     _userId = userId;
@@ -27,14 +32,27 @@ Transaction::Transaction(const int articleId, const string type, const int userI
     _finish = Date(_beginning.getMonth()+1, _beginning.getDay(), _beginning.getYear()); // By default, allow a month
 }
 
-Transaction::Transaction(Article *article, const string type, const User user, const Date beginning, const Date finish) :
+Transaction::Transaction(Article *article, const int type, const User user, const Date beginning, const Date finish) :
     _article(article), _type(type), _user(user), _beginning(beginning), _finish(finish)
 {
     _articleId = article->getId();
     _userId = user.getId();
 }
 
-Transaction::Transaction(const int id, const int article_id, const string type, const int borrower_id,
+Transaction::Transaction(unsigned int id){
+    map<string, string> data = BaseModel::getById(_dbTable, id);
+    
+    if(!data.empty())
+    {
+        deserialization(data);
+    }
+    else
+    {
+        throw invalid_argument("Merci d'entrer une transaction valide");
+    }
+}
+
+Transaction::Transaction(const int id, const int article_id, const int type, const int borrower_id,
                          const Date date_beginning, const Date date_returned, const bool returned)
 {
     _id = id;
@@ -77,6 +95,40 @@ Transaction::~Transaction()
 
 }
 
+void Transaction::init(map<string, string> data){
+    this->deserialization(data);
+}
+
+void Transaction::deserialization(map<string, string> data){
+    if(!data.empty())
+    {
+        _id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
+        _type = data.find("type")!= data.end() ? stoi(data["type"]): 0;
+        if(data.find("article_id")!= data.end()){
+            _articleId = stoi(data["article_id"]);
+            if(_type == Util::Types::Book){
+                _article = new Book(stoi(data["article_id"]));
+            }
+            else if(_type == Util::Types::Cd){
+                _article = new Cd(stoi(data["article_id"]));
+            }
+            else{
+                _article = new Dvd(stoi(data["article_id"]));
+            }
+        }
+        else{
+            _articleId = 0;
+        }
+        if(data.find("borrower_id")!= data.end()){
+            _userId = stoi(data["borrower_id"]);
+            _user = User(_userId);
+        }
+        _beginning = Date(data["date_borrowed"]);
+        _finish = Date(data["date_returned"]);
+        _returned = data["returned"] == "0";
+    }
+}
+
 Date Transaction::getBeginDate() const
 {
     return _beginning;
@@ -107,14 +159,44 @@ void Transaction::setId(const unsigned int id)
     _id = id;
 }
 
-string Transaction::getType() const
+int Transaction::getType() const
 {
     return _type;
 }
 
-void Transaction::setType(string const type)
+void Transaction::setType(const int type)
 {
     _type = type;
+}
+
+int Transaction::getArticleId() const
+{
+    return _articleId;
+}
+
+void Transaction::setArticleId(const  unsigned int id)
+{
+    _articleId = id;
+}
+
+int Transaction::getUserId() const
+{
+    return _userId;
+}
+
+void Transaction::setUserId(const unsigned int id)
+{
+    _userId = id;
+}
+
+bool Transaction::getReturned() const
+{
+    return _returned;
+}
+
+void Transaction::setReturned(const bool returned )
+{
+    _returned = returned;
 }
 
 // TODO: day/month/year
@@ -172,7 +254,7 @@ list<Transaction> Transaction::byUser(const int userId, const bool active){
 
     while (query.executeStep())
     {
-        Transaction tmp(query.getColumn(0).getInt(), query.getColumn(1).getInt(), query.getColumn(2).getText(), query.getColumn(3).getInt(), Date(query.getColumn(4).getText()), Date(query.getColumn(5).getText()), (bool)query.getColumn(6).getInt());
+        Transaction tmp(query.getColumn(0).getInt(), query.getColumn(1).getInt(), query.getColumn(2).getInt(), query.getColumn(3).getInt(), Date(query.getColumn(4).getText()), Date(query.getColumn(5).getText()), (bool)query.getColumn(6).getInt());
         res.push_back(tmp);
     }
 
@@ -192,7 +274,7 @@ bool Transaction::save()
         {"id", {to_string(_id), "int"}},
         {"article_id", {to_string(_articleId), "int"}},
         {"borrower_id", {to_string(_userId), "int"}},
-        {"type", {_type, "string"}},
+        {"type", {to_string(_type), "int"}},
         {"date_borrowed", {_beginning.dateToDB(), "string"}},
         {"returned", {to_string(_returned), "int"}},
     };
@@ -214,6 +296,17 @@ bool Transaction::save()
 bool Transaction::remove()
 {
     return BaseModel::remove(_dbTable, _id);
+}
+
+void Transaction::shortDisplay() const{
+    cout << _id << ". ";
+    if(_articleId != 0){
+        cout << _article->getTitle();
+    }
+    else{
+        cout << "Inconnu";
+    }
+    cout << " | emprunte le " << _beginning << endl;
 }
 
 ostream& operator<<(ostream& os, const Transaction& transaction)
