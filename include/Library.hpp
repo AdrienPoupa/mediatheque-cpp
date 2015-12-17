@@ -28,22 +28,22 @@ class Library {
         Library();
 
         bool isAdmin();
-    
+
         bool connect();
 
         bool checkInput(std::istream& stream, const int intToCheck, const int minValue) const;
 
         int displayMenu();
         void redirectChoice(int choice);
-    
+
         template <class T>
         void seeArticle(int id);
-    
+
         template <class T>
         void getListArticle();
-    
+
         bool affichageChoixSee(std::string typeChoix, std::string typeArticle) const;
-    
+
         void searchList();
 
         void editBook(Book& book);
@@ -54,7 +54,7 @@ class Library {
 
         void userList();
         void editUser(const int userId);
-        void deleteUser(int userId);
+        void deleteUser(const unsigned int userId);
 
         void artistList();
         void seeArtist(const int artistId);

@@ -29,9 +29,9 @@ class Transaction {
         Transaction(const int articleId, const int type, const int userId);
         Transaction(Article *article, const int type, const User user, const Date beginning, const Date finish);
         Transaction(const int id, const int article_id, const int type, const int borrower_id, const Date date_beginning, const Date date_returned, const bool returned);
-        Transaction(unsigned int id);
+        Transaction(const unsigned int id);
         virtual ~Transaction();
-    
+
         void init(std::map<std::string, std::string> data);
         void deserialization(std::map<std::string, std::string> data);
 
@@ -49,13 +49,13 @@ class Transaction {
 
         int getType() const;
         void setType(const int type);
-    
+
         int getArticleId() const;
         void setArticleId(const  unsigned int id);
-    
+
         int getUserId() const;
         void setUserId(const unsigned int id);
-    
+
         bool getReturned() const;
         void setReturned(const bool returned);
 
@@ -69,7 +69,7 @@ class Transaction {
 
         bool save();
         bool remove();
-    
+
         void shortDisplay() const;
 
         friend std::ostream& operator<<(std::ostream& os, const Transaction& transaction);
