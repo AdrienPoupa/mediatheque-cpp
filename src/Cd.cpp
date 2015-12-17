@@ -37,7 +37,7 @@ Cd::Cd(int id)
         _authorId = stoi(data["artist"]);
         _title = data["title"];
         _borrowable = data["borrowable"] != "0";
-        _release = Date(data["release"]);
+        _release = data["release"];
         _length = stoi(data["length"]);
         _studio = data["studio"];
         retrieveGenreFromDB(data);
@@ -60,9 +60,9 @@ void Cd::deserialization(map<string, string> data)
         _id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
         _borrowable = data.find("borrowable")!= data.end() ? data["borrowable"] != "0" : true;
         _title = data["title"];
-        _release = Date(data["release"]);
+        _release = data["release"];
 
-        if (data.find("artist")!= data.end())
+        if(data.find("artist")!= data.end())
         {
             _authorId = stoi(data["artist"]);
             _author = new Artist(stoi(data["artist"]));
@@ -200,7 +200,7 @@ bool Cd::save()
         {"artist", {to_string(_authorId), "int"}},
         {"title", {_title, "string"}},
         {"borrowable", {_borrowable ? "1" : "0", "int"}},
-        {"release", {_release.dateToDB(), "string"}},
+        {"release", {_release, "string"}},
         {"length", {to_string(_length), "int"}},
         {"studio", {_studio, "string"}}
     };

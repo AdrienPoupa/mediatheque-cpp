@@ -17,7 +17,7 @@ protected:
     Person* _author; // do not save
     bool _borrowable; // save
     std::vector<int> _genres; // contains genres IDs
-    Date _release; // save
+    std::string _release; // save
     std::string _title; // save
 
     //std::map<int, std::string> _content;
@@ -42,8 +42,8 @@ public:
     void addGenre(int genreId);
     void deleteGenre();
 
-    Date getRelease() const;
-    void setRelease(const Date& newRelease);
+    std::string getRelease() const;
+    void setRelease(const std::string newRelease);
 
     std::string getTitle() const;
     void setTitle(const std::string& newTitle);

@@ -42,7 +42,7 @@ Dvd::Dvd(int id)
         _authorId = stoi(data["director"]);
         _title = data["title"];
         _borrowable = data["borrowable"] != "0";
-        _release = Date(data["release"]);
+        _release = data["release"];
         _length = stoi(data["length"]);
         _studio = data["studio"];
         retrieveGenreFromDB(data);
@@ -64,6 +64,8 @@ void Dvd::deserialization(map<string, string> data)
 
         if (data.find("director")!= data.end())
         {
+        _release = data["release"];
+        if(data.find("director")!= data.end()){
             _authorId = stoi(data["director"]);
             _author = new Artist(stoi(data["director"]));
         }
@@ -212,7 +214,7 @@ bool Dvd::save()
         {"director", {to_string(_authorId), "int"}},
         {"title", {_title, "string"}},
         {"borrowable", {_borrowable ? "1": "0", "int"}},
-        {"release", {_release.dateToDB(), "string"}},
+        {"release", {_release, "string"}},
         {"length", {to_string(_length), "int"}},
         {"studio", {_studio, "string"}}
     };
