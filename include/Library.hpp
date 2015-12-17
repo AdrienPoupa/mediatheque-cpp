@@ -41,8 +41,8 @@ class Library {
         void seeEntity(const int id);
 
         template <class T>
-        void getListArticle(bool askEdit = true);
-
+        void getListEntity(bool askEdit = true);
+    
         bool affichageChoixSee(std::string typeChoix, std::string typeArticle) const;
 
         void searchList();

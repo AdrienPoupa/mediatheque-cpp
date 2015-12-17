@@ -52,7 +52,7 @@ User::User(const int id) // Get a person from an ID provided by DB
         _id = id;
         _firstName = data["name"];
         _lastName = data["surname"];
-        _birthDate = data["birthdate"];
+        _birthDate = Date(data["birthdate"]);
         _phone = data["phone"];
         _address = Address(stoi(data["house_number"]), data["street"], data["postal_code"], data["town"], data["country"]);
         _isAdmin = stoi(data["isadmin"]);
@@ -68,6 +68,24 @@ User::User(const int id) // Get a person from an ID provided by DB
 User::~User()
 {
 
+}
+
+void User::init(map<string, string> data){
+    this->deserialization(data);
+}
+
+void User::deserialization(map<string, string> data){
+    if(!data.empty()){
+        _id = data.find("id") != data.end() ? stoi(data["id"]) : 0;
+        _firstName = data["name"];
+        _lastName = data["surname"];
+        _birthDate = data.find("birthdate") != data.end() ? Date(data["birthdate"]) : Date();
+        _phone = data["phone"];
+        _address = Address(data.find("house_number") != data.end() ? stoi(data["house_number"]) : 0, data["street"], data["postal_code"], data["town"], data["country"]);
+        _isAdmin = data.find("isAdmin") != data.end() ? stoi(data["isadmin"]) : 0;
+        _quota = data.find("quota") != data.end() ? stoi(data["quota"]) : 0;
+        _password = data["password"];
+    }
 }
 
 string User::getPhone() const
@@ -328,6 +346,10 @@ bool User::save()
 bool User::remove()
 {
     return BaseModel::remove(_dbTable, _id);
+}
+
+void User::shortDisplay() const{
+    cout << _id << ". " << _firstName << " " << _lastName;
 }
 
 ostream& operator<< (ostream& stream, const User& user)

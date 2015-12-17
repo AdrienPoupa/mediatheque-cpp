@@ -85,34 +85,34 @@ int getDayFromStr(string date, int month)
 
 Date::Date (const string dateDB)
 {
-    if(dateDB.length() >= 4)
-    {
-        _year = getYearFromStr(dateDB);
-    }
-    else
-    {
+    
+    if(dateDB == "0000-00-00"){
         _year = -1;
-    }
-
-    if(dateDB.length() >= 7)
-    {
-        _month = getMonthFromStr(dateDB);
-    }
-    else
-    {
         _month = -1;
-    }
-
-    if(dateDB.length() >= 10)
-    {
-        _day = getDayFromStr(dateDB, _month == -1 ? 0 : _month);
-    }
-    else
-    {
         _day = -1;
     }
-
-
+    else{
+        if(dateDB.length() >= 4){
+            _year = getYearFromStr(dateDB);
+        }
+        else{
+            _year = -1;
+        }
+        
+        if(dateDB.length() >= 7){
+            _month = getMonthFromStr(dateDB);
+        }
+        else{
+            _month = -1;
+        }
+        
+        if(dateDB.length() >= 10){
+            _day = getDayFromStr(dateDB, _month == -1 ? 0 : _month);
+        }
+        else{
+            _day = -1;
+        }
+    }
 }
 
 int Date::daysSoFar() const
@@ -180,6 +180,7 @@ string Date::dateToDB() const
     ss3 << setw(2) << setfill('0') << (_day == -1 ? 0 : _day);
     string day = ss3.str();
 
+    cout << year << "-" << month << "-" << day << endl;
     return year + "-" + month + "-" + day;
 }
 
@@ -190,41 +191,36 @@ ostream& operator<< (ostream& stream, const Date& date)
     "Mai", "Juin", "Juillet", "Aout", "Septembre",
     "Octobre", "Novembre", "Decembre"};
 
-    cout << (date._day != -1 ? date._day : stoi("")) << ' ' << (date._month != -1 ? name[date._month] : "") << ' ' << (date._year != -1 ? date._year : stoi(""));
-
+    if(date._year == -1 && date._month == -1 && date._day == -1){
+        stream << "inconnu";
+    }
+    else {
+        stream << (date._day != -1 ? to_string(date._day) : "") << ' ' << (date._month != -1 ? name[date._month] : "") << ' ' << (date._year != -1 ? to_string(date._year) : "");
+    }
     return stream;
 }
 
 istream& operator>> (istream& stream, Date& date)
 {
-    int day, month, year;
 
     do {
-        cout << "Saisissez d'abord le jour (de 1 a 31) : " << endl;
-        stream >> day;
-    } while(day < 1 && day > 31);
-
+        cout << "Saisissez d'abord le jour (de 1 a 31, ou -1 si inconnu) : " << endl;
+        stream >> date._day;
+    }while(date._day < -1 && date._day > 31 && date._day == 0);
+    
     do {
-        cout << "Saisissez ensuite le mois (de 1 a 12) : " << endl;
-        stream >> month;
-    } while(month < 1 && month > 12);
-
-    do {
-        cout << "Saisissez enfin l'annee : " << endl;
-        stream >> year;
-    } while(year < 0 && year > 9000);
-
-
+        cout << "Saisissez ensuite le mois (de 1 a 12, ou -1 si inconnu) : " << endl;
+        stream >> date._month;
+    }while(date._month < -1 && date._month > 12 && date._month == 0);
+    
+    do{
+        cout << "Saisissez enfin l'annee (-1 si inconnu): " << endl;
+        stream >> date._year;
+    }while(date._year < -1 && date._year > 9000);
+    
     // Redundant with constructor, should we do something about it ?
     static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
-    date._month = max(1, month);
-    date._month = min(date._month,12);
-
-    date._day = max(1, day);
     date._day = min(date._day, length[date._month]);
-
-    date._year = max(1, year);
 
     return stream;
 }
