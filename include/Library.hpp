@@ -42,15 +42,10 @@ class Library {
 
         template <class T>
         void getListEntity(bool askEdit = true);
-    
+
         bool affichageChoixSee(std::string typeChoix, std::string typeArticle) const;
 
         void searchList();
-
-        void userList();
-
-        void artistList();
-        void seeArtist(const int artistId);
 
         template <class T>
         void addThing();

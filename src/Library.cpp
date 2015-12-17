@@ -474,45 +474,14 @@ void Library::addThing()
 
 bool Library::affichageChoixSee(const string typeChoix, const string typeArticle) const
 {
-
     string choice = "";
+
     do {
         cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' le si oui, 'n' sinon" << endl;
         cin >> choice;
     } while(choice != "o" && choice !="n");
 
     return choice == "o";
-}
-
-void Library::userList()
-{
-    cout << "Liste des utilisateurs :" << endl << endl;
-
-    map<int, map<string, string>> users = BaseModel::select("users", "id");
-
-    int totalUsers = (int)users.size();
-
-    map<int, User> userIds = map<int, User>();
-    for (int i = 1; i != totalUsers + 1; i++)
-    {
-        User tmp(stoi(users[i]["id"]));
-        cout << tmp << endl;
-        userIds.insert(pair<int, User>(tmp.getId(), tmp));
-    }
-
-    int userId;
-    do {
-        cout << "Pour modifier un utilisateur, tapez son ID, et 0 pour revenir au menu: " << endl;
-        cin >> userId;
-    } while(userIds.find(userId) == userIds.end() && userId != 0);
-
-    if (userId == 0)
-    {
-        return;
-    }
-
-    User tmpUser(userId);
-    tmpUser.edit();
 }
 
 void Library::borrowedMenu()
