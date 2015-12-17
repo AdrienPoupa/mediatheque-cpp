@@ -184,7 +184,7 @@ void Library::redirectChoice(const int choice)
             getListArticle<Cd>();
             break;
         case 4:
-            artistList();
+            getListArticle<Artist>();
             break;
         case 5:
             borrowedMenu();
@@ -287,25 +287,38 @@ void Library::searchList()
 }
 
 template <class T>
-void Library::getListArticle()
+void Library::getListArticle(bool askEdit)
 {
-    map<string, vector<string>> liaison = {{"books", {"livre", "id, title, author, release"}}, {"cds", {"CD", "*"}}, {"dvds", {"DVD", "*"}}};
+    map<string, vector<string>> liaison = {{"books", {"livre", "id, title, author, release"}}, {"cds", {"CD", "*"}}, {"dvds", {"DVD", "*"}},
+    {"artists", {"artiste", "id, name, surname"}}};
+
     string type = "books";
 
-    if (std::is_same<T, Cd>::value)
+    if (is_same<T, Cd>::value)
     {
         type = "cds";
     }
-    else if (std::is_same<T, Dvd>::value)
+    else if (is_same<T, Dvd>::value)
     {
         type = "dvds";
+    }
+    else if (is_same<T, Artist>::value)
+    {
+        type = "artists";
     }
 
     // étendre au User et Artist, pareil pour seeX
 
     cout << "Liste des " + liaison.at(type)[0] + "s" + " dans la mediatheque:" << endl;
 
-    map<int, map<string, string>> articles = BaseModel::select(type, liaison.at(type)[1], "borrowable IS 1");
+    string where = "";
+
+    if (!is_same<T, Artist>::value)
+    {
+        where = "borrowable IS 1";
+    }
+
+    map<int, map<string, string>> articles = BaseModel::select(type, liaison.at(type)[1]);
 
     int totalCount = (int)articles.size();
 
@@ -324,20 +337,24 @@ void Library::getListArticle()
         ids.insert(stoi(articles[i]["id"]));
     }
 
-    int articleId;
-    do{
-        cout << "Pour voir un " + liaison.at(type)[0] + ", puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
-        cin >> articleId;
-    } while(articleId != 0 && !(ids.find(articleId) != ids.end()));
+    if (askEdit)
+    {
+        int articleId;
+        do
+        {
+            cout << "Pour voir un " + liaison.at(type)[0] + ", puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
+            cin >> articleId;
+        } while(articleId != 0 && !(ids.find(articleId) != ids.end()));
 
-    seeArticle<T>(articleId);
-
+        seeArticle<T>(articleId);
+    }
 }
 
 template <class T>
-void Library::seeArticle(const int id)
+void Library::seeArticle(int id)
 {
-    Article * art;
+    void * art = nullptr;
+    Article * artCast = nullptr;
 
     if (id == 0)
     {
@@ -346,50 +363,46 @@ void Library::seeArticle(const int id)
 
     Util::Types type = Util::Types::Book;
 
-    if (std::is_same<T, Cd>::value)
+    if (is_same<T, Cd>::value)
     {
         type = Util::Types::Cd;
-        art = new Cd(id);
+        artCast = static_cast<Cd*>(art);
+        artCast = new Cd(id);
     }
-    else if (std::is_same<T, Dvd>::value)
+    else if (is_same<T, Dvd>::value)
     {
         type = Util::Types::Dvd;
-        art  = new Dvd(id);
+        artCast = static_cast<Dvd*>(art);
+        artCast = new Dvd(id);
     }
-    else
+    else if (is_same<T, Book>::value)
     {
-        art = new Book(id);
+        type = Util::Types::Book;
+        artCast = static_cast<Book*>(art);
+        artCast = new Book(id);
     }
 
-    if (art->getBorrowable())
+    T tmp(id);
+    cout << tmp << endl;
+
+    if (artCast != nullptr && artCast->getBorrowable())
     {
-        if (affichageChoixSee("emprunter", Util::getTypesString(type))) borrowArticle(art, type);
+        if (affichageChoixSee("emprunter", Util::getTypesString(type)))
+        {
+            borrowArticle(artCast, type);
+        }
     }
 
     if (isAdmin())
     {
         if (affichageChoixSee("modifier", Util::getTypesString(type)))
         {
-            if (type == Util::Types::Cd)
-            {
-                Cd tmp = dynamic_cast<Cd&>(*art);
-                tmp.edit();
-            }
-            else if (type == Util::Types::Cd)
-            {
-                Dvd tmp = dynamic_cast<Dvd&>(*art);
-                tmp.edit();
-            }
-            else
-            {
-                Book tmp = dynamic_cast<Book&>(*art);
-                tmp.edit();
-            }
+            tmp.edit();
         }
 
         if (affichageChoixSee("supprimer", Util::getTypesString(type)))
         {
-            art->remove();
+            tmp.remove();
         }
     }
     return;
@@ -568,79 +581,6 @@ void Library::deleteUser(const unsigned int userId)
     {
         cout << "Vous ne pouvez pas vous supprimer vous-meme !" << endl;
     }
-    return;
-}
-
-void Library::artistList()
-{
-    cout << "Liste des artistes de la mediatheque:" << endl;
-
-    map<int, map<string, string>> artists = BaseModel::select("artists", "id, name, surname");
-
-    int totalCount = (int)artists.size();
-
-    if (totalCount == 0)
-    {
-        cout << "Aucun artiste dans la mediatheque" << endl;
-        return;
-    }
-
-    set<int> artistIds = set<int>();
-    for (int i = 1; i != totalCount + 1; i++)
-    {
-        cout << artists[i]["id"] << ". " << artists[i]["name"] << " " << artists[i]["surname"] << endl;
-        artistIds.insert(stoi(artists[i]["id"]));
-    }
-
-    int artistId;
-    do{
-        cout << "Pour voir un artiste, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
-        cin >> artistId;
-    } while(artistIds.find(artistId) == artistIds.end() && artistId != 0);
-
-    if (artistId == 0)
-    {
-        return;
-    }
-
-    seeArtist(artistId);
-}
-
-void Library::seeArtist(const int artistId)
-{
-    if (artistId == 0)
-    {
-        return;
-    }
-
-    Artist artistToDisplay(artistId);
-    cout << artistToDisplay << endl;
-
-    artistToDisplay.bibliography();
-    artistToDisplay.discography();
-    artistToDisplay.filmography();
-
-    if (isAdmin())
-    {
-        cout << "Voulez-vous modifier cet artiste ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
-        string choice;
-        cin >> choice;
-
-        if (choice == "o")
-        {
-            artistToDisplay.edit();
-        }
-
-        cout << "Voulez-vous supprimer cet artiste ? Tapez 'o' le cas echeant, 'n' sinon" << endl;
-        string choice2;
-        cin >> choice2;
-
-        if (choice2 == "o")
-        {
-            artistToDisplay.remove();
-        }
-    }
-
     return;
 }
 

@@ -43,6 +43,16 @@ Artist::Artist(int id) // Get a person from an ID provided by DB
     }
 }
 
+void Artist::deserialization(map<string, string> data)
+{
+    if (!data.empty())
+    {
+        _id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
+        _lastName = data["surname"];
+        _firstName = data["name"];
+    }
+}
+
 std::string Artist::getNationality() const
 {
     return _nationality;
@@ -201,6 +211,9 @@ void Artist::edit()
 std::ostream& operator<<(std::ostream& os, const Artist& me)
 {
     os << me._firstName << " " << me._lastName <<" (" << me._nationality << "), ne(e) le " << me._birthDate << endl;
+    me.discography();
+    me.filmography();
+    me.bibliography();
     return os;
 }
 

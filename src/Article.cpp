@@ -147,7 +147,8 @@ void Article::addGenreToDB(map<string, vector<string>>& data)
     data["genre2"] = {to_string(genre2), "int"};
 }
 
-void Article::shortDisplay() const{
+void Article::shortDisplay() const
+{
     cout << _id << ". " << _title << " (" << _release << ")";
     if (_authorId)
     {
