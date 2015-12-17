@@ -435,6 +435,14 @@ void Library::seeEntity(int id)
         artCast = static_cast<Book*>(art);
         artCast = new Book(id);
     }
+    else if (is_same<T, User>::value)
+    {
+        type = Util::Types::User;
+    }
+    else if (is_same<T, Artist>::value)
+    {
+        type = Util::Types::Artist;
+    }
 
     T tmp(id);
     cout << tmp << endl;
