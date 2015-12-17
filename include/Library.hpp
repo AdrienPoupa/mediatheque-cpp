@@ -66,12 +66,31 @@ class Library {
         void addThing();
 
         void borrowedMenu() const;
-        void seeEmprunt(int empruntId) const;
-        void borrowArticle(Article* art = nullptr, const std::string type = NULL);
+        void seeEmprunt(Transaction tr) const;
+        void borrowArticle(Article* art = nullptr, const int type = 0);
         void returnArticle(Transaction *t = nullptr);
         void listTransactions();
 
         static Library* singleton;
 };
+
+class Util{
+public:
+    enum Types{Book, Cd, Dvd};
+    static std::string getTypesString(Types type){
+        switch(type){
+            case Types::Book:
+                return "livre";
+                break;
+            case Types::Cd:
+                return "Cd";
+                break;
+            default:
+                return "Dvd";
+        }
+    }
+};
+
+
 
 #endif /* Library_hpp */

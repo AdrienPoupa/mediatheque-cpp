@@ -19,16 +19,16 @@ class Transaction {
         Article *_article;
         int _articleId, _userId;
         bool _returned = false;
-        std::string _type = "Book";
+        int _type = 0;
         User _user;
         Date _beginning, _finish;
         int _id = 0;
         static std::string _dbTable;
     public:
         Transaction();
-        Transaction(const int articleId, const std::string type, const int userId);
-        Transaction(Article *article, const std::string type, const User user, const Date beginning, const Date finish);
-        Transaction(const int id, const int article_id, const std::string type, const int borrower_id, const Date date_beginning, const Date date_returned, const bool returned);
+        Transaction(const int articleId, const int type, const int userId);
+        Transaction(Article *article, const int type, const User user, const Date beginning, const Date finish);
+        Transaction(const int id, const int article_id, const int type, const int borrower_id, const Date date_beginning, const Date date_returned, const bool returned);
         Transaction(unsigned int id);
         virtual ~Transaction();
     
@@ -47,8 +47,8 @@ class Transaction {
         unsigned int getId() const;
         void setId(const unsigned int id);
 
-        std::string getType() const;
-        void setType(std::string const type);
+        int getType() const;
+        void setType(const int type);
     
         int getArticleId() const;
         void setArticleId(const  unsigned int id);

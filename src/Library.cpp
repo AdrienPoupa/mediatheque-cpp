@@ -315,14 +315,14 @@ void Library::seeArticle(int id){
         return;
     }
     
-    string type = "livre";
+    Util::Types type = Util::Types::Book;
     
     if(std::is_same<T, Cd>::value){
-        type = "CD";
+        type = Util::Types::Cd;
         art = new Cd(id);
     }
     else if(std::is_same<T, Dvd>::value){
-        type = "DVD";
+        type = Util::Types::Dvd;
         art  = new Dvd(id);
     }
     else{
@@ -330,18 +330,18 @@ void Library::seeArticle(int id){
     }
     
     if(art->getBorrowable()){
-        if(affichageChoixSee("emprunter", type)) borrowArticle(art, type);
+        if(affichageChoixSee("emprunter", Util::getTypesString(type))) borrowArticle(art, type);
     }
     
     if (isAdmin())
     {
-        if (affichageChoixSee("modifier", type))
+        if (affichageChoixSee("modifier", Util::getTypesString(type)))
         {
-            if(type == "CD"){
+            if(type == Util::Types::Cd){
                 Cd tmp = dynamic_cast<Cd&>(*art);
                 editCd(tmp);
             }
-            else if(type == "DVD"){
+            else if(type == Util::Types::Cd){
                 Dvd tmp = dynamic_cast<Dvd&>(*art);
                 editDvd(tmp);
                 
@@ -352,7 +352,7 @@ void Library::seeArticle(int id){
             }
         }
         
-        if (affichageChoixSee("supprimer", type))
+        if (affichageChoixSee("supprimer", Util::getTypesString(type)))
         {
             art->remove();
         }
@@ -1036,11 +1036,13 @@ void Library::borrowedMenu() const{
     }
     
     set<int> ids = set<int>();
+    map<int, Transaction> trs = map<int, Transaction>();
     for (int i = 1; i != totalCount + 1; i++)
     {
         Transaction tmp = Transaction();
         tmp.init(transactions[i]);
         tmp.shortDisplay();
+        trs.insert(pair<int, Transaction>(tmp.getId(), tmp));
         ids.insert(tmp.getId());
     }
     
@@ -1050,15 +1052,15 @@ void Library::borrowedMenu() const{
         cin >> empruntId;
     }while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
     
-    seeEmprunt(empruntId);
+    seeEmprunt(trs.at(empruntId));
 }
 
-void Library::seeEmprunt(int empruntId) const
+void Library::seeEmprunt(Transaction tr) const
 {
-    Transaction t(empruntId);
+    affichageChoixSee("rendre", Util::getTypesString(Util::Types(tr.getType())));
 }
 
-void Library::borrowArticle(Article* art, const string type)
+void Library::borrowArticle(Article* art, const int type)
 {
     _currentUser.borrow(art, type);
 

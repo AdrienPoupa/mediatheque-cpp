@@ -45,7 +45,7 @@ class User: public Person {
         void setQuota(const int quota);
         bool checkQuota() const;
 
-        bool borrow(Article* art, const std::string type);
+        bool borrow(Article* art, const int type);
         bool returnArticle(Transaction * t);
 
         bool save();

@@ -3,6 +3,7 @@
 #include "BaseModel.hpp"
 #include "sha256.h"
 #include "Transaction.hpp"
+#include "Library.hpp"
 
 using namespace std;
 
@@ -132,7 +133,7 @@ bool User::checkQuota() const
     return true;//Transaction::byUser(_id, true).size() < _quota; // TODO
 }
 
-bool User::borrow(Article* art, const string type)
+bool User::borrow(Article* art, const int type)
 {
     if(checkQuota())
     {
@@ -164,10 +165,10 @@ bool User::borrow(Article* art, const string type)
 
 bool User::returnArticle(Transaction * t){
     Article * art;
-    if(t->getType() == "book"){
+    if(t->getType() == Util::Types::Book){
         art = new Book(t->getArticleId());
     }
-    else if(t->getType() == "cd"){
+    else if(t->getType() == Util::Types::Cd){
         art = new Cd(t->getArticleId());
     }
     else {
