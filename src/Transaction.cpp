@@ -39,9 +39,9 @@ Transaction::Transaction(Article *article, const int type, const User user, cons
     _userId = user.getId();
 }
 
-Transaction::Transaction(unsigned int id){
+Transaction::Transaction(const unsigned int id){
     map<string, string> data = BaseModel::getById(_dbTable, id);
-    
+
     if(!data.empty())
     {
         deserialization(data);
