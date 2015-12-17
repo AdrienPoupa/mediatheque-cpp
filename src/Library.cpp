@@ -194,7 +194,7 @@ void Library::redirectChoice(const int choice)
             getListEntity<Cd>();
             break;
         case 4:
-            getListArticle<Artist>();
+            getListEntity<Artist>();
             break;
         case 5:
             borrowedMenu();
@@ -400,8 +400,6 @@ void Library::getListEntity(bool askEdit)
 
     if(type != 4)
         seeArticle<T>(responseId);
-    else
-        editUser(responseId);
 }
 
 template <class T>
