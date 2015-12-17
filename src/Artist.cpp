@@ -95,7 +95,6 @@ void Artist::bibliography() const
 
     for (int i = 1; i != totalCount + 1; i++)
     {
-        Artist writer(stoi(bibliography[i]["author"]));
         Date release(bibliography[i]["release"]);
         cout << bibliography[i]["id"] << ". " << bibliography[i]["title"] << " (" << release << ")" << endl;
     }

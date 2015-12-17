@@ -48,6 +48,8 @@ class User: public Person {
         bool borrow(Article* art, const int type);
         bool returnArticle(Transaction * t);
 
+        void edit();
+
         bool save();
         bool remove();
 

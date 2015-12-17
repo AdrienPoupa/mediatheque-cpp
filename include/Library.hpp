@@ -48,8 +48,6 @@ class Library {
         void searchList();
 
         void userList();
-        void editUser(const int userId);
-        void deleteUser(const unsigned int userId);
 
         void artistList();
         void seeArtist(const int artistId);

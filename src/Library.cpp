@@ -420,7 +420,6 @@ void Library::addThing()
 
 bool Library::affichageChoixSee(const string typeChoix, const string typeArticle) const
 {
-
     string choice = "";
     do {
         cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' le si oui, 'n' sinon" << endl;
@@ -452,136 +451,13 @@ void Library::userList()
         cin >> userId;
     } while(userIds.find(userId) == userIds.end() && userId != 0);
 
-    if (userId == 0) return;
-
-    editUser(userId);
-}
-
-void Library::editUser(int userId)
-{
     if (userId == 0)
     {
         return;
     }
 
-    User userToEdit(userId);
-
-    int choice;
-
-    do {
-        cout << "Modification d'un utilisateur" << endl;
-
-        cout << "1. Modifier le prenom" << endl;
-        cout << "2. Modifier le nom" << endl;
-        cout << "3. Modifier le telephone" << endl;
-        cout << "4. Modifier la date de naissance" << endl;
-        cout << "5. Modifier l'adresse" << endl;
-        cout << "6. Modifier le type de compte" << endl;
-        cout << "7. Modifier le nombre d'emprunts simultanes" << endl;
-        cout << "8. Modifier le mot de passe" << endl;
-        cout << "9. Supprimer l'utilisateur" << endl;
-        cout << "0. Annuler" << endl;
-
-        cout << "Choix: ";
-        cin >> choice;
-    } while(choice < 0 && choice > 9);
-
-    switch (choice)
-    {
-        case 1:
-        {
-            string newName;
-            cin.ignore(1, '\n');
-            getline(cin, newName, '\n');
-            userToEdit.setFirstName(newName);
-            break;
-        }
-        case 2:
-        {
-            string newLastName;
-            cin.ignore(1, '\n');
-            getline(cin, newLastName, '\n');
-            userToEdit.setLastName(newLastName);
-            break;
-        }
-        case 3:
-        {
-            string newPhone;
-            cin.ignore(1, '\n');
-            getline(cin, newPhone, '\n');
-            userToEdit.setPhone(newPhone);
-            break;
-        }
-        case 4:
-        {
-            Date newBirthDate;
-            cin >> newBirthDate;
-            userToEdit.setBirthDate(newBirthDate);
-            break;
-        }
-        case 5:
-        {
-            Address newAddress;
-            cin >> newAddress;
-            userToEdit.setAddress(newAddress);
-            break;
-        }
-        case 6:
-        {
-            int newIsAdmin;
-            cout << "Tapez 0 pour un utilisateur lambda, 1 pour un administrateur" << endl;
-            cin >> newIsAdmin;
-            Util::checkInput(cin, newIsAdmin, 0);
-            userToEdit.setAdmin(newIsAdmin);
-            break;
-        }
-        case 7:
-        {
-            int newQuota;
-            cin >> newQuota;
-            Util::checkInput(cin, newQuota, 0);
-            userToEdit.setQuota(newQuota);
-            break;
-        }
-        case 8:
-        {
-            string newPassword;
-            cin.ignore(1, '\n');
-            getline(cin, newPassword, '\n');
-            userToEdit.setPassword(newPassword);
-            break;
-        }
-        case 9:{
-            deleteUser(userId);
-            break;
-        }
-        default:
-            return;
-            break;
-    }
-
-    if (choice != 9 && choice != 0 )
-    {
-        cout << "Sauvegarde..." << endl;
-        userToEdit.save();
-    }
-
-    return;
-}
-
-void Library::deleteUser(const unsigned int userId)
-{
-
-    if (userId != _currentUser.getId())
-    {
-        User userToDelete(userId);
-        userToDelete.remove();
-    }
-    else
-    {
-        cout << "Vous ne pouvez pas vous supprimer vous-meme !" << endl;
-    }
-    return;
+    User tmpUser(userId);
+    tmpUser.edit();
 }
 
 void Library::borrowedMenu()

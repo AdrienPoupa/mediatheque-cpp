@@ -33,6 +33,8 @@ public:
     Date getBirthDate() const;
     void setBirthDate(const Date birthDate);
 
+    virtual void edit() = 0;
+
     // DB
     virtual bool save() = 0;
     virtual bool remove() = 0;
