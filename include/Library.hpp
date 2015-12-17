@@ -68,7 +68,7 @@ class Library {
         void addThing();
 
         void borrowedMenu();
-        void seeEmprunt(Transaction tr);
+        void seeEmprunt(Transaction tr, bool adminMode = false);
         void borrowArticle(Article* art = nullptr, const int type = 0);
         void returnArticle(Transaction *t = nullptr);
         void listTransactions();

@@ -58,7 +58,10 @@ void Library::run(){
     // connection
     bool connected = connect();
     
-    if(!connected) return;
+    if(!connected){
+        cout << "Vous avez echoue votre authentification." << endl;
+        return;
+    }
     // boucle tant que l'utilisateur ne quitte pas le programme
     bool quit = false;
 
@@ -69,6 +72,8 @@ void Library::run(){
         else
             quit = true;
     }
+    
+    cout << "A bientot !" << endl;
 }
 
 bool Library::connect()
@@ -150,7 +155,7 @@ int Library::displayMenu()
             cout << "12. Ajouter un artiste" << endl;
             cout << "13. Emprunts en cours" << endl;
         }
-        
+        cout << "Choix: " << endl;
         cin >> choice;
     }while(choice < 0 && ((isAdmin() && choice > 13) || choice > 7));
 
@@ -1091,12 +1096,18 @@ void Library::borrowedMenu() {
         cin >> empruntId;
     }while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
     
+    if(empruntId == 0) return;
+    
     seeEmprunt(trs.at(empruntId));
 }
 
-void Library::seeEmprunt(Transaction tr)
+void Library::seeEmprunt(Transaction tr, bool adminMode)
 {
-    if(affichageChoixSee("rendre", Util::getTypesString(Util::Types(tr.getType())))){
+    if(adminMode){
+        // editTransaction
+        cout << "fonctionnalite d'edition non disponible ..." << endl;
+    }
+    else if(affichageChoixSee("rendre", Util::getTypesString(Util::Types(tr.getType())))){
         returnArticle(&tr);
     }
 }
@@ -1117,7 +1128,68 @@ void Library::returnArticle(Transaction *t)
 
 void Library::listTransactions()
 {
-    // TODO
-    return;
+    /* 
+     recherche d'emprunts : 
+     # filtre:
+        - fini/en cours/tous;
+        - date
+     */
+    int choice;
+    
+    do{
+        cout << "Emprunts: choix du filtre" << endl;
+        cout << "1. En cours" << endl;
+        cout << "2. Termines" << endl;
+        cout << "3. Tous" << endl;
+        cout << "0. Annuler" << endl;
+        cout << "Choix: " << endl;
+        cin >> choice;
+    }while(choice < 0 && choice > 3);
+    
+    if(choice == 0) return;
+    
+    string filter = "";
+    switch(choice){
+        case 1:
+            // En cours
+            filter = "returned=0";
+            break;
+        case 2:
+            // Termines
+            filter = "returned=1";
+            break;
+        default:
+            // Tous = No filter
+            break;
+    }
+    
+    map<int, map<string, string>> transactions = BaseModel::select("transactions", "*", filter);
+    
+    int totalCount = (int)transactions.size();
+    
+    if (totalCount == 0)
+    {
+        cout << "Aucun emprunt en cours" << endl;
+        return;
+    }
+    
+    set<int> ids = set<int>();
+    map<int, Transaction> trs = map<int, Transaction>();
+    for (int i = 1; i != totalCount + 1; i++)
+    {
+        Transaction tmp = Transaction();
+        tmp.init(transactions[i]);
+        tmp.shortDisplay();
+        trs.insert(pair<int, Transaction>(tmp.getId(), tmp));
+        ids.insert(tmp.getId());
+    }
+    
+    int empruntId;
+    do{
+        cout << "Pour voir un emprunt, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
+        cin >> empruntId;
+    }while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
+    
+    seeEmprunt(trs.at(empruntId), true);
 }
 

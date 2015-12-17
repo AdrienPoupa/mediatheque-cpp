@@ -306,7 +306,7 @@ void Transaction::shortDisplay() const{
     else{
         cout << "Inconnu";
     }
-    cout << " | emprunte le " << _beginning << endl;
+    cout << " | emprunte le " << _beginning << ", " << (_returned ? "rendu.": "non rendu.")<< endl;
 }
 
 ostream& operator<<(ostream& os, const Transaction& transaction)
