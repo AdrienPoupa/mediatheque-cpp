@@ -140,7 +140,7 @@ void Cd::edit()
         }
         case 3:
         {
-            Date newReleaseDate;
+            string newReleaseDate;
             cin >> newReleaseDate;
             setRelease(newReleaseDate);
             break;

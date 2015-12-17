@@ -60,12 +60,10 @@ void Dvd::deserialization(map<string, string> data)
         _id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
         _borrowable = data.find("borrowable")!= data.end() ? data["borrowable"] != "0" : true;
         _title = data["title"];
-        _release = Date(data["release"]);
-
-        if (data.find("director")!= data.end())
-        {
         _release = data["release"];
-        if(data.find("director")!= data.end()){
+
+        if(data.find("director")!= data.end())
+        {
             _authorId = stoi(data["director"]);
             _author = new Artist(stoi(data["director"]));
         }
@@ -133,7 +131,7 @@ void Dvd::edit()
         }
         case 3:
         {
-            Date newReleaseDate;
+            string newReleaseDate;
             cin >> newReleaseDate;
             setRelease(newReleaseDate);
             break;

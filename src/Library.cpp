@@ -336,7 +336,7 @@ void Library::getListArticle()
     do{
         cout << "Pour voir un " + liaison.at(type)[0] + ", puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
         cin >> articleId;
-    }while(articleId != 0 && !(ids.find(articleId) != ids.end()));
+    } while(articleId != 0 && !(ids.find(articleId) != ids.end()));
 
     seeArticle<T>(articleId);
 
@@ -445,7 +445,7 @@ void Library::userList()
     do {
         cout << "Pour modifier un utilisateur, tapez son ID, et 0 pour revenir au menu: " << endl;
         cin >> userId;
-    }while(userIds.find(userId) == userIds.end() && userId != 0);
+    } while(userIds.find(userId) == userIds.end() && userId != 0);
 
     if (userId == 0) return;
 
@@ -479,7 +479,7 @@ void Library::editUser(int userId)
 
         cout << "Choix: ";
         cin >> choice;
-    }while(choice < 0 && choice > 9);
+    } while(choice < 0 && choice > 9);
 
     switch (choice)
     {
@@ -604,7 +604,7 @@ void Library::artistList()
     do{
         cout << "Pour voir un artiste, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
         cin >> artistId;
-    }while(artistIds.find(artistId) == artistIds.end() && artistId != 0);
+    } while(artistIds.find(artistId) == artistIds.end() && artistId != 0);
 
     if (artistId == 0)
     {
@@ -731,7 +731,7 @@ void Library::editArtist(Artist& artist)
         cout << "0. Annuler" << endl;
         cout << "Choix: ";
         cin >> choice;
-    }while(choice < 0 && choice > 4);
+    } while(choice < 0 && choice > 4);
 
     switch (choice)
     {
@@ -808,7 +808,7 @@ void Library::borrowedMenu() {
     do{
         cout << "Pour voir un emprunt, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
         cin >> empruntId;
-    }while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
+    } while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
 
     if (empruntId == 0) return;
 
@@ -860,7 +860,7 @@ void Library::listTransactions()
         cout << "0. Annuler" << endl;
         cout << "Choix: " << endl;
         cin >> choice;
-    }while(choice < 0 && choice > 3);
+    } while(choice < 0 && choice > 3);
 
     if (choice == 0) return;
 
@@ -905,7 +905,7 @@ void Library::listTransactions()
     do{
         cout << "Pour voir un emprunt, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
         cin >> empruntId;
-    }while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
+    } while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
 
     seeEmprunt(trs.at(empruntId), true);
 }

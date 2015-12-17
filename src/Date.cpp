@@ -19,8 +19,8 @@ Date::Date (const int month, const int day, const int year)
 
         _year = max(1, year);
     }
-    else{
-
+    else
+    {
         map<string, int> months = {{"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4}, {"Mai", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8}, {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}};
 
         std::chrono::time_point<std::chrono::system_clock> end;
@@ -38,7 +38,8 @@ Date::Date (const int month, const int day, const int year)
 
 }
 
-int getYearFromStr(string date){
+int getYearFromStr(string date)
+{
     ostringstream ss1;
     ss1 << date.substr(0,4);
     string yearString = ss1.str();
@@ -50,7 +51,8 @@ int getYearFromStr(string date){
     return year;
 }
 
-int getMonthFromStr(string date){
+int getMonthFromStr(string date)
+{
     ostringstream ss2;
     ss2 << date.substr(5,2);
     string monthString = ss2.str();
@@ -60,13 +62,14 @@ int getMonthFromStr(string date){
     ss22 >> month;
     month = max(1, month);
     month = min(month,12);
-    
+
     return month;
 }
 
-int getDayFromStr(string date, int month){
+int getDayFromStr(string date, int month)
+{
     static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-    
+
     ostringstream ss3;
     ss3 << date.substr(8,2);
     string dayString = ss3.str();
@@ -82,28 +85,34 @@ int getDayFromStr(string date, int month){
 
 Date::Date (const string dateDB)
 {
-    if(dateDB.length() >= 4){
+    if(dateDB.length() >= 4)
+    {
         _year = getYearFromStr(dateDB);
     }
-    else{
+    else
+    {
         _year = -1;
     }
-    
-    if(dateDB.length() >= 7){
+
+    if(dateDB.length() >= 7)
+    {
         _month = getMonthFromStr(dateDB);
     }
-    else{
+    else
+    {
         _month = -1;
     }
-    
-    if(dateDB.length() >= 10){
+
+    if(dateDB.length() >= 10)
+    {
         _day = getDayFromStr(dateDB, _month == -1 ? 0 : _month);
     }
-    else{
+    else
+    {
         _day = -1;
     }
 
-    
+
 }
 
 int Date::daysSoFar() const
@@ -193,18 +202,18 @@ istream& operator>> (istream& stream, Date& date)
     do {
         cout << "Saisissez d'abord le jour (de 1 a 31) : " << endl;
         stream >> day;
-    }while(day < 1 && day > 31);
-    
+    } while(day < 1 && day > 31);
+
     do {
         cout << "Saisissez ensuite le mois (de 1 a 12) : " << endl;
         stream >> month;
-    }while(month < 1 && month > 12);
-    
-    do{
+    } while(month < 1 && month > 12);
+
+    do {
         cout << "Saisissez enfin l'annee : " << endl;
         stream >> year;
-    }while(year < 0 && year > 9000);
-    
+    } while(year < 0 && year > 9000);
+
 
     // Redundant with constructor, should we do something about it ?
     static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
