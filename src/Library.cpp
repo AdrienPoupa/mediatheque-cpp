@@ -161,7 +161,7 @@ int Library::displayMenu()
         cout << "Choix: " << endl;
         cin >> choice;
 
-    } while(choice < 0 && ((isAdmin() && choice > 13) || choice > 7));
+    } while(choice < 0 || (!isAdmin() && choice > 6) || choice > 13);
 
     return choice;
 }
@@ -192,37 +192,29 @@ void Library::redirectChoice(const int choice)
         case 6:
             searchList();
             break;
-        // Admin action - we need an extra check
+        // Admin action
         case 7:
-            //(isAdmin()) ? userList() : displayMenu();
             userList();
             break;
         case 8:
-            //(isAdmin()) ? addThing<User>() : displayMenu();
             addThing<User>();
             break;
         case 9:
-            //(isAdmin()) ? addThing<Book>() : displayMenu();
             addThing<Book>();
             break;
         case 10:
-            //(isAdmin()) ? addThing<Cd>() : displayMenu();
             addThing<Cd>();
             break;
         case 11:
-            //(isAdmin()) ? addThing<Dvd>() : displayMenu();
             addThing<Dvd>();
             break;
         case 12:
-            //(isAdmin()) ? addThing<Artist>() : displayMenu();
             addThing<Artist>();
             break;
         case 13:
-            //(isAdmin()) ? listTransactions() : displayMenu();
             listTransactions();
             break;
         default:
-            //(isAdmin()) ? displayMenu() : displayMenu();
             return;
             break;
     }
