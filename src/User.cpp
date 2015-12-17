@@ -162,9 +162,29 @@ bool User::borrow(Article* art, const string type)
     }
 }
 
-//bool User::returnArticle(){
-//    return true;
-//}
+bool User::returnArticle(Transaction * t){
+    Article * art;
+    if(t->getType() == "book"){
+        art = new Book(t->getArticleId());
+    }
+    else if(t->getType() == "cd"){
+        art = new Cd(t->getArticleId());
+    }
+    else {
+        art = new Dvd(t->getArticleId());
+    }
+    
+    t->setReturned(true);
+    
+    if(t->save()){
+        cout << "Rendu validé!" << endl;
+        art->setBorrowable(true);
+        art->save();
+        
+        return true;
+    }
+    return false;
+}
 
 bool User::save()
 {

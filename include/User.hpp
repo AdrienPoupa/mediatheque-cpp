@@ -10,6 +10,7 @@
 #include "Date.hpp"
 #include "Person.hpp"
 
+class Transaction;
 
 class User: public Person {
     private:
@@ -45,6 +46,7 @@ class User: public Person {
         bool checkQuota() const;
 
         bool borrow(Article* art, const std::string type);
+        bool returnArticle(Transaction * t);
 
         bool save();
         bool remove();

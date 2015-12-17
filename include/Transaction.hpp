@@ -2,6 +2,8 @@
 #define Transaction_hpp
 
 #include <stdio.h>
+#include <list>
+
 #include "../sqlite/SQLiteCpp.h"
 #include "BaseModel.hpp"
 #include "Article.hpp"
@@ -10,7 +12,7 @@
 #include "Dvd.hpp"
 #include "Date.hpp"
 #include "User.hpp"
-#include <list>
+
 
 class Transaction {
     private:
@@ -23,11 +25,15 @@ class Transaction {
         int _id = 0;
         static std::string _dbTable;
     public:
+        Transaction();
         Transaction(const int articleId, const std::string type, const int userId);
         Transaction(Article *article, const std::string type, const User user, const Date beginning, const Date finish);
         Transaction(const int id, const int article_id, const std::string type, const int borrower_id, const Date date_beginning, const Date date_returned, const bool returned);
-        //Transaction(unsigned int id);
+        Transaction(unsigned int id);
         virtual ~Transaction();
+    
+        void init(std::map<std::string, std::string> data);
+        void deserialization(std::map<std::string, std::string> data);
 
         User getUser() const;
         void setUser(const User user);
@@ -43,6 +49,15 @@ class Transaction {
 
         std::string getType() const;
         void setType(std::string const type);
+    
+        int getArticleId() const;
+        void setArticleId(const  unsigned int id);
+    
+        int getUserId() const;
+        void setUserId(const unsigned int id);
+    
+        bool getReturned() const;
+        void setReturned(const bool returned);
 
         static void displayCurrentTransactions();
         static void displayTransactions(const std::string current = "current", const int day_borrowed = 0,
@@ -54,6 +69,8 @@ class Transaction {
 
         bool save();
         bool remove();
+    
+        void shortDisplay() const;
 
         friend std::ostream& operator<<(std::ostream& os, const Transaction& transaction);
         friend std::istream& operator>>(std::istream& is, Transaction& transaction);

@@ -44,13 +44,10 @@ class Library {
     
         void searchList();
 
-        void bookList();
         void editBook(Book& book);
 
-        void dvdList();
         void editDvd(Dvd& dvd);
 
-        void cdList();
         void editCd(Cd& cd);
 
         void userList();
@@ -68,8 +65,10 @@ class Library {
         template <class T>
         void addThing();
 
+        void borrowedMenu() const;
+        void seeEmprunt(int empruntId) const;
         void borrowArticle(Article* art = nullptr, const std::string type = NULL);
-        void returnArticle();
+        void returnArticle(Transaction *t = nullptr);
         void listTransactions();
 
         static Library* singleton;
