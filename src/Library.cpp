@@ -326,7 +326,8 @@ void Library::getListEntity(bool askEdit)
         type = Util::Types::Book;
         typeStr = Util::getTypesString(Util::Types::Book);
     }
-    else if(is_same<T, User>::value){
+    else if(is_same<T, User>::value)
+    {
         type = Util::Types::User;
         typeStr = Util::getTypesString(Util::Types::User);
     }
@@ -344,13 +345,14 @@ void Library::getListEntity(bool askEdit)
         bool failInput = false;
         do {
             cout << "Filtres possibles:" << endl;
-            cout << "1.Empruntables" << endl;
-            cout << "2.Empruntes" << endl;
-            cout << "3.Tous" << endl;
-            cout << "0.Annuler" << endl;
+            cout << "1. Empruntables" << endl;
+            cout << "2. Empruntes" << endl;
+            cout << "3. Tous" << endl;
+            cout << "0. Annuler" << endl;
             cout << "Choix: " << endl;
             cin >> choice;
-            if(cin.fail()){
+            if(cin.fail())
+            {
                 failInput = true;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -399,8 +401,7 @@ void Library::getListEntity(bool askEdit)
         cin >> responseId;
     } while(responseId != 0 && !(ids.find(responseId) != ids.end()));
 
-        seeArticle<T>(articleId);
-    }
+        seeEntity<T>(responseId);
 }
 
 template <class T>

@@ -348,8 +348,9 @@ bool User::remove()
     return BaseModel::remove(_dbTable, _id);
 }
 
-void User::shortDisplay() const{
-    cout << _id << ". " << _firstName << " " << _lastName;
+void User::shortDisplay() const
+{
+    cout << _id << ". " << _firstName << " " << _lastName << endl;
 }
 
 ostream& operator<< (ostream& stream, const User& user)

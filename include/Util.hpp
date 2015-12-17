@@ -18,7 +18,7 @@ class Util
             switch(type)
             {
                 case Types::Book:
-                    return "libre";
+                    return "livre";
                     break;
                 case Types::Cd:
                     return "cd";
