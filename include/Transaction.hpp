@@ -69,6 +69,7 @@ class Transaction {
 
         bool save();
         bool remove();
+        void edit();
 
         void shortDisplay() const;
 

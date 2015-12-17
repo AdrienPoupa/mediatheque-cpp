@@ -223,7 +223,7 @@ void Library::redirectChoice(const int choice)
             addThing<Artist>();
             break;
         case 13:
-            listTransactions();
+            getListEntity<Transaction>();
             break;
         default:
             return;
@@ -305,7 +305,8 @@ void Library::getListEntity(bool askEdit)
         {Util::Types::Cd, {"cds", "*"}},
         {Util::Types::Dvd, {"dvds", "*"}},
         {Util::Types::Artist, {"artists", "id, name, surname"}},
-        {Util::Types::User, {"users", "*"}}
+        {Util::Types::User, {"users", "*"}},
+        {Util::Types::Transaction, {"transactions", "*"}}
     };
 
     int type = 0;
@@ -336,44 +337,85 @@ void Library::getListEntity(bool askEdit)
         type = Util::Types::Artist;
         typeStr = Util::getTypesString(Util::Types::Artist);
     }
+    else if (is_same<T, Transaction>::value){
+        type = Util::Types::Transaction;
+        typeStr = Util::getTypesString(Util::Types::Transaction);
+    }
 
 
     string filter = "borrowable=1";
-
-    if(isAdmin() && type >= 0 && type <= 2){
-        int choice;
-        bool failInput = false;
-        do {
-            cout << "Filtres possibles:" << endl;
-            cout << "1. Empruntables" << endl;
-            cout << "2. Empruntes" << endl;
-            cout << "3. Tous" << endl;
-            cout << "0. Annuler" << endl;
-            cout << "Choix: " << endl;
-            cin >> choice;
-            if(cin.fail())
-            {
-                failInput = true;
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    
+    if(isAdmin()){
+        if(type>= 0 && type <= 2){
+            int choice;
+            bool failInput = false;
+            do {
+                cout << "Filtres possibles:" << endl;
+                cout << "1. Empruntables" << endl;
+                cout << "2. Empruntes" << endl;
+                cout << "3. Tous" << endl;
+                cout << "0. Annuler" << endl;
+                cout << "Choix: " << endl;
+                cin >> choice;
+                if(cin.fail())
+                {
+                    failInput = true;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            }while(failInput || choice < 0 || choice > 3);
+            
+            if(choice == 0) return;
+            
+            switch(choice){
+                case 2:
+                    filter = "borrowable=0";
+                    break;
+                case 3:
+                    filter = "";
+                    break;
+                default:
+                    filter = "borrowable=1";
+                    break;
             }
-        }while(failInput || choice < 0 || choice > 3);
-
-        if(choice == 0) return;
-
-        switch(choice){
-            case 2:
-                filter = "borrowable=0";
-                break;
-            case 3:
-                filter = "";
-                break;
-            default:
-                filter = "borrowable=1";
-                break;
+        }
+        else if(type == Util::Types::Transaction){
+            int choice;
+            bool failInput = false;
+            do{
+                cout << "Emprunts: choix du filtre" << endl;
+                cout << "1. En cours" << endl;
+                cout << "2. Termines" << endl;
+                cout << "3. Tous" << endl;
+                cout << "0. Annuler" << endl;
+                cout << "Choix: " << endl;
+                cin >> choice;
+                if(cin.fail()){
+                    failInput = true;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            } while(failInput || choice < 0 || choice > 3);
+            
+            if (choice == 0) return;
+            
+            switch(choice)
+            {
+                case 1:
+                    // En cours
+                    filter = "returned=0";
+                    break;
+                case 2:
+                    // Termines
+                    filter = "returned=1";
+                    break;
+                default:
+                    // Tous = No filter
+                    break;
+            }
         }
     }
-
+    
     cout << "Liste des " + typeStr + "s" + " dans la mediatheque:" << endl;
 
     map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], type < 3? filter : "");
@@ -401,7 +443,7 @@ void Library::getListEntity(bool askEdit)
         cin >> responseId;
     } while(responseId != 0 && !(ids.find(responseId) != ids.end()));
 
-        seeEntity<T>(responseId);
+    seeEntity<T>(responseId);
 }
 
 template <class T>
@@ -409,6 +451,7 @@ void Library::seeEntity(int id)
 {
     void * art = nullptr;
     Article * artCast = nullptr;
+    Transaction * trCast = nullptr;
 
     if (id == 0)
     {
@@ -443,6 +486,11 @@ void Library::seeEntity(int id)
     {
         type = Util::Types::Artist;
     }
+    else if (is_same<T, Transaction>::value){
+        type = Util::Types::Transaction;
+        trCast = static_cast<Transaction*>(art);
+        trCast = new Transaction(id);
+    }
 
     T tmp(id);
     cout << tmp << endl;
@@ -454,9 +502,16 @@ void Library::seeEntity(int id)
             borrowArticle(artCast, type);
         }
     }
+    else if (trCast != nullptr){
+        if (affichageChoixSee("rendre", Util::getTypesString(type)))
+        {
+            returnArticle(trCast);
+        }
+    }
 
     if (isAdmin())
     {
+        
         if (affichageChoixSee("modifier", Util::getTypesString(type)))
         {
             tmp.edit();
@@ -507,13 +562,11 @@ void Library::borrowedMenu()
     }
 
     set<int> ids = set<int>();
-    map<int, Transaction> trs = map<int, Transaction>();
     for (int i = 1; i != totalCount + 1; i++)
     {
         Transaction tmp = Transaction();
         tmp.init(transactions[i]);
         tmp.shortDisplay();
-        trs.insert(pair<int, Transaction>(tmp.getId(), tmp));
         ids.insert(tmp.getId());
     }
 
@@ -526,20 +579,7 @@ void Library::borrowedMenu()
 
     if (empruntId == 0) return;
 
-    seeEmprunt(trs.at(empruntId));
-}
-
-void Library::seeEmprunt(Transaction tr, bool adminMode)
-{
-    if (adminMode)
-    {
-        // editTransaction
-        cout << "fonctionnalite d'edition non disponible ..." << endl;
-    }
-    else if (affichageChoixSee("rendre", Util::getTypesString(Util::Types(tr.getType()))))
-    {
-        returnArticle(&tr);
-    }
+    seeEntity<Transaction>(empruntId);
 }
 
 void Library::borrowArticle(Article* art, const int type)
@@ -554,79 +594,5 @@ void Library::returnArticle(Transaction *t)
     _currentUser.returnArticle(t);
 
     return;
-}
-
-void Library::listTransactions()
-{
-    /*
-     recherche d'emprunts :
-     # filtre:
-        - fini/en cours/tous;
-        - date
-     */
-    int choice;
-    bool failInput = false;
-    do{
-        cout << "Emprunts: choix du filtre" << endl;
-        cout << "1. En cours" << endl;
-        cout << "2. Termines" << endl;
-        cout << "3. Tous" << endl;
-        cout << "0. Annuler" << endl;
-        cout << "Choix: " << endl;
-        cin >> choice;
-        if(cin.fail()){
-            failInput = true;
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-    } while(failInput || choice < 0 || choice > 3);
-
-    if (choice == 0) return;
-
-    string filter = "";
-    switch(choice)
-    {
-        case 1:
-            // En cours
-            filter = "returned=0";
-            break;
-        case 2:
-            // Termines
-            filter = "returned=1";
-            break;
-        default:
-            // Tous = No filter
-            break;
-    }
-
-    map<int, map<string, string>> transactions = BaseModel::select("transactions", "*", filter);
-
-    int totalCount = (int)transactions.size();
-
-    if (totalCount == 0)
-    {
-        cout << "Aucun emprunt en cours" << endl;
-        return;
-    }
-
-    set<int> ids = set<int>();
-    map<int, Transaction> trs = map<int, Transaction>();
-    for (int i = 1; i != totalCount + 1; i++)
-    {
-        Transaction tmp = Transaction();
-        tmp.init(transactions[i]);
-        tmp.shortDisplay();
-        trs.insert(pair<int, Transaction>(tmp.getId(), tmp));
-        ids.insert(tmp.getId());
-    }
-
-    int empruntId;
-    do
-    {
-        cout << "Pour voir un emprunt, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
-        cin >> empruntId;
-    } while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
-
-    seeEmprunt(trs.at(empruntId), true);
 }
 

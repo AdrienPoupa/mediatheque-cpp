@@ -11,7 +11,7 @@
 class Util
 {
     public:
-        enum Types{Book, Cd, Dvd, Artist, User};
+        enum Types{Book, Cd, Dvd, Artist, User, Transaction};
 
         static std::string getTypesString(Types type)
         {
@@ -28,6 +28,9 @@ class Util
                     break;
                 case Types::User:
                     return "utilisateur";
+                    break;
+                case Types::Transaction:
+                    return "emprunt";
                     break;
                 default:
                     return "dvd";

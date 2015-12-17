@@ -141,7 +141,7 @@ void Transaction::deserialization(map<string, string> data)
         finishDefault = _beginning;
         finishDefault.setMonth(_beginning.getMonth() + 1);
         _finish = data["date_returned"] == "" ? finishDefault: Date(data["date_returned"]);
-        _returned = data["returned"] == "0";
+        _returned = data["returned"] == "1";
     }
 }
 
@@ -316,6 +316,10 @@ bool Transaction::remove()
     return BaseModel::remove(_dbTable, _id);
 }
 
+void Transaction::edit(){
+    return;
+}
+
 void Transaction::shortDisplay() const{
     cout << _id << ". ";
     if (_articleId != 0)
@@ -330,7 +334,7 @@ void Transaction::shortDisplay() const{
 
 ostream& operator<<(ostream& os, const Transaction& transaction)
 {
-    os << "Transaction #" << transaction._id << " : Article  " << transaction._article->getTitle() << " emprunte par " << transaction._user << " le " << transaction._beginning << " a rendre le "  << transaction._finish << endl;
+    os << "Transaction #" << transaction._id << " : Article  " << transaction._article->getTitle() << " emprunte par " << transaction._user.getFirstName() << " "  <<transaction._user.getLastName() << ", le " << transaction._beginning << " a rendre le "  << transaction._finish << endl;
     return os;
 }
 
