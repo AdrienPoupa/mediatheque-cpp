@@ -13,7 +13,7 @@ int main()
     {
         Library * towerOfBabel = Library::getSingleton();
 
-        towerOfBabel->open();
+        towerOfBabel->run();
 
         delete towerOfBabel;
     }

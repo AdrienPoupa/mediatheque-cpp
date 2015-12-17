@@ -22,16 +22,18 @@ class Library {
         static Library *getSingleton();
         ~Library();
 
-        void open();
+        void run();
 
     private:
         Library();
 
         bool isAdmin();
+    
+        bool connect();
 
-        void checkInput(std::istream& stream, const int intToCheck, const int minValue) const;
+        bool checkInput(std::istream& stream, const int intToCheck, const int minValue) const;
 
-        void displayMenu();
+        int displayMenu();
         void redirectChoice(int choice);
     
         template <class T>
@@ -52,7 +54,7 @@ class Library {
 
         void userList();
         void editUser(const int userId);
-        void deleteUser();
+        void deleteUser(int userId);
 
         void artistList();
         void seeArtist(const int artistId);
@@ -65,8 +67,8 @@ class Library {
         template <class T>
         void addThing();
 
-        void borrowedMenu() const;
-        void seeEmprunt(Transaction tr) const;
+        void borrowedMenu();
+        void seeEmprunt(Transaction tr);
         void borrowArticle(Article* art = nullptr, const int type = 0);
         void returnArticle(Transaction *t = nullptr);
         void listTransactions();

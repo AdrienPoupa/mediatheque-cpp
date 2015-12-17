@@ -99,7 +99,7 @@ bool Cd::save()
         {"id", {to_string(_id), "int"}},
         {"artist", {to_string(_authorId), "int"}},
         {"title", {_title, "string"}},
-        {"borrowable", {to_string(_borrowable), "boolean"}},
+        {"borrowable", {_borrowable ? "1" : "0", "int"}},
         {"release", {_release.dateToDB(), "string"}},
         {"length", {to_string(_length), "int"}},
         {"studio", {_studio, "string"}}
