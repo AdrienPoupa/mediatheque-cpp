@@ -93,9 +93,14 @@ bool Library::connect()
 
         cout << "Saisissez le numero du compte a ouvrir" << endl;
         cin >> idToOpen;
-
-        correctId = userIds.find(idToOpen) != userIds.end();
-
+        if(cin.fail()){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        else {
+            correctId = userIds.find(idToOpen) != userIds.end();
+        }
+        
         if (!correctId)
         {
             cout << "Identifiant inconnu ..." << endl;
@@ -133,7 +138,7 @@ int Library::displayMenu()
 {
 
     int choice;
-
+    bool failInput = false;
     do
     {
         cout << endl;
@@ -160,8 +165,13 @@ int Library::displayMenu()
 
         cout << "Choix: " << endl;
         cin >> choice;
+        if(cin.fail()){
+            failInput = true;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
         
-    } while(choice < 0 || (!isAdmin() && choice > 6) || choice > 13);
+    } while(failInput || choice < 0 || (!isAdmin() && choice > 6) || choice > 13);
 
     return choice;
 }
@@ -175,13 +185,13 @@ void Library::redirectChoice(const int choice)
             return;
             break;
         case 1:
-            getListArticle<Book>();
+            getListEntity<Book>();
             break;
         case 2:
-            getListArticle<Dvd>();
+            getListEntity<Dvd>();
             break;
         case 3:
-            getListArticle<Cd>();
+            getListEntity<Cd>();
             break;
         case 4:
             artistList();
@@ -194,7 +204,7 @@ void Library::redirectChoice(const int choice)
             break;
         // Admin action
         case 7:
-            userList();
+            getListEntity<User>();
             break;
         case 8:
             addThing<User>();
@@ -287,50 +297,100 @@ void Library::searchList()
 }
 
 template <class T>
-void Library::getListArticle()
+void Library::getListEntity()
 {
-    map<string, vector<string>> liaison = {{"books", {"livre", "id, title, author, release"}}, {"cds", {"CD", "*"}}, {"dvds", {"DVD", "*"}}};
-    string type = "books";
+    map<int, vector<string>> liaison = {{Util::Types::Book, {"books", "id, title, author, release"}}, {Util::Types::Cd, {"cds", "*"}}, {Util::Types::Dvd, {"dvds", "*"}}, {3, {"users", "*"}}};
+    
+    int type = Util::Types::Book;
+    string typeStr;
 
-    if (std::is_same<T, Cd>::value)
+    if (is_same<T, Cd>::value)
     {
-        type = "cds";
+        type = Util::Types::Cd;
+        typeStr = Util::getTypesString(Util::Types::Cd);
     }
-    else if (std::is_same<T, Dvd>::value)
+    else if (is_same<T, Dvd>::value)
     {
-        type = "dvds";
+        type = Util::Types::Dvd;
+        typeStr = Util::getTypesString(Util::Types::Dvd);
+    }
+    else if (is_same<T, Book>::value)
+    {
+        type = Util::Types::Book;
+        typeStr = Util::getTypesString(Util::Types::Book);
+    }
+    else{
+        type = 3; // Users
+        typeStr = "utilisateur";
+    }
+    
+    string filter = "borrowable=1";
+    
+    if(isAdmin() && type >= 0 && type <= 2){
+        int choice;
+        bool failInput;
+        do {
+            cout << "Filtres possibles:" << endl;
+            cout << "1.Empruntables" << endl;
+            cout << "2.Empruntes" << endl;
+            cout << "3.Tous" << endl;
+            cout << "0.Annuler" << endl;
+            cout << "Choix: " << endl;
+            cin >> choice;
+            if(cin.fail()){
+                failInput = true;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+        }while(failInput || choice < 0 || choice > 3);
+        
+        if(choice == 0) return;
+        
+        switch(choice){
+            case 2:
+                filter = "borrowable=0";
+                break;
+            case 3:
+                filter = "";
+                break;
+            default:
+                filter = "borrowable=1";
+                break;
+        }
     }
 
-    // étendre au User et Artist, pareil pour seeX
+    cout << "Liste des " + typeStr + "s" + " dans la mediatheque:" << endl;
 
-    cout << "Liste des " + liaison.at(type)[0] + "s" + " dans la mediatheque:" << endl;
+    map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], type != 3 ? filter : "");
 
-    map<int, map<string, string>> articles = BaseModel::select(type, liaison.at(type)[1], "borrowable IS 1");
-
-    int totalCount = (int)articles.size();
+    int totalCount = (int)response.size();
 
     if (totalCount == 0)
     {
-        cout << "Aucun " + liaison.at(type)[0] + " dans la mediatheque" << endl;
+        cout << "Aucun " + typeStr + " dans la mediatheque" << endl;
         return;
     }
 
     set<int> ids = set<int>();
     for (int i = 1; i != totalCount + 1; i++)
     {
-        T tmp = T();
-        tmp.init(articles[i]);
+        T tmp= T();
+        tmp.init(response[i]);
         tmp.shortDisplay();
-        ids.insert(stoi(articles[i]["id"]));
+        
+        ids.insert(stoi(response[i]["id"]));
     }
 
-    int articleId;
+    int responseId;
     do{
-        cout << "Pour voir un " + liaison.at(type)[0] + ", puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
-        cin >> articleId;
-    } while(articleId != 0 && !(ids.find(articleId) != ids.end()));
+        cout << "Pour voir un " + typeStr + ", puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
+        cin >> responseId;
+    } while(responseId != 0 && !(ids.find(responseId) != ids.end()));
 
-    seeArticle<T>(articleId);
+    if(type != 3)
+        seeArticle<T>(responseId);
+    else
+        editUser(responseId);
 
 }
 
@@ -360,6 +420,8 @@ void Library::seeArticle(const int id)
     {
         art = new Book(id);
     }
+    
+    cout << art << endl;
 
     if (art->getBorrowable())
     {
@@ -454,7 +516,7 @@ void Library::editUser(int userId)
     User userToEdit(userId);
 
     int choice;
-
+    bool failInput = false;
     do {
         cout << "Modification d'un utilisateur" << endl;
 
@@ -471,7 +533,12 @@ void Library::editUser(int userId)
 
         cout << "Choix: ";
         cin >> choice;
-    } while(choice < 0 && choice > 9);
+        if(cin.fail()){
+            failInput = true;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    } while(failInput || choice < 0 || choice > 9);
 
     switch (choice)
     {
@@ -717,7 +784,7 @@ void Library::listTransactions()
         - date
      */
     int choice;
-
+    bool failInput = false;
     do{
         cout << "Emprunts: choix du filtre" << endl;
         cout << "1. En cours" << endl;
@@ -726,7 +793,12 @@ void Library::listTransactions()
         cout << "0. Annuler" << endl;
         cout << "Choix: " << endl;
         cin >> choice;
-    } while(choice < 0 && choice > 3);
+        if(cin.fail()){
+            failInput = true;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    } while(failInput || choice < 0 || choice > 3);
 
     if (choice == 0) return;
 

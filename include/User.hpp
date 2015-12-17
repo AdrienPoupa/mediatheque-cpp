@@ -28,6 +28,9 @@ class User: public Person {
         User();
         ~User();
         User(int id); // Get a person from an ID provided by DB
+    
+        void init(std::map<std::string, std::string> data);
+        void deserialization(std::map<std::string, std::string> data);
 
         std::string getPhone() const ;
         void setPhone(const std::string phone);
@@ -50,6 +53,8 @@ class User: public Person {
 
         bool save();
         bool remove();
+    
+        void shortDisplay() const;
 
         friend std::ostream& operator<< (std::ostream& stream, const User& user);
         friend std::istream& operator>> (std::istream& stream, User& user);
