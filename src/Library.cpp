@@ -48,85 +48,113 @@ bool Library::isAdmin()
     return _currentUser.isAdmin();
 }
 
-void Library::checkInput(istream& stream, const int intToCheck, const int minValue) const
+bool Library::checkInput(istream& stream, const int intToCheck, const int minValue) const
 {
-    if (stream.fail() || intToCheck < minValue)
-    {
-        throw invalid_argument("Merci d'entrer un choix valide");
+    return !(stream.fail() || intToCheck < minValue); //"Merci d'entrer un choix valide"
+}
+
+void Library::run(){
+    
+    // connection
+    bool connected = connect();
+    
+    if(!connected) return;
+    // boucle tant que l'utilisateur ne quitte pas le programme
+    bool quit = false;
+
+    while(!quit){
+        int choice = displayMenu();
+        if(choice)
+            redirectChoice(choice);
+        else
+            quit = true;
     }
 }
 
-void Library::open()
+bool Library::connect()
 {
-    cout << "Liste des comptes disponibles pour l'ouverture:" << endl;
-
     map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname");
 
-    int totalUsers = users.size();
+    int totalUsers = (int)users.size();
 
-    for (int i = 1; i != totalUsers + 1; i++)
-    {
-        cout << users[i]["id"] << ". " << users[i]["name"] << " " << users[i]["surname"] << endl;
-    }
-
-    cout << "Saisissez le numero du compte a ouvrir" << endl;
     int idToOpen;
-    cin >> idToOpen;
-
-    checkInput(cin, idToOpen, 1);
+    set<int> userIds = set<int>();
+    bool correctId = false;
+    
+    do{
+        cout << "Liste des comptes disponibles pour l'ouverture:" << endl;
+        for (int i = 1; i != totalUsers + 1; i++)
+        {
+            cout << users[i]["id"] << ". " << users[i]["name"] << " " << users[i]["surname"] << endl;
+            userIds.insert(stoi(users[i]["id"]));
+        }
+        
+        cout << "Saisissez le numero du compte a ouvrir" << endl;
+        cin >> idToOpen;
+        
+        correctId = userIds.find(idToOpen) != userIds.end();
+        
+        if(!correctId){
+            cout << "Identifiant inconnu ..." << endl;
+        }
+        
+    }while(!correctId);
 
     User accountToOpen(idToOpen);
     _currentUser = accountToOpen;
 
-    cout << "Identification: rentrez votre mot de passe" << endl;
-    string inputPassword;
-    cin >> inputPassword;
-
-    if (_currentUser.checkPassword(inputPassword))
-    {
-        cout << "Identification reussie!" << endl;
-        displayMenu();
-        return;
+    int essai = 3;
+    bool correctPass = false;
+    while(!correctPass && essai > 0){
+        cout << "Identification: rentrez votre mot de passe" << endl;
+        string inputPassword;
+        cin >> inputPassword;
+    
+        correctPass = _currentUser.checkPassword(inputPassword);
+        essai--;
+        
+        if(correctPass){
+            cout << "Identification reussie!" << endl;
+        }
+        else{
+            cout << "Erreur dans votre mot de passe." << endl;
+        }
     }
-    else
-    {
-        cout << "Identification ratee" << endl;
-        open();
-    }
+    return correctPass;
 }
 
-void Library::displayMenu()
+int Library::displayMenu()
 {
+    
     int choice;
 
-    cout << endl;
-    cout << "Menu : tapez le numero de l'action choisie" << endl;
-    cout << "0. Quitter" << endl;
-    cout << "1. Liste des livres" << endl;
-    cout << "2. Liste des dvds" << endl;
-    cout << "3. Liste des cds" << endl;
-    cout << "4. Liste des artistes" << endl;
-    cout << "5. Mes emprunts" << endl;
-    cout << "6. Chercher un article" << endl;
+    do{
+        cout << endl;
+        cout << "Menu : tapez le numero de l'action choisie" << endl;
+        cout << "0. Quitter" << endl;
+        cout << "1. Liste des livres" << endl;
+        cout << "2. Liste des dvds" << endl;
+        cout << "3. Liste des cds" << endl;
+        cout << "4. Liste des artistes" << endl;
+        cout << "5. Mes emprunts" << endl;
+        cout << "6. Chercher un article" << endl;
+        
+        if (isAdmin())
+        {
+            cout << endl << "Menu Administrateur" << endl;
+            cout << "7. Liste des utilisateurs" << endl;
+            cout << "8. Ajouter un utilisateur" << endl;
+            cout << "9. Ajouter un livre" << endl;
+            cout << "10. Ajouter un cd" << endl;
+            cout << "11. Ajouter un dvd" << endl;
+            cout << "12. Ajouter un artiste" << endl;
+            cout << "13. Emprunts en cours" << endl;
+        }
+        
+        cin >> choice;
+    }while(choice < 0 && ((isAdmin() && choice > 13) || choice > 7));
 
-    if (isAdmin())
-    {
-        cout << endl << "Menu Administrateur" << endl;
-        cout << "7. Liste des utilisateurs" << endl;
-        cout << "8. Ajouter un utilisateur" << endl;
-        cout << "9. Supprimer un utilisateur" << endl;
-        cout << "10. Ajouter un livre" << endl;
-        cout << "11. Ajouter un cd" << endl;
-        cout << "12. Ajouter un dvd" << endl;
-        cout << "13. Ajouter un artiste" << endl;
-        cout << "14. Emprunts en cours" << endl;
-    }
-
-    cin >> choice;
-
-    checkInput(cin, choice, 0);
-
-    redirectChoice(choice);
+    return choice;
 }
 
 void Library::redirectChoice(const int choice)
@@ -157,31 +185,36 @@ void Library::redirectChoice(const int choice)
             break;
         // Admin action - we need an extra check
         case 7:
-            (isAdmin()) ? userList() : displayMenu();
+            //(isAdmin()) ? userList() : displayMenu();
+            userList();
             break;
         case 8:
-            (isAdmin()) ? addThing<User>() : displayMenu();
+            //(isAdmin()) ? addThing<User>() : displayMenu();
+            addThing<User>();
             break;
         case 9:
-            (isAdmin()) ? deleteUser() : displayMenu();
+            //(isAdmin()) ? addThing<Book>() : displayMenu();
+            addThing<Book>();
             break;
         case 10:
-            (isAdmin()) ? addThing<Book>() : displayMenu();
+            //(isAdmin()) ? addThing<Cd>() : displayMenu();
+            addThing<Cd>();
             break;
         case 11:
-            (isAdmin()) ? addThing<Cd>() : displayMenu();
+            //(isAdmin()) ? addThing<Dvd>() : displayMenu();
+            addThing<Dvd>();
             break;
         case 12:
-            (isAdmin()) ? addThing<Dvd>() : displayMenu();
+            //(isAdmin()) ? addThing<Artist>() : displayMenu();
+            addThing<Artist>();
             break;
         case 13:
-            (isAdmin()) ? addThing<Artist>() : displayMenu();
-            break;
-        case 14:
-            (isAdmin()) ? listTransactions() : displayMenu();
+            //(isAdmin()) ? listTransactions() : displayMenu();
+            listTransactions();
             break;
         default:
-            (isAdmin()) ? displayMenu() : displayMenu();
+            //(isAdmin()) ? displayMenu() : displayMenu();
+            return;
             break;
     }
 }
@@ -197,7 +230,7 @@ void Library::searchList()
 
     map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "title LIKE '%" + query + "%'");
 
-    int totalBooks = bibliography.size();
+    int totalBooks = (int)bibliography.size();
 
     if (totalBooks == 0)
     {
@@ -215,7 +248,7 @@ void Library::searchList()
 
     map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "title LIKE '%" + query + "%'");
 
-    int totalCds = cds.size();
+    int totalCds = (int)cds.size();
 
     if (totalCds == 0)
     {
@@ -232,7 +265,7 @@ void Library::searchList()
 
     map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "title LIKE '%" + query + "%'");
 
-    int totalDvds = dvds.size();
+    int totalDvds = (int)dvds.size();
 
     if (totalDvds == 0)
     {
@@ -245,18 +278,10 @@ void Library::searchList()
         cout << dvds[i]["id"] << ". " << dvds[i]["title"] << " (" << release << ")" << endl;
     }
 
-    // saisie de la recherche par l'utilisateur (ensemble de mots)
-
-    // saisie des filtres (type d'article, artistes, genre)
-
-    // Select * FROM filtre WHERE filtre LIKE mot
-
-    // affichage selon le type de recherche.
+    // Action a proposer avec les resultats.
     /*
      On peut aussi demander les filtres avant, et faire differente fonction qui traite chaque table de la DB
      */
-
-     displayMenu();
      return;
 }
 
@@ -278,7 +303,7 @@ void Library::getListArticle(){
     
     map<int, map<string, string>> articles = BaseModel::select(type, liaison.at(type)[1], "borrowable IS 1");
     
-    int totalCount = articles.size();
+    int totalCount = (int)articles.size();
     
     if (totalCount == 0)
     {
@@ -311,7 +336,6 @@ void Library::seeArticle(int id){
     Article * art;
     
     if(id == 0){
-        displayMenu();
         return;
     }
     
@@ -357,26 +381,48 @@ void Library::seeArticle(int id){
             art->remove();
         }
     }
-    
-    displayMenu();
     return;
+}
+
+template <class T>
+void Library::addThing()
+{
+    T newThing;
+    cin >> newThing;
+    newThing.save();
+    
+    return;
+}
+
+bool Library::affichageChoixSee(const string typeChoix, const string typeArticle) const
+{
+    
+    string choice = "";
+    do {
+        cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' le si oui, 'n' sinon" << endl;
+        cin >> choice;
+    } while(choice != "o" && choice !="n");
+    
+    return choice == "o";
 }
 
 void Library::editBook(Book& book)
 {
-    cout << "Modification d'un livre" << endl;
-
-    cout << "1. Modifier l'auteur" << endl;
-    cout << "2. Modifier le titre" << endl;
-    cout << "3. Modifier la date de sortie" << endl;
-    cout << "4. Modifier le nombre de pages" << endl;
-    cout << "5. Modifier l'editeur" << endl;
-    cout << "6. Modifier les genres" << endl;
-
     int choice;
-    cin >> choice;
-
-    checkInput(cin, choice, 1);
+    
+    do{
+        cout << "Modification d'un livre" << endl;
+        
+        cout << "1. Modifier l'auteur" << endl;
+        cout << "2. Modifier le titre" << endl;
+        cout << "3. Modifier la date de sortie" << endl;
+        cout << "4. Modifier le nombre de pages" << endl;
+        cout << "5. Modifier l'editeur" << endl;
+        cout << "6. Modifier les genres" << endl;
+        cout << "0. Annuler" << endl;
+        cout << "Choix: ";
+        cin >> choice;
+    }while(choice < 0 && choice > 6);
 
     switch (choice)
     {
@@ -444,32 +490,34 @@ void Library::editBook(Book& book)
             break;
         }
         default:
-            editBook(book);
+            return;
             break;
     }
 
     cout << "Sauvegarde..." << endl;
     book.save();
-    displayMenu();
     return;
 }
 
 void Library::editDvd(Dvd& dvd)
 {
-    cout << "Modification d'un DVD" << endl;
-
-    cout << "1. Modifier le realisateur" << endl;
-    cout << "2. Modifier le titre" << endl;
-    cout << "3. Modifier la date de sortie" << endl;
-    cout << "4. Modifier la duree" << endl;
-    cout << "5. Modifier le studio" << endl;
-    cout << "6. Modifier les genres" << endl;
-    cout << "7. Modifier le casting" << endl;
-
+    
     int choice;
-    cin >> choice;
-
-    checkInput(cin, choice, 1);
+    
+    do{
+        cout << "Modification d'un DVD" << endl;
+        
+        cout << "1. Modifier le realisateur" << endl;
+        cout << "2. Modifier le titre" << endl;
+        cout << "3. Modifier la date de sortie" << endl;
+        cout << "4. Modifier la duree" << endl;
+        cout << "5. Modifier le studio" << endl;
+        cout << "6. Modifier les genres" << endl;
+        cout << "7. Modifier le casting" << endl;
+        cout << "0. Annuler" << endl;
+        cout << "Choix: ";
+        cin >> choice;
+    }while(choice < 0 && choice > 7);
 
     switch (choice)
     {
@@ -558,44 +606,33 @@ void Library::editDvd(Dvd& dvd)
             break;
         }
         default:
-            editDvd(dvd);
+            return;
             break;
     }
 
     cout << "Sauvegarde..." << endl;
     dvd.save();
-    displayMenu();
     return;
 }
 
 
-bool Library::affichageChoixSee(const string typeChoix, const string typeArticle) const
-{
-
-    string choice = "";
-    do {
-        cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' le si oui, 'n' sinon" << endl;
-        cin >> choice;
-    } while(choice != "o" && choice !="n");
-
-    return choice == "o";
-}
-
 void Library::editCd(Cd& cd)
 {
-    cout << "Modification d'un CD" << endl;
-
-    cout << "1. Modifier l'artiste" << endl;
-    cout << "2. Modifier le titre" << endl;
-    cout << "3. Modifier la date de sortie" << endl;
-    cout << "4. Modifier la duree" << endl;
-    cout << "5. Modifier le studio" << endl;
-    cout << "6. Modifier les genres" << endl;
-
     int choice;
-    cin >> choice;
-
-    checkInput(cin, choice, 1);
+    do{
+        cout << "Modification d'un CD" << endl;
+        
+        cout << "1. Modifier l'artiste" << endl;
+        cout << "2. Modifier le titre" << endl;
+        cout << "3. Modifier la date de sortie" << endl;
+        cout << "4. Modifier la duree" << endl;
+        cout << "5. Modifier le studio" << endl;
+        cout << "6. Modifier les genres" << endl;
+        cout << "0. Annuler" << endl;
+        cout << "Choix: ";
+        cin >> choice;
+        
+    }while(choice < 0 && choice > 6);
 
     switch (choice)
     {
@@ -663,13 +700,12 @@ void Library::editCd(Cd& cd)
             break;
         }
         default:
-            editCd(cd);
+            return;
             break;
     }
 
     cout << "Sauvegarde..." << endl;
     cd.save();
-    displayMenu();
     return;
 }
 
@@ -679,59 +715,55 @@ void Library::userList()
 
     map<int, map<string, string>> users = BaseModel::select("users", "id");
 
-    int totalUsers = users.size();
+    int totalUsers = (int)users.size();
 
+    map<int, User> userIds = map<int, User>();
     for (int i = 1; i != totalUsers + 1; i++)
     {
-        User currentUser(stoi(users[i]["id"]));
-        cout << currentUser << endl;
+        User tmp(stoi(users[i]["id"]));
+        cout << tmp << endl;
+        userIds.insert(pair<int, User>(tmp.getId(), tmp));
     }
 
     int userId;
-    cout << "Pour modifier un utilisateur, tapez son ID, et 0 pour revenir au menu" << endl;
-    cin >> userId;
-
-    checkInput(cin, userId, 0);
-
+    do {
+        cout << "Pour modifier un utilisateur, tapez son ID, et 0 pour revenir au menu: " << endl;
+        cin >> userId;
+    }while(userIds.find(userId) == userIds.end() && userId != 0);
+    
+    if(userId == 0) return;
+    
     editUser(userId);
-}
-
-template <class T>
-void Library::addThing()
-{
-    T newThing;
-    cin >> newThing;
-    newThing.save();
-
-    displayMenu();
-    return;
 }
 
 void Library::editUser(int userId)
 {
     if (userId == 0)
     {
-        displayMenu();
         return;
     }
 
     User userToEdit(userId);
 
-    cout << "Modification d'un utilisateur" << endl;
-
-    cout << "1. Modifier le prenom" << endl;
-    cout << "2. Modifier le nom" << endl;
-    cout << "3. Modifier le telephone" << endl;
-    cout << "4. Modifier la date de naissance" << endl;
-    cout << "5. Modifier l'adresse" << endl;
-    cout << "6. Modifier le type de compte" << endl;
-    cout << "7. Modifier le nombre d'emprunts simultanes" << endl;
-    cout << "8. Modifier le mot de passe" << endl;
-
     int choice;
-    cin >> choice;
-
-    checkInput(cin, choice, 1);
+    
+    do {
+        cout << "Modification d'un utilisateur" << endl;
+        
+        cout << "1. Modifier le prenom" << endl;
+        cout << "2. Modifier le nom" << endl;
+        cout << "3. Modifier le telephone" << endl;
+        cout << "4. Modifier la date de naissance" << endl;
+        cout << "5. Modifier l'adresse" << endl;
+        cout << "6. Modifier le type de compte" << endl;
+        cout << "7. Modifier le nombre d'emprunts simultanes" << endl;
+        cout << "8. Modifier le mot de passe" << endl;
+        cout << "9. Supprimer l'utilisateur" << endl;
+        cout << "0. Annuler" << endl;
+        
+        cout << "Choix: ";
+        cin >> choice;
+    }while(choice < 0 && choice > 9);
 
     switch (choice)
     {
@@ -798,25 +830,25 @@ void Library::editUser(int userId)
             userToEdit.setPassword(newPassword);
             break;
         }
+        case 9:{
+            deleteUser(userId);
+            break;
+        }
         default:
-            editUser(userId);
+            return;
             break;
     }
 
-    cout << "Sauvegarde..." << endl;
-    userToEdit.save();
-    displayMenu();
+    if(choice != 9 && choice != 0 ){
+        cout << "Sauvegarde..." << endl;
+        userToEdit.save();
+    }
+    
     return;
 }
 
-void Library::deleteUser()
+void Library::deleteUser(int userId)
 {
-    unsigned int userId;
-
-    cout << "Rentrez l'ID de l'utilisateur a supprimer" << endl;
-    cin >> userId;
-
-    checkInput(cin, userId, 1);
 
     if (userId != _currentUser.getId())
     {
@@ -827,8 +859,6 @@ void Library::deleteUser()
     {
         cout << "Vous ne pouvez pas vous supprimer vous-meme !" << endl;
     }
-
-    displayMenu();
     return;
 }
 
@@ -838,24 +868,30 @@ void Library::artistList()
 
     map<int, map<string, string>> artists = BaseModel::select("artists", "id, name, surname");
 
-    int totalArtists = artists.size();
+    int totalCount = (int)artists.size();
 
-    if (totalArtists == 0)
+    if (totalCount == 0)
     {
         cout << "Aucun artiste dans la mediatheque" << endl;
         return;
     }
 
-    for (int i = 1; i != totalArtists + 1; i++)
+    set<int> artistIds = set<int>();
+    for (int i = 1; i != totalCount + 1; i++)
     {
         cout << artists[i]["id"] << ". " << artists[i]["name"] << " " << artists[i]["surname"] << endl;
+        artistIds.insert(stoi(artists[i]["id"]));
     }
 
     int artistId;
-    cout << "Pour voir un artiste, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
-    cin >> artistId;
-
-    checkInput(cin, artistId, 0);
+    do{
+        cout << "Pour voir un artiste, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu" << endl;
+        cin >> artistId;
+    }while(artistIds.find(artistId) == artistIds.end() && artistId != 0);
+    
+    if(artistId == 0){
+        return;
+    }
 
     seeArtist(artistId);
 }
@@ -864,12 +900,15 @@ void Library::seeArtist(const int artistId)
 {
     if (artistId == 0)
     {
-        displayMenu();
         return;
     }
 
     Artist artistToDisplay(artistId);
     cout << artistToDisplay << endl;
+    
+    bibliography(artistToDisplay);
+    discography(artistToDisplay);
+    filmography(artistToDisplay);
 
     if (isAdmin())
     {
@@ -892,11 +931,6 @@ void Library::seeArtist(const int artistId)
         }
     }
 
-    bibliography(artistToDisplay);
-    discography(artistToDisplay);
-    filmography(artistToDisplay);
-
-    displayMenu();
     return;
 }
 
@@ -906,15 +940,15 @@ void Library::bibliography(Artist& artist) const
 
     map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "author=" + to_string(artist.getId()));
 
-    int totalBooks = bibliography.size();
+    int totalCount = (int)bibliography.size();
 
-    if (totalBooks == 0)
+    if (totalCount == 0)
     {
         cout << "Aucun livre dans la mediatheque" << endl;
         return;
     }
 
-    for (int i = 1; i != totalBooks + 1; i++)
+    for (int i = 1; i != totalCount + 1; i++)
     {
         Artist writer(stoi(bibliography[i]["author"]));
         Date release(bibliography[i]["release"]);
@@ -928,7 +962,7 @@ void Library::discography(Artist& artist) const
 
     map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "artist=" + to_string(artist.getId()));
 
-    int totalCds = cds.size();
+    int totalCds = (int)cds.size();
 
     if (totalCds == 0)
     {
@@ -949,7 +983,7 @@ void Library::filmography(Artist& artist) const
 
     map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "director=" + to_string(artist.getId()));
 
-    int totalDvds = dvds.size();
+    int totalDvds = (int)dvds.size();
 
     if (totalDvds == 0)
     {
@@ -966,17 +1000,20 @@ void Library::filmography(Artist& artist) const
 
 void Library::editArtist(Artist& artist)
 {
-    cout << "Modification d'un artiste" << endl;
-
-    cout << "1. Modifier le prenom" << endl;
-    cout << "2. Modifier le nom" << endl;
-    cout << "3. Modifier la date de naissance" << endl;
-    cout << "4. Modifier la nationalite" << endl;
-
+    
     int choice;
-    cin >> choice;
-
-    checkInput(cin, choice, 1);
+    
+    do{
+        cout << "Modification d'un artiste" << endl;
+        
+        cout << "1. Modifier le prenom" << endl;
+        cout << "2. Modifier le nom" << endl;
+        cout << "3. Modifier la date de naissance" << endl;
+        cout << "4. Modifier la nationalite" << endl;
+        cout << "0. Annuler" << endl;
+        cout << "Choix: ";
+        cin >> choice;
+    }while(choice < 0 && choice > 4);
 
     switch (choice)
     {
@@ -1012,22 +1049,24 @@ void Library::editArtist(Artist& artist)
             break;
         }
         default:
-            editArtist(artist);
+            return;
             break;
     }
 
-    cout << "Sauvegarde..." << endl;
-    artist.save();
-    displayMenu();
+    if(choice != 0){
+        cout << "Sauvegarde..." << endl;
+        artist.save();
+    }
+    
     return;
 }
 
-void Library::borrowedMenu() const{
+void Library::borrowedMenu() {
     cout << "Mes emprunts en cours" << endl;
     
-    map<int, map<string, string>> transactions = BaseModel::select("transactions", "*", "borrower_id=" + to_string(_currentUser.getId()));
+    map<int, map<string, string>> transactions = BaseModel::select("transactions", "*", "borrower_id=" + to_string(_currentUser.getId()) +" AND returned=0");
     
-    int totalCount = transactions.size();
+    int totalCount = (int)transactions.size();
     
     if (totalCount == 0)
     {
@@ -1055,16 +1094,17 @@ void Library::borrowedMenu() const{
     seeEmprunt(trs.at(empruntId));
 }
 
-void Library::seeEmprunt(Transaction tr) const
+void Library::seeEmprunt(Transaction tr)
 {
-    affichageChoixSee("rendre", Util::getTypesString(Util::Types(tr.getType())));
+    if(affichageChoixSee("rendre", Util::getTypesString(Util::Types(tr.getType())))){
+        returnArticle(&tr);
+    }
 }
 
 void Library::borrowArticle(Article* art, const int type)
 {
     _currentUser.borrow(art, type);
-
-    displayMenu();
+    
     return;
 }
 
@@ -1072,14 +1112,12 @@ void Library::returnArticle(Transaction *t)
 {
     _currentUser.returnArticle(t);
     
-    displayMenu();
     return;
 }
 
 void Library::listTransactions()
 {
     // TODO
-    displayMenu();
     return;
 }
 

@@ -91,7 +91,7 @@ bool Book::save()
 {
     map<string, vector<string>> data = {
         {"id", {to_string(_id), "int"}},
-        {"borrowable", {_borrowable ? "1" : "0", "boolean"}},
+        {"borrowable", {_borrowable ? "1" : "0", "int"}},
         {"title", {_title, "string"}},
         {"release", {_release.dateToDB(), "string"}},
         {"author", {to_string(_authorId), "int"}},

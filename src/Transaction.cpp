@@ -124,7 +124,7 @@ void Transaction::deserialization(map<string, string> data){
             _user = User(_userId);
         }
         _beginning = Date(data["date_borrowed"]);
-        _finish = Date(data["date_returned"]);
+        _finish = data["date_returned"] == "" ? NULL: Date(data["date_returned"]);
         _returned = data["returned"] == "0";
     }
 }

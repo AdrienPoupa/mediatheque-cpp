@@ -89,7 +89,7 @@ bool Dvd::save()
         {"id", {to_string(_id), "int"}},
         {"director", {to_string(_authorId), "int"}},
         {"title", {_title, "string"}},
-        {"borrowable", {to_string(_borrowable), "boolean"}},
+        {"borrowable", {_borrowable ? "1": "0", "int"}},
         {"release", {_release.dateToDB(), "string"}},
         {"length", {to_string(_length), "int"}},
         {"studio", {_studio, "string"}}
@@ -145,7 +145,7 @@ void Dvd::displayCasting() const
     if (!casting.empty())
     {
         cout << "Casting : ";
-        int totalCasting = casting.size();
+        int totalCasting = (int)casting.size();
         for (int i = 1; i != totalCasting + 1; i++)
         {
             Artist actor(stoi(casting[i]["artist_id"]));
