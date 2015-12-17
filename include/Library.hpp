@@ -35,10 +35,10 @@ class Library {
         bool connect();
 
         int displayMenu();
-        void redirectChoice(int choice);
+        void redirectChoice(const int choice);
 
         template <class T>
-        void seeArticle(int id);
+        void seeArticle(const int id);
 
         template <class T>
         void getListArticle();
@@ -53,11 +53,6 @@ class Library {
 
         void artistList();
         void seeArtist(const int artistId);
-        void editArtist(Artist& artist);
-
-        void bibliography(Artist& artist) const;
-        void discography(Artist& artist) const;
-        void filmography(Artist& artist) const;
 
         template <class T>
         void addThing();
