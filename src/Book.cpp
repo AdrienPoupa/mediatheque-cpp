@@ -283,17 +283,29 @@ ostream& operator<< (ostream& stream, Book& book)
 istream& operator>> (istream& stream, Book& book)
 {
     cout << "Saisie d'un livre" << endl;
-    cout << "Saisie du titre" << endl;
+
+    cout << "Saisie du titre :" << endl;
     stream.ignore(1, '\n');
     getline(stream, book._title, '\n');
-    cout << "ID de l'auteur" << endl;
-    stream >> book._authorId;
-    cout << "Editeur" << endl;
+
+    cout << "ID de l'auteur :" << endl;
+
+    int authorId;
+
+    do {
+        authorId = Util::displayIdList<Artist>("artists");
+    } while (authorId == 0);
+
+    book._authorId = authorId;
+
+    cout << "Editeur :" << endl;
     stream.ignore(1, '\n');
     getline(stream, book._editor, '\n');
-    cout << "Date de sortie" << endl;
+
+    cout << "Date de sortie :" << endl;
     stream >> book._release;
-    cout << "Nombre de pages" << endl;
+
+    cout << "Nombre de pages :" << endl;
     stream >> book._pages;
 
     book.displayGenreFromCli(stream);

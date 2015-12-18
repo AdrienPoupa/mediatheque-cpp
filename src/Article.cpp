@@ -1,5 +1,6 @@
 #include "Article.hpp"
 #include "Artist.hpp"
+#include "Util.hpp"
 
 using namespace std;
 
@@ -267,14 +268,18 @@ ostream& Article::displayGenres(ostream& stream)
 
 istream& Article::displayGenreFromCli(istream& stream)
 {
-    int idGenre1, idGenre2;
-    cout << "ID Genre 1 (0 pour genre inconnu)" << endl;
-    stream >> idGenre1;
-    cout << "ID Genre 2 (0 pour genre inconnu)" << endl;
-    stream >> idGenre2;
+    int genre1 = 0, genre2 = 0;
 
-    _genres.push_back(idGenre1);
-    _genres.push_back(idGenre2);
+    cout << "ID genre 1 (0 pour genre inconnu)" << endl;
+
+    genre1 = Util::displayIdList<Genre>("genres");
+
+    cout << "ID genre 2 (0 pour genre inconnu)" << endl;
+
+    genre2 = Util::displayIdList<Genre>("genres");
+
+    _genres.push_back(genre1);
+    _genres.push_back(genre2);
 
     return stream;
 }
