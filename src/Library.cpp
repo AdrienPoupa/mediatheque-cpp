@@ -1,4 +1,5 @@
 #include "Library.hpp"
+#include <thread>
 
 using namespace std;
 
@@ -6,7 +7,7 @@ class NoDbException: public exception
 {
     virtual const char* what() const throw()
     {
-        return "No DB file available.";
+        return "Le fichier mediatheque.db3 n'est pas accessible.";
     }
 } NoDb;
 
@@ -34,9 +35,19 @@ Library* Library::getSingleton()
 
 Library::Library()
 {
-    cout << "Bienvenue dans votre mediatheque !" << endl;
-    cout << "Timothee Barbot, Adrien Poupa, Edgar Buob" << endl;
-    cout << "Efrei L'3 2018" << endl;
+    cout << "######################################" << endl;
+    cout << "#                                    #" << endl;
+    cout << "# Bienvenue dans votre mediatheque ! #" << endl;
+    cout << "#                                    #" << endl;
+    cout << "#  Realise par:                      #" << endl;
+    cout << "#          - Timothee Barbot         #" << endl;
+    cout << "#          - Adrien Poupa            #" << endl;
+    cout << "#          - Edgar Buob              #" << endl;
+    cout << "#                                    #" << endl;
+    cout << "#         Efrei L'3 2018             #" << endl;
+    cout << "#                                    #" << endl;
+    cout << "######################################" << endl;
+    cout << endl;
 }
 
 Library::~Library()
@@ -87,13 +98,19 @@ bool Library::connect()
 
     do{
         cout << "Liste des comptes disponibles pour l'ouverture:" << endl;
+        cout << " Identifiant | Prenom Nom " << endl;
+        cout << "-------------|-------------------" << endl;
         for (int i = 1; i != totalUsers + 1; i++)
         {
-            cout << users[i]["id"] << ". " << users[i]["name"] << " " << users[i]["surname"] << endl;
+            string space;
+            for(int i = 0; i < (11 - users[i]["id"].length()); i++){
+                space += " ";
+            }
+            cout <<  space << users[i]["id"] << " | " << users[i]["name"] << " " << users[i]["surname"] << endl;
             userIds.insert(stoi(users[i]["id"]));
         }
 
-        cout << "Saisissez le numero du compte a ouvrir" << endl;
+        cout << endl << "Identifiant de connexion : " << endl;
         cin >> idToOpen;
 
         if(cin.fail())
@@ -120,7 +137,7 @@ bool Library::connect()
     bool correctPass = false;
     while(!correctPass && essai > 0)
     {
-        cout << "Identification: rentrez votre mot de passe" << endl;
+        cout << "Mot de passe de connexion : " << endl;
         string inputPassword;
         cin >> inputPassword;
 
@@ -129,7 +146,7 @@ bool Library::connect()
 
         if (correctPass)
         {
-            cout << "Identification reussie!" << endl;
+            cout << "Identification reussie ! " << endl << endl;
         }
         else
         {
@@ -147,32 +164,38 @@ int Library::displayMenu()
     do
     {
         cout << endl;
-        cout << "Menu : tapez le numero de l'action choisie" << endl;
-        cout << "0. Quitter" << endl;
-        cout << "1. Liste des livres" << endl;
-        cout << "2. Liste des dvds" << endl;
-        cout << "3. Liste des cds" << endl;
-        cout << "4. Liste des artistes" << endl;
-        cout << "5. Liste des genres" << endl;
-        cout << "6. Liste des statuts" << endl;
-        cout << "7. Mes emprunts" << endl;
-        cout << "8. Chercher un article" << endl;
-
+        cout << "##############################" << endl;
+        cout << "#                            #" << endl;
+        cout << "#  -- Menu principal --      #" << endl;
+        cout << "#  1. Liste des livres       #" << endl;
+        cout << "#  2. Liste des dvds         #" << endl;
+        cout << "#  3. Liste des cds          #" << endl;
+        cout << "#  4. Liste des artistes     #" << endl;
+        cout << "#  5. Liste des genres       #" << endl;
+        cout << "#  6. Liste des statuts      #" << endl;
+        cout << "#  7. Mes emprunts           #" << endl;
+        cout << "#  8. Chercher un article    #" << endl;
+        
         if (isAdmin())
         {
-            cout << endl << "Menu Administrateur" << endl;
-            cout << "9. Liste des utilisateurs" << endl;
-            cout << "10. Ajouter un utilisateur" << endl;
-            cout << "11. Ajouter un livre" << endl;
-            cout << "12. Ajouter un cd" << endl;
-            cout << "13. Ajouter un dvd" << endl;
-            cout << "14. Ajouter un artiste" << endl;
-            cout << "15. Ajouter un genre" << endl;
-            cout << "16. Ajouter un statuts" << endl;
-            cout << "17. Emprunts en cours" << endl;
+            cout << "#                            #" << endl;
+            cout << "# -- Menu Administrateur --  #" << endl;
+            cout << "#  9. Liste des utilisateurs #" << endl;
+            cout << "# 10. Ajouter un utilisateur #" << endl;
+            cout << "# 11. Ajouter un livre       #" << endl;
+            cout << "# 12. Ajouter un cd          #" << endl;
+            cout << "# 13. Ajouter un dvd         #" << endl;
+            cout << "# 14. Ajouter un artiste     #" << endl;
+            cout << "# 15. Ajouter un genre       #" << endl;
+            cout << "# 16. Ajouter un statuts     #" << endl;
+            cout << "# 17. Emprunts en cours      #" << endl;
         }
+        
+        cout << "#  -----------------------   #" << endl;
+        cout << "#  0. Annuler                #" << endl;
+        cout << "##############################" << endl;
 
-        cout << "Choix: " << endl;
+        cout << "\tChoix: " << endl;
         cin >> choice;
         if(cin.fail()){
             failInput = true;
@@ -418,12 +441,14 @@ void Library::getListEntity(bool askEdit)
             int choice;
             bool failInput = false;
             do {
-                cout << "Filtres possibles:" << endl;
-                cout << "1. Empruntables" << endl;
-                cout << "2. Empruntes" << endl;
-                cout << "3. Tous" << endl;
-                cout << "0. Annuler" << endl;
-                cout << "Choix: " << endl;
+                cout << "----------------------------- " << endl;
+                cout << "| -- Filtres disponibles -- |" << endl;
+                cout << "| 1. Empruntables           |" << endl;
+                cout << "| 2. Empruntes              |" << endl;
+                cout << "| 3. Tous                   |" << endl;
+                cout << "| 0. Annuler                |" << endl;
+                cout << "----------------------------- " << endl;
+                cout << "\tChoix: " << endl;
                 cin >> choice;
                 if(cin.fail())
                 {
@@ -454,12 +479,14 @@ void Library::getListEntity(bool askEdit)
             int choice;
             bool failInput = false;
             do{
-                cout << "Emprunts: choix du filtre" << endl;
-                cout << "1. En cours" << endl;
-                cout << "2. Termines" << endl;
-                cout << "3. Tous" << endl;
-                cout << "0. Annuler" << endl;
-                cout << "Choix: " << endl;
+                cout << "-----------------------------" << endl;
+                cout << "| -- Filtres disponibles -- |" << endl;
+                cout << "| 1. En cours               |" << endl;
+                cout << "| 2. Termines               |" << endl;
+                cout << "| 3. Tous                   |" << endl;
+                cout << "| 0. Annuler                |" << endl;
+                cout << "-----------------------------" << endl;
+                cout << "\tChoix: " << endl;
                 cin >> choice;
                 if(cin.fail()){
                     failInput = true;
@@ -490,7 +517,16 @@ void Library::getListEntity(bool askEdit)
             }
         }
     }
-
+    
+    cout << endl << "Traitement de la recherche en cours ." << flush;
+    for(int i = 0; i < 10; i++){
+        std::this_thread::sleep_for(chrono::milliseconds(100));
+        cout << "." << flush;
+    }
+    cout << endl;
+    
+    
+    
     cout << "Liste des " + (typeStr.substr(typeStr.length()-1, 1) == "s" ? typeStr : typeStr + "s") + " dans la mediatheque:" << endl;
 
     map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], (Util::isFilterableType(type))? filter : "");

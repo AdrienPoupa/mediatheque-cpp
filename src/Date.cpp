@@ -213,7 +213,7 @@ string Date::dateToDB() const
 
 ostream& operator<< (ostream& stream, const Date& date)
 {
-   static char const *name[] =
+   static string name[] =
    {"inconnu", "Janvier", "Fevrier", "Mars", "Avril",
     "Mai", "Juin", "Juillet", "Aout", "Septembre",
     "Octobre", "Novembre", "Decembre"};
@@ -222,7 +222,7 @@ ostream& operator<< (ostream& stream, const Date& date)
         stream << "inconnu";
     }
     else {
-        stream << (date._day != -1 ? to_string(date._day) : "") << ' ' << (date._month != -1 ? name[date._month] : "") << ' ' << (date._year != -1 ? to_string(date._year) : "");
+        stream << (date._day != -1 ? to_string(date._day) + " " : "") << (date._month != -1 ? name[date._month] + " ": "") << (date._year != -1 ? to_string(date._year) : "");
     }
     return stream;
 }
