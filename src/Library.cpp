@@ -324,10 +324,17 @@ void Library::searchList()
     }
     
     int responseId;
+    bool failInput;
     do{
+        failInput = false;
         cout << "Pour voir un article, puis le modifier ou le supprimer, tapez son ID, ou 0 pour revenir au menu precedent." << endl << "Choix: " << endl;
         cin >> responseId;
-    } while(responseId < 0 && responseId > n );
+        if(cin.fail()){
+            failInput = true;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    } while(failInput || responseId < 0 || responseId > n );
     
     if(responseId == 0) return;
     
