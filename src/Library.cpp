@@ -1,6 +1,12 @@
 #include "Library.hpp"
 #include <thread>
 
+#ifdef _WIN32
+#define CLEAN_SCREEN "CLS"
+#else
+#define CLEAN_SCREEN "clear"
+#endif
+
 using namespace std;
 
 class NoDbException: public exception
@@ -35,6 +41,7 @@ Library* Library::getSingleton()
 
 Library::Library()
 {
+    system(CLEAN_SCREEN);
     cout << "######################################" << endl;
     cout << "#                                    #" << endl;
     cout << "# Bienvenue dans votre mediatheque ! #" << endl;
@@ -62,7 +69,11 @@ bool Library::isAdmin()
 
 void Library::run()
 {
-
+    cout << endl << "Chargement en cours (2 sec)" << endl;
+    std::this_thread::sleep_for(chrono::seconds(2));
+    
+    system(CLEAN_SCREEN);
+    
     // connection
     bool connected = connect();
 
@@ -97,7 +108,8 @@ bool Library::connect()
     bool correctId = false;
 
     do{
-        cout << "Liste des comptes disponibles pour l'ouverture:" << endl;
+        cout << "-------------------------------------------------------" << endl;
+        cout << " -- Liste des comptes disponibles pour la connexion --" << endl;
         cout << " Identifiant | Prenom Nom " << endl;
         cout << "-------------|-------------------" << endl;
         for (int i = 1; i != totalUsers + 1; i++)
@@ -158,7 +170,7 @@ bool Library::connect()
 
 int Library::displayMenu()
 {
-
+    system(CLEAN_SCREEN);
     int choice;
     bool failInput = false;
     do
@@ -276,6 +288,7 @@ void Library::redirectChoice(const int choice)
 
 void Library::searchList()
 {
+    system(CLEAN_SCREEN);
     cout << "--------------------------------------" << endl;
     cout << " -- Rechercher dans la mediatheque -- " << endl;
     cout << endl;
@@ -361,7 +374,12 @@ void Library::searchList()
         n++;
     }
     
-    if(totalCount == 0) return;
+    if(totalCount == 0){
+        cout << " ---------- " << endl;
+        cout << "Retour au menu principal ..." << endl;
+        std::this_thread::sleep_for(chrono::seconds(2));
+        return;
+    }
     
     int responseId;
     bool failInput;
@@ -395,6 +413,7 @@ void Library::searchList()
 template <class T>
 void Library::getListEntity(bool askEdit)
 {
+    system(CLEAN_SCREEN);
     map<int, vector<string>> liaison = {
         {Util::Types::Book, {"books", "id, title, author, release"}},
         {Util::Types::Cd, {"cds", "*"}},
@@ -534,6 +553,9 @@ void Library::getListEntity(bool askEdit)
             }
         }
     }
+    else{
+        filter = "borrowable=1";
+    }
     
     cout << endl << "Traitement de la recherche en cours ." << flush;
     for(int i = 0; i < 10; i++){
@@ -587,6 +609,7 @@ void Library::getListEntity(bool askEdit)
 template <class T>
 void Library::seeEntity(int id, bool isTrWithAdmin)
 {
+    system(CLEAN_SCREEN);
     void * art = nullptr;
     Article * artCast = nullptr;
     Transaction * trCast = nullptr;
@@ -683,6 +706,11 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
             tmp.remove();
         }
     }
+    
+    cout << " ---------- " << endl;
+    cout << "Retour au menu principal ..." << endl;
+    std::this_thread::sleep_for(chrono::seconds(2));
+    
     return;
 }
 
@@ -710,7 +738,7 @@ bool Library::affichageChoixSee(const string typeChoix, const string typeArticle
 
 void Library::borrowedMenu()
 {
-    cout << endl;
+    system(CLEAN_SCREEN);
     cout << " --------------------------- " << endl;
     cout << " -- Mes emprunts en cours -- " << endl;
 
@@ -720,7 +748,13 @@ void Library::borrowedMenu()
 
     if (totalCount == 0)
     {
-        cout << "Aucun emprunt en cours" << endl;
+        if(totalCount == 0){
+            cout << "Aucun emprunt en cours" << endl << endl;
+            cout << " ---------- " << endl;
+            cout << "Retour au menu principal ..." << endl;
+            std::this_thread::sleep_for(chrono::seconds(2));
+            return;
+        }
         return;
     }
 

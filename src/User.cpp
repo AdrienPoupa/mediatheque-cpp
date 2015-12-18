@@ -1,3 +1,4 @@
+#include <thread>
 #include "User.hpp"
 #include "Address.hpp"
 #include "BaseModel.hpp"
@@ -166,14 +167,8 @@ bool User::borrow(Article* art, const int type)
 
             return true;
         }
-
-        return false;
     }
-    else{
-        cout << "Vous avez trop d'emprunts en cours. Ramenez vos articles empruntés si vous voulez emprunter cet article" << endl;
-
-        return false;
-    }
+    return false;
 }
 
 bool User::returnArticle(Transaction * t)
