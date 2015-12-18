@@ -112,11 +112,7 @@ void Dvd::edit()
     {
         case 1:
         {
-            int newArtist;
-            cin >> newArtist;
-
-            Util::checkInput(cin, newArtist, 1);
-
+            int newArtist = Util::displayIdList<Artist>("artists");
             setAuthorId(newArtist);
             break;
         }
@@ -130,18 +126,26 @@ void Dvd::edit()
         }
         case 3:
         {
-            string newReleaseDate;
+            Date newReleaseDate;
             cin >> newReleaseDate;
             setRelease(newReleaseDate);
             break;
         }
         case 4:
         {
-            int newLength;
-            cin >> newLength;
-
-            Util::checkInput(cin, newLength, 1);
-
+            int newLength = -1;
+            bool failInput;
+            do{
+                failInput = false;
+                cout << "Saisir nouvel duree: ";
+                cin >> newLength;
+                if(cin.fail()){
+                    failInput = true;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            }while(failInput || newLength <= 0);
+            
             setLength(newLength);
             break;
         }
