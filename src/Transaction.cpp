@@ -495,7 +495,7 @@ ostream& operator<<(ostream& os, const Transaction& transaction)
 istream& operator>>(istream& is, Transaction& transaction)
 {
     cout << "Saisie d'une transaction" << endl;
-    cout << "Utilisateur emprunteur:" << endl;
+    cout << "Utilisateur emprunteur : " << endl;
     //is >> transaction._user; // TODO: sélection d'un utilisateur existant en DB
     return is;
 }

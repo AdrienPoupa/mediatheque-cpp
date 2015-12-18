@@ -68,7 +68,6 @@ std::set<Article*> Artist::getArticles() const
     return _articles;
 }
 
-
 void addArticles(const Article& article)
 {
     // TODO?
