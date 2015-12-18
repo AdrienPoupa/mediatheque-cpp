@@ -33,14 +33,7 @@ Cd::Cd(int id)
 
     if (!data.empty())
     {
-        _id = id;
-        _authorId = stoi(data["artist"]);
-        _title = data["title"];
-        _borrowable = data["borrowable"] != "0";
-        _release = data["release"];
-        _length = stoi(data["length"]);
-        _studio = data["studio"];
-        retrieveGenreFromDB(data);
+        deserialization(data);
     }
     else
     {
@@ -75,6 +68,7 @@ void Cd::deserialization(map<string, string> data)
         _studio = data["studio"];
         _length = data.find("length")!= data.end() ? stoi(data["length"]) : 0;
         retrieveGenreFromDB(data);
+        retrieveStatusFromDB("cd");
     }
 }
 
@@ -112,6 +106,7 @@ void Cd::edit()
         cout << "4. Modifier la duree" << endl;
         cout << "5. Modifier le studio" << endl;
         cout << "6. Modifier les genres" << endl;
+        cout << "7. Modifier les statuts" << endl;
         cout << "0. Annuler" << endl;
         cout << "Choix: ";
         cin >> choice;
@@ -187,6 +182,37 @@ void Cd::edit()
 
             break;
         }
+        case 7:
+        {
+            cout << "Les statuts actuels sont supprimes et remplaces par ceux que vous allez rentrer" << endl;
+            deleteStatus();
+
+            int artistId = 0, positionId = 0;
+
+            cout << "ID de l'artiste a rajouter au status" << endl;
+            cin >> artistId;
+
+            cout << "ID de la position de l'artiste" << endl;
+            cin >> positionId;
+
+            do {
+                Util::checkInput(cin, artistId, 1);
+                Util::checkInput(cin, positionId, 1);
+
+                addStatus(positionId, artistId);
+
+                cout << "ID de l'artiste a rajouter au status, 0 pour arreter" << endl;
+                cin >> artistId;
+
+                if (artistId != 0)
+                {
+                    cout << "ID de la position de l'artiste" << endl;
+                    cin >> positionId;
+                }
+            } while (artistId != 0);
+
+            break;
+        }
         default:
             return;
             break;
@@ -204,12 +230,13 @@ bool Cd::save()
         {"artist", {to_string(_authorId), "int"}},
         {"title", {_title, "string"}},
         {"borrowable", {_borrowable ? "1" : "0", "int"}},
-        {"release", {_release, "string"}},
+        {"release", {_release.dateToDB(), "string"}},
         {"length", {to_string(_length), "int"}},
         {"studio", {_studio, "string"}}
     };
 
     addGenreToDB(data);
+    addStatusToDB();
 
     int res = BaseModel::save(_dbTable, data);
 
