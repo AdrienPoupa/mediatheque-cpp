@@ -344,6 +344,7 @@ void Library::getListEntity(bool askEdit)
 
 
     string filter = "borrowable=1";
+    string filterStr = " empruntable";
     
     if(isAdmin()){
         if(type>= 0 && type <= 2){
@@ -370,9 +371,11 @@ void Library::getListEntity(bool askEdit)
             switch(choice){
                 case 2:
                     filter = "borrowable=0";
+                    filterStr = " emprunte";
                     break;
                 case 3:
                     filter = "";
+                    filterStr = "";
                     break;
                 default:
                     filter = "borrowable=1";
@@ -404,13 +407,17 @@ void Library::getListEntity(bool askEdit)
                 case 1:
                     // En cours
                     filter = "returned=0";
+                    filterStr = " en cours";
                     break;
                 case 2:
                     // Termines
                     filter = "returned=1";
+                    filterStr = " termine";
                     break;
                 default:
                     // Tous = No filter
+                    filterStr = "";
+                    filter = "";
                     break;
             }
         }
@@ -418,13 +425,13 @@ void Library::getListEntity(bool askEdit)
     
     cout << "Liste des " + typeStr + "s" + " dans la mediatheque:" << endl;
 
-    map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], type < 3? filter : "");
+    map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], (type != 3 && type != 4)? filter : "");
 
     int totalCount = (int)response.size();
 
     if (totalCount == 0)
     {
-        cout << "Aucun " + typeStr + " dans la mediatheque" << endl;
+        cout << "Aucun " + typeStr + filterStr + " dans la mediatheque" << endl;
         return;
     }
 
