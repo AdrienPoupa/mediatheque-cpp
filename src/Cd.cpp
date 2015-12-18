@@ -157,7 +157,7 @@ void Cd::edit()
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
             }while(failInput || newLength < 0);
-            
+
             if(newLength != 0){
                 setLength(newLength);
             }
@@ -175,21 +175,21 @@ void Cd::edit()
         {
             cout << "Les genres actuels sont supprimes et remplaces par ceux que vous allez rentrer" << endl;
             deleteGenre();
-            
+
             int genre1 = 0, genre2 = 0;
-            
+
             cout << "ID genre 1" << endl;
-            
+
             genre1 = Util::displayIdList<Genre>("genres");
-            
+
             addGenre(genre1);
-            
+
             cout << "ID genre 2" << endl;
-            
+
             genre1 = Util::displayIdList<Genre>("genres");
-            
+
             addGenre(genre2);
-            
+
             break;
 
         }
@@ -197,31 +197,31 @@ void Cd::edit()
         {
             cout << "Les statuts actuels sont supprimes et remplaces par ceux que vous allez rentrer" << endl;
             deleteStatus();
-            
+
             int artistId = 0, positionId = 0;
-            
+
             cout << "ID de l'artiste a rajouter au status" << endl;
             artistId = Util::displayIdList<Artist>("artists");
-            
+
             cout << "ID de la position de l'artiste" << endl;
             positionId = Util::displayIdList<Status>("status");
-            
+
             do {
                 if (positionId != 0 && artistId != 0)
                 {
                     addStatus(positionId, artistId);
                 }
-                
+
                 cout << "ID de l'artiste a rajouter au status" << endl;
                 artistId = Util::displayIdList<Artist>("artists");
-                
+
                 if (artistId != 0)
                 {
                     cout << "ID de la position de l'artiste" << endl;
                     positionId = Util::displayIdList<Status>("status");
                 }
             } while (artistId != 0);
-            
+
             break;
         }
         default:
@@ -281,25 +281,25 @@ ostream& operator<< (ostream& stream, Cd& cd)
 istream& operator>> (istream& stream, Cd& cd)
 {
     cout << "Saisie d'un CD" << endl;
-    
+
     cout << "Saisie du titre : " << endl;
     stream.ignore(1, '\n');
     getline(stream, cd._title, '\n');
-    
+
     cout << "ID de l'artiste principal : " << endl;
     int authorId;
     do {
-        authorId = Util::displayIdList<Artist>("artistes");
+        authorId = Util::displayIdList<Artist>("artists");
     }while(authorId == 0);
     cd._authorId = authorId;
-    
+
     cout << "Studio" << endl;
     stream.ignore(1, '\n');
     getline(stream, cd._studio, '\n');
-    
+
     cout << "Date de sortie" << endl;
     stream >> cd._release;
-    
+
     cout << "Duree" << endl;
     stream >> cd._length;
 
