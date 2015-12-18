@@ -275,18 +275,38 @@ void User::edit()
         case 6:
         {
             int newIsAdmin;
-            cout << "Tapez 0 pour un utilisateur lambda, 1 pour un administrateur" << endl;
-            cin >> newIsAdmin;
-            Util::checkInput(cin, newIsAdmin, 0);
+            bool failInput;
+            do {
+                failInput = false;
+                cout << "Tapez 0 pour un utilisateur lambda, 1 pour un administrateur : " << endl;
+                cin >> newIsAdmin;
+                if(cin.fail()){
+                    failInput = true;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            }while(failInput);
             setAdmin(newIsAdmin);
             break;
         }
         case 7:
         {
             int newQuota;
-            cin >> newQuota;
-            Util::checkInput(cin, newQuota, 0);
-            setQuota(newQuota);
+            bool failInput;
+            do {
+                failInput = false;
+                cout << "Saisir nouveau quota, ou 0 pour annuler : " << endl;
+                cin >> newQuota;
+                if(cin.fail()){
+                    failInput = true;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            }while(failInput || newQuota < 0);
+            if(newQuota != 0){
+                setQuota(newQuota);
+            }
+            
             break;
         }
         case 8:
@@ -369,26 +389,55 @@ istream& operator>> (istream& stream, User& user)
 {
     string passwordTmp;
 
-    cout << "Saisie d'un user" << endl;
-    cout << "Saisie du prenom" << endl;
+    cout << "Saisie d'un utilisateur" << endl;
+    
+    cout << "Saisie du prenom : " << endl;
     stream.ignore(1, '\n');
     getline(stream, user._firstName, '\n');
-    cout << "Saisie du nom" << endl;
+    
+    cout << "Saisie du nom : " << endl;
     getline(stream, user._lastName, '\n');
-    cout << "Saisie de l'anniversaire" << endl;
+    
+    cout << "Saisie de l'anniversaire : " << endl;
     stream >> user._birthDate;
-    cout << "Saisie du telephone" << endl;
+    
+    cout << "Saisie du telephone : " << endl;
     stream.ignore(1, '\n');
     getline(stream, user._phone, '\n');
-    cout << "Saisie de l'adresse" << endl;
+    
+    cout << "Saisie de l'adresse : " << endl;
     stream >> user._address;
-    cout << "Saisie du mot de passe" << endl;
+    
+    cout << "Saisie du mot de passe : " << endl;
     stream.ignore(1, '\n');
     getline(stream, passwordTmp, '\n');
-    cout << "Tapez 1 si l'utilisateur est administrateur, 0 sinon" << endl;
-    stream >> user._isAdmin;
-    cout << "Saisie du nombre d'emprunts simultanes" << endl;
-    stream >> user._quota;
+    
+    cout << "Tapez 1 si l'utilisateur est administrateur, 0 sinon : " << endl;
+    bool a;
+    bool failInput;
+    do {
+        failInput = false;
+        stream >> a;
+        if(stream.fail()){
+            failInput = true;
+            stream.clear();
+            stream.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    }while(failInput);
+    user._isAdmin = a;
+    
+    cout << "Saisie du nombre d'emprunts simultanes : " << endl;
+    int q;
+    do {
+        failInput = false;
+        stream >> q;
+        if(stream.fail()){
+            failInput = true;
+            stream.clear();
+            stream.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    }while(failInput);
+    user._quota = q;
 
     // Insert the hashed password
     user._password = sha256(passwordTmp);

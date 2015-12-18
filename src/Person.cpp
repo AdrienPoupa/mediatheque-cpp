@@ -80,12 +80,12 @@ ostream& operator<< (ostream& stream, const Person& person)
 istream& operator>> (istream& stream, Person& person)
 {
     cout << "Saisie d'une personne" << endl;
-    cout << "Saisie du prenom" << endl;
+    cout << "Saisie du prenom : " << endl;
     stream.ignore(1, '\n');
     getline(stream, person._firstName, '\n');
-    cout << "Saisie du nom" << endl;
+    cout << "Saisie du nom : " << endl;
     getline(stream, person._lastName, '\n');
-    cout << "Saisie de l'anniversaire" << endl;
+    cout << "Saisie de l'anniversaire : " << endl;
     stream >> person._birthDate;
 
     return stream;

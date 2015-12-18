@@ -281,16 +281,25 @@ ostream& operator<< (ostream& stream, Cd& cd)
 istream& operator>> (istream& stream, Cd& cd)
 {
     cout << "Saisie d'un CD" << endl;
-    cout << "Saisie du titre" << endl;
+    
+    cout << "Saisie du titre : " << endl;
     stream.ignore(1, '\n');
     getline(stream, cd._title, '\n');
-    cout << "ID de l'artiste principal" << endl;
-    stream >> cd._authorId;
+    
+    cout << "ID de l'artiste principal : " << endl;
+    int authorId;
+    do {
+        authorId = Util::displayIdList<Artist>("artistes");
+    }while(authorId == 0);
+    cd._authorId = authorId;
+    
     cout << "Studio" << endl;
     stream.ignore(1, '\n');
     getline(stream, cd._studio, '\n');
+    
     cout << "Date de sortie" << endl;
     stream >> cd._release;
+    
     cout << "Duree" << endl;
     stream >> cd._length;
 
