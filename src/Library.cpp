@@ -1,11 +1,4 @@
 #include "Library.hpp"
-#include <thread>
-
-#ifdef _WIN32
-#define CLEAN_SCREEN "CLS"
-#else
-#define CLEAN_SCREEN "clear"
-#endif
 
 using namespace std;
 
@@ -71,9 +64,9 @@ void Library::run()
 {
     cout << endl << "Chargement en cours (2 sec)" << endl;
     std::this_thread::sleep_for(chrono::seconds(2));
-    
+
     system(CLEAN_SCREEN);
-    
+
     // connection
     bool connected = connect();
 
@@ -185,7 +178,7 @@ int Library::displayMenu()
         cout << "#  4. Liste des artistes     #" << endl;
         cout << "#  5. Mes emprunts           #" << endl;
         cout << "#  6. Chercher un article    #" << endl;
-        
+
         if (isAdmin())
         {
             cout << "#                            #" << endl;
@@ -202,7 +195,7 @@ int Library::displayMenu()
             cout << "# 16. Ajouter un genre       #" << endl;
             cout << "# 17. Ajouter un statuts     #" << endl;
         }
-        
+
         cout << "#  -----------------------   #" << endl;
         cout << "#  0. Annuler                #" << endl;
         cout << "##############################" << endl;
@@ -292,38 +285,38 @@ void Library::searchList()
     cout << "--------------------------------------" << endl;
     cout << " -- Rechercher dans la mediatheque -- " << endl;
     cout << endl;
-    
+
     cout << "Saisisser le titre de l'element que vous cherche : " << endl;
     string query;
     cin.ignore(1, '\n');
     getline(cin, query, '\n');
-    
+
     cout << endl << "Traitement de la recherche en cours ." << flush;
     for(int i = 0; i < 10; i++){
         std::this_thread::sleep_for(chrono::milliseconds(100));
         cout << "." << flush;
     }
     cout << endl << endl;
-    
+
     int totalCount = 0;
 
     map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "title LIKE '%" + query + "%'");
 
     int totalBooks = (int)bibliography.size();
-    
+
     map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "title LIKE '%" + query + "%'");
-    
+
     int totalDvds = (int)dvds.size();
-    
+
     map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "title LIKE '%" + query + "%'");
-    
+
     int totalCds = (int)cds.size();
-    
+
     totalCount = totalBooks + totalCds + totalDvds;
     int n = 1;
-    
+
     vector<Book> bookSet = vector<Book>();
-    
+
     cout << "----------------------" << endl;
     cout << " -- Livres trouves -- " << endl;
     if (totalBooks == 0)
@@ -338,10 +331,10 @@ void Library::searchList()
         bookSet.push_back(tmp);
         n++;
     }
-    
-    
+
+
     vector<Cd> cdSet = vector<Cd>();
-    
+
     cout << "-------------------" << endl;
     cout << " -- CDs trouves -- " << endl;
     if (totalCds == 0)
@@ -358,7 +351,7 @@ void Library::searchList()
     }
 
     vector<Dvd> dvdSet = vector<Dvd>();
-    
+
     cout << "--------------------" << endl;
     cout << " -- DVDs trouves -- " << endl;
     if (totalDvds == 0)
@@ -373,14 +366,14 @@ void Library::searchList()
         dvdSet.push_back(tmp);
         n++;
     }
-    
+
     if(totalCount == 0){
         cout << " ---------- " << endl;
         cout << "Retour au menu principal ..." << endl;
         std::this_thread::sleep_for(chrono::seconds(2));
         return;
     }
-    
+
     int responseId;
     bool failInput;
     do{
@@ -393,11 +386,11 @@ void Library::searchList()
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     } while(failInput || responseId < 0 || responseId > n );
-    
+
     if(responseId == 0) return;
-    
+
     responseId -= 1;
-    
+
     if(responseId >= 0 && responseId < totalBooks){
         seeEntity<Book>(bookSet[responseId].getId());
     }
@@ -407,7 +400,7 @@ void Library::searchList()
     else if(responseId >= totalBooks + totalCds && responseId < n){
         seeEntity<Dvd>(dvdSet[responseId - (totalBooks + totalCds) ].getId());
     }
-    
+
 }
 
 template <class T>
@@ -556,21 +549,21 @@ void Library::getListEntity(bool askEdit)
     else{
         filter = "borrowable=1";
     }
-    
+
     cout << endl << "Traitement de la recherche en cours ." << flush;
     for(int i = 0; i < 10; i++){
         std::this_thread::sleep_for(chrono::milliseconds(100));
         cout << "." << flush;
     }
     cout << endl << endl;
-    
+
     string dash = "";
     for(int i = 0; i < typeStr.length(); i++){
         dash += "-";
     }
-    
+
     bool needS = typeStr.substr(typeStr.length()-1, 1) == "s";
-    
+
     cout << "--------------" << dash << (needS ? "-" : "") << "------------------------"<< endl;
     cout << " -- Liste des " + (needS ? typeStr + "s" : typeStr) + " dans la mediatheque --" << endl << endl;
 
@@ -592,7 +585,7 @@ void Library::getListEntity(bool askEdit)
         tmp.shortDisplay();
         ids.insert(stoi(response[i]["id"]));
     }
-    
+
     cout << " ---------- " << endl;
     if(askEdit){
         int responseId;
@@ -628,7 +621,7 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
         artCast = static_cast<Cd*>(art);
         artCast = new Cd(id);
         typeStr = Util::getTypesString(Util::Types::Cd);
-        
+
     }
     else if (is_same<T, Dvd>::value)
     {
@@ -664,9 +657,9 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
         trCast = static_cast<Transaction*>(art);
         trCast = new Transaction(id);
     }
-    
+
     typeStr = Util::getTypesString(type);
-    
+
     string firstL = typeStr.substr(0, 1);
     set<string> voyelles = {"a", "e", "i", "o", "u", "y"};
     bool needE = voyelles.find(firstL) == voyelles.end();
@@ -674,7 +667,7 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
     for(int i = 0; i < typeStr.length(); i++){
         dash += "-";
     }
-    
+
     T tmp(id);
     cout << "----------------------" << (needE ? "-" : "") << dash << "-----" << endl ;
     cout << " -- Informations sur l" << (needE ? "e " : "'") << typeStr  << " -- "<< endl;
@@ -706,11 +699,11 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
             tmp.remove();
         }
     }
-    
+
     cout << " ---------- " << endl;
     cout << "Retour au menu principal ..." << endl;
     std::this_thread::sleep_for(chrono::seconds(2));
-    
+
     return;
 }
 
