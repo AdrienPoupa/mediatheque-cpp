@@ -423,7 +423,7 @@ void Library::getListEntity(bool askEdit)
         }
     }
     
-    cout << "Liste des " + typeStr + "s" + " dans la mediatheque:" << endl;
+    cout << "Liste des " + (typeStr.substr(typeStr.length()-1, 1) == "s" ? typeStr : typeStr + "s") + " dans la mediatheque:" << endl;
 
     map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], (type != 3 && type != 4)? filter : "");
 
