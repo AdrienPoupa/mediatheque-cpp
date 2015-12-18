@@ -270,11 +270,11 @@ istream& Article::displayGenreFromCli(istream& stream)
 {
     int genre1 = 0, genre2 = 0;
 
-    cout << "ID genre 1 (0 pour genre inconnu)" << endl;
+    cout << "ID genre 1 (0 pour genre inconnu) : " << endl;
 
     genre1 = Util::displayIdList<Genre>("genres");
 
-    cout << "ID genre 2 (0 pour genre inconnu)" << endl;
+    cout << "ID genre 2 (0 pour genre inconnu) : " << endl;
 
     genre2 = Util::displayIdList<Genre>("genres");
 

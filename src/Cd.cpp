@@ -189,7 +189,7 @@ void Cd::edit()
             genre1 = Util::displayIdList<Genre>("genres");
 
             addGenre(genre2);
-
+            
             break;
 
         }
@@ -293,14 +293,14 @@ istream& operator>> (istream& stream, Cd& cd)
     }while(authorId == 0);
     cd._authorId = authorId;
 
-    cout << "Studio" << endl;
+    cout << "Studio : " << endl;
     stream.ignore(1, '\n');
     getline(stream, cd._studio, '\n');
 
-    cout << "Date de sortie" << endl;
+    cout << "Date de sortie : " << endl;
     stream >> cd._release;
 
-    cout << "Duree" << endl;
+    cout << "Duree : " << endl;
     stream >> cd._length;
 
     cd.displayGenreFromCli(stream);

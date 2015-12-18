@@ -367,15 +367,15 @@ istream& operator>> (istream& stream, Dvd& dvd)
 
     int artistId = 0;
 
-    cout << "ID de l'artiste a rajouter au casting, 0 pour ne pas rentrer de casting" << endl;
-    stream >> artistId;
+    cout << "ID de l'artiste a rajouter au casting : " << endl;
+    artistId = Util::displayIdList<Artist>("artists");
 
     while (artistId != 0)
     {
         dvd._casting.push_back(artistId);
 
-        cout << "ID de l'artiste a rajouter au casting, 0 pour arreter" << endl;
-        stream >> artistId;
+        cout << "ID de l'artiste a rajouter au casting : " << endl;
+        artistId = Util::displayIdList<Artist>("artists");
     }
 
     dvd._author = new Artist(dvd._authorId);

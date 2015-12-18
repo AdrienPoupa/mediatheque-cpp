@@ -17,7 +17,7 @@ protected:
     unsigned int _id = 0; // save
     unsigned int _authorId; // save
     Person* _author; // do not save
-    bool _borrowable; // save
+    bool _borrowable = true; // save
     std::vector<int> _genres;
     std::map<int, int> _status;
     Date _release;

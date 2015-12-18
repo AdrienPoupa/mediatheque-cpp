@@ -229,13 +229,13 @@ std::istream& operator>>(std::istream& is, Artist& me)
     is.ignore(1, '\n');
     getline(is, me._firstName, '\n');
     
-    cout << "Saisie du nom : ";
+    cout << "Saisie du nom : " << endl;
     getline(is, me._lastName, '\n');
     
-    cout << "Saisie de la nationalite : ";
+    cout << "Saisie de la nationalite : " << endl;
     getline(is, me._nationality, '\n');
     
-    cout << "Saisie de la date de naissance : ";
+    cout << "Saisie de la date de naissance : " << endl;
     is >> me._birthDate;
 
     return is;

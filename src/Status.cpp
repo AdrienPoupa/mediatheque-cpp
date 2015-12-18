@@ -75,6 +75,7 @@ ostream& operator<< (ostream& stream, const Status& status)
 
 istream& operator>> (istream& stream, Status& status)
 {
+    cout << "Saisie d'une position : " << endl;
     stream.ignore(1, '\n');
     getline(stream, status._name, '\n');
 
