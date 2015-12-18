@@ -26,7 +26,7 @@ protected:
 public:
     virtual ~Article();
 
-    void init(std::map<std::string, std::string> data);
+    virtual void init(std::map<std::string, std::string> data);
 
     unsigned int getId() const;
 

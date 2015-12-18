@@ -122,7 +122,7 @@ void Book::edit()
     {
         case 1:
         {
-            int newArtist = Util::displayIdList<Book>("artists");
+            int newArtist = Util::displayIdList<Artist>("artists");
             setAuthorId(newArtist);
             break;
         }
