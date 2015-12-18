@@ -22,7 +22,7 @@ Status::~Status()
 
 }
 
-Status::Status(const int id)
+Status::Status(int id)
 {
     map<string, string> data = BaseModel::getById("status", id);
 

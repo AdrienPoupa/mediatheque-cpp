@@ -17,7 +17,7 @@ class Status : public Genre {
 
     public:
         Status(const std::string name = "Inconnu");
-        Status(const int id);
+        Status(int id);
         ~Status();
 
         void deserialization(std::map<std::string, std::string> data);

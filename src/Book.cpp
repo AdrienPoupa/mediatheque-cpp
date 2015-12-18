@@ -68,6 +68,7 @@ void Book::deserialization(map<string, string> data)
         _editor = data["editor"];
         _pages = data.find("pages")!= data.end() ? stoi(data["pages"]) : 0;
         retrieveGenreFromDB(data);
+        retrieveStatusFromDB("book");
     }
 }
 
@@ -105,6 +106,7 @@ void Book::edit()
         cout << "4. Modifier le nombre de pages" << endl;
         cout << "5. Modifier l'editeur" << endl;
         cout << "6. Modifier les genres" << endl;
+        cout << "7. Modifier les statuts" << endl;
         cout << "0. Annuler" << endl;
         cout << "Choix: ";
         cin >> choice;
@@ -176,6 +178,37 @@ void Book::edit()
 
             break;
         }
+        case 7:
+        {
+            cout << "Les statuts actuels sont supprimes et remplaces par ceux que vous allez rentrer" << endl;
+            deleteStatus();
+
+            int artistId = 0, positionId = 0;
+
+            cout << "ID de l'artiste a rajouter au status" << endl;
+            cin >> artistId;
+
+            cout << "ID de la position de l'artiste" << endl;
+            cin >> positionId;
+
+            do {
+                Util::checkInput(cin, artistId, 1);
+                Util::checkInput(cin, positionId, 1);
+
+                addStatus(positionId, artistId);
+
+                cout << "ID de l'artiste a rajouter au status, 0 pour arreter" << endl;
+                cin >> artistId;
+
+                if (artistId != 0)
+                {
+                    cout << "ID de la position de l'artiste" << endl;
+                    cin >> positionId;
+                }
+            } while (artistId != 0);
+
+            break;
+        }
         default:
             return;
             break;
@@ -192,13 +225,14 @@ bool Book::save()
         {"id", {to_string(_id), "int"}},
         {"borrowable", {_borrowable ? "1" : "0", "int"}},
         {"title", {_title, "string"}},
-        {"release", {_release, "string"}},
+        {"release", {_release.dateToDB(), "string"}},
         {"author", {to_string(_authorId), "int"}},
         {"editor", {_editor, "string"}},
         {"pages", {to_string(_pages), "int"}},
     };
 
     addGenreToDB(data);
+    addStatusToDB();
 
     int res = BaseModel::save(_dbTable, data);
 
@@ -225,6 +259,7 @@ ostream& operator<< (ostream& stream, Book& book)
     stream << "Date de sortie : " << book._release << endl;
     stream << "Nombre de pages : " << book._pages << endl;
     book.displayGenres(stream);
+    book.displayStatus(stream);
 
     return stream;
 }

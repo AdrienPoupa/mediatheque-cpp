@@ -4,11 +4,13 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <map>
 
 #include "BaseModel.hpp"
 #include "Date.hpp"
 #include "Genre.hpp"
 #include "Person.hpp"
+#include "Status.h"
 
 class Article {
 protected:
@@ -16,11 +18,10 @@ protected:
     unsigned int _authorId; // save
     Person* _author; // do not save
     bool _borrowable; // save
-    std::vector<int> _genres; // contains genres IDs
-    std::string _release; // save
-    std::string _title; // save
-
-    //std::map<int, std::string> _content;
+    std::vector<int> _genres;
+    std::map<int, int> _status;
+    Date _release;
+    std::string _title, _type = "book";
 
 public:
     virtual ~Article();
@@ -39,10 +40,17 @@ public:
     void setAuthorId(const int& newAuthorId);
 
     std::vector<int> getGenres() const;
-    void addGenre(int genreId);
+    void addGenre(const int genreId);
     void deleteGenre();
 
-    std::string getRelease() const;
+    std::map<int, int> getStatus() const;
+    void addStatus(const int statusId, const int artistId);
+    void deleteStatus();
+    std::ostream& displayStatus(std::ostream& stream);
+    void addStatusToDB();
+    void retrieveStatusFromDB(std::string type);
+
+    Date getRelease() const;
     void setRelease(const std::string newRelease);
 
     std::string getTitle() const;
