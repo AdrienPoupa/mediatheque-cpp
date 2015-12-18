@@ -225,12 +225,8 @@ bool Transaction::save()
         {"type", {to_string(_type), "int"}},
         {"date_borrowed", {_beginning.dateToDB(), "string"}},
         {"returned", {_returned ? "1": "0", "int"}},
+        {"date_returned", { _finish.dateToDB(), "string"}},
     };
-
-    if (_id != 0)
-    {
-        tmp.insert({"date_returned", { _finish.dateToDB(), "string"}});
-    }
 
     int res = BaseModel::save("transactions", tmp);
 
@@ -449,7 +445,53 @@ ostream& operator<<(ostream& os, const Transaction& transaction)
 istream& operator>>(istream& is, Transaction& transaction)
 {
     cout << "Saisie d'une transaction" << endl;
-    cout << "Utilisateur emprunteur : " << endl;
-    //is >> transaction._user; // TODO: sélection d'un utilisateur existant en DB
+    cout << "Utilisateur emprunteur :" << endl;
+
+    do {
+        transaction._userId = Util::displayIdList<User>("users");
+    } while (transaction._userId == 0);
+
+    transaction._user = User(transaction._userId);
+
+    cout << "Article emprunte :" << endl;
+
+    do{
+        cout << "Quel type d'article voulez-vous emprunter ? Choix possibles: 1 pour livre, 2 pour cd, 3 pour dvd" << endl;
+        is >> transaction._type;
+    } while (transaction._type != 1 && transaction._type != 2 && transaction._type != 3);
+
+    transaction._type -= 1;
+
+    switch (transaction._type)
+    {
+        case 0:
+        {
+            do {
+                transaction._articleId = Util::displayIdList<Book>("books");
+            } while (transaction._articleId == 0);
+            break;
+        }
+        case 1:
+        {
+            do {
+                transaction._articleId = Util::displayIdList<Cd>("cds");
+            } while (transaction._articleId == 0);
+            break;
+        }
+        case 2:
+        {
+            do {
+                transaction._articleId = Util::displayIdList<Dvd>("dvds");
+            } while (transaction._articleId == 0);
+            break;
+        }
+    }
+
+    cout << "Date de debut d'emprunt : " << endl;
+    is >> transaction._beginning;
+
+    cout << "Date de fin d'emprunt : " << endl;
+    is >> transaction._finish;
+
     return is;
 }
