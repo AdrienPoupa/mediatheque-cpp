@@ -194,6 +194,7 @@ int Library::displayMenu()
             cout << "# 15. Ajouter un artiste     #" << endl;
             cout << "# 16. Ajouter un genre       #" << endl;
             cout << "# 17. Ajouter un statuts     #" << endl;
+            cout << "# 18. Ajouter un emprunt     #" << endl;
         }
 
         cout << "#  -----------------------   #" << endl;
@@ -208,7 +209,7 @@ int Library::displayMenu()
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
 
-    } while(failInput || choice < 0 || (!isAdmin() && choice > 6) || choice > 17);
+    } while(failInput || choice < 0 || (!isAdmin() && choice > 6) || choice > 18);
 
     return choice;
 }
@@ -272,6 +273,9 @@ void Library::redirectChoice(const int choice)
             break;
         case 17:
             addThing<Status>();
+            break;
+        case 18:
+            addThing<Transaction>();
             break;
         default:
             return;
@@ -672,7 +676,7 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
     cout << "----------------------" << (needE ? "-" : "") << dash << "-----" << endl ;
     cout << " -- Informations sur l" << (needE ? "e " : "'") << typeStr  << " -- "<< endl;
     cout << tmp << endl;
-    
+
     // todo : artist -> selection article depuis filmo, biblio, disco
 
     if (artCast != nullptr && artCast->getBorrowable())
