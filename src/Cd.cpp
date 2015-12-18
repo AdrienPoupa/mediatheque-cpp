@@ -207,7 +207,10 @@ void Cd::edit()
             positionId = Util::displayIdList<Status>("status");
             
             do {
-                addStatus(positionId, artistId);
+                if (positionId != 0 && artistId != 0)
+                {
+                    addStatus(positionId, artistId);
+                }
                 
                 cout << "ID de l'artiste a rajouter au status" << endl;
                 artistId = Util::displayIdList<Artist>("artists");
