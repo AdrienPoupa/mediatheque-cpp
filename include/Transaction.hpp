@@ -59,12 +59,6 @@ class Transaction {
         bool getReturned() const;
         void setReturned(const bool returned);
 
-        static void displayCurrentTransactions();
-        static void displayTransactions(const std::string current = "current", const int day_borrowed = 0,
-                                        const int month_borrowed = 0, const int year_borrowed = 0,
-                                        const int day_returned = 0, const int month_returned = 0, const int year_returned = 0);
-        //Transaction getTransaction(int id);
-
         static std::list<Transaction> byUser(const int userId, const bool active);
 
         bool save();

@@ -54,7 +54,7 @@ class Util
         template <class T>
         int static displayIdList(std::string table, std::string fields = "*")
         {
-            std::map<int, std::map<std::string, std::string>> rows = BaseModel::select(table, "*");
+            std::map<int, std::map<std::string, std::string>> rows = BaseModel::select(table, fields);
 
             int totalCount = (int) rows.size();
             std::set<int> ids = std::set<int>();

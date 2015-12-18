@@ -190,50 +190,6 @@ void Transaction::setReturned(const bool returned )
     _returned = returned;
 }
 
-// TODO: day/month/year
-void Transaction::displayTransactions(const string current, const int day_borrowed, const int month_borrowed, const int year_borrowed,
-                                      const int day_returned, const int month_returned, const int year_returned)
-{
-    string condition = (current == "current") ? "AND returned=0" : "";
-
-    SQLite::Database dbTransaction("mediatheque.db3");
-
-    SQLite::Statement query(dbTransaction, "SELECT id, article_id, type, borrower_id, date_borrowed, date_returned, returned FROM transactions WHERE id!=0 "+condition);
-
-    while (query.executeStep())
-    {
-        int id = query.getColumn(0).getInt();
-        int articleId = query.getColumn(1).getInt();
-
-        string type = query.getColumn(2).getText();
-        Article* article;
-        if (type == "book")
-        {
-            article = new Book(articleId);
-        }
-        else if (type == "cd")
-        {
-            article = new Cd(articleId);
-        }
-        else
-        {
-            article = new Dvd(articleId);
-        }
-
-        int _userTmp = query.getColumn(3).getInt();
-        User borrower(_userTmp);
-        string dateTmp = query.getColumn(4).getText();
-        Date beginning(dateTmp);
-        string date2Tmp = query.getColumn(5).getText();
-        Date finish(date2Tmp);
-        int returned = query.getColumn(6).getInt();
-
-        cout << "Transaction #" << id << " : Article  " << article->getTitle() << " emprunte par " << borrower << " le " << beginning << " a rendre le "  << finish << " ";
-        (returned == 0) ? cout << "pas encore rendu" : cout << "rendu";
-        cout << endl;
-    }
-}
-
 list<Transaction> Transaction::byUser(const int userId, const bool active)
 {
 
@@ -312,14 +268,14 @@ void Transaction::edit(){
     bool failInput = false;
     do {
         cout << "Modification d'un emprunt" << endl;
-        
+
         cout << "1. Modifier l'article" << endl;
         cout << "2. Modifier l'utilisateur" << endl;
         cout << "3. Modifier la date d'emprunt" << endl;
         cout << "4. Modifier la date de rendu" << endl;
         cout << "5. Modifier l'état de l'emprunt" << endl;
         cout << "0. Annuler" << endl;
-        
+
         cout << "Choix: ";
         cin >> choice;
         if(cin.fail()){
@@ -328,16 +284,16 @@ void Transaction::edit(){
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     } while(failInput || choice < 0 || choice > 5);
-    
+
     switch (choice)
     {
         case 1:
         {
             Article * prev = _article;
             Article * nArt;
-            
+
             string from = "";
-            
+
             switch (_type) {
                 case Util::Types::Book:
                     from = "books";
@@ -349,17 +305,17 @@ void Transaction::edit(){
                     from = "dvds";
                     break;
             }
-            
-            
+
+
             map<int, map<string, string>> articles = BaseModel::select(from, "id, title", "borrowable=1");
-            
+
             int totalCount = (int) articles.size();
             set<int> articleIds = set<int>();
             for(int i = 1; i <= totalCount; i++){
                 cout << articles[i]["id"] << ". " << articles[i]["title"] << endl;
                 articleIds.insert(stoi(articles[i]["id"]));
             }
-            
+
             int selectedId;
             bool failInput = false;
             do {
@@ -371,14 +327,14 @@ void Transaction::edit(){
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
             }while(failInput || (articleIds.find(selectedId) == articleIds.end() && selectedId != 0));
-            
+
             if(selectedId == 0) break;
-            
+
             _articleId = selectedId;
-            
+
             prev->setBorrowable(true);
             prev->save();
-            
+
             switch (_type) {
                 case Util::Types::Book:
                     nArt = new Book(selectedId);
@@ -390,23 +346,23 @@ void Transaction::edit(){
                     nArt = new Dvd(selectedId);
                     break;
             }
-        
+
             nArt->setBorrowable(false);
             nArt->save();
-            
+
             break;
         }
         case 2:
         {
             map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname");
-            
+
             int totalCount = (int)users.size();
             set<int> userIds = set<int>();
             for(int i = 1; i <= totalCount; i++){
                 cout << users[i]["id"] << ". " << users[i]["name"] << " " << users[i]["surname"] << endl;
                 userIds.insert(stoi(users[i]["id"]));
             }
-            
+
             int selectedId;
             bool failInput = false;
             do {
@@ -418,9 +374,9 @@ void Transaction::edit(){
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
             }while(failInput || userIds.find(selectedId) == userIds.end());
-            
+
             _userId = selectedId;
-            
+
             break;
         }
         case 3:
@@ -454,7 +410,7 @@ void Transaction::edit(){
                 _returned = ret;
             }while(failInput);
             cout << "Nouvel etat: " << (_returned ? "rendu" : "non rendu") << endl;
-            
+
             if(prev != _returned){
                 _article->setBorrowable(!_returned);
                 _article->save();
@@ -465,7 +421,7 @@ void Transaction::edit(){
             return;
             break;
     }
-    
+
     if (choice != 0 )
     {
         cout << "Sauvegarde..." << endl;

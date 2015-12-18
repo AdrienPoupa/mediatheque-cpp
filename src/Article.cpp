@@ -9,11 +9,6 @@ Article::~Article()
 
 }
 
-void Article::deserialization(map<string, string> data)
-{
-    //empty
-}
-
 void Article::init(map<string, string> data){
     this->deserialization(data);
 }
@@ -241,43 +236,43 @@ void Article::editRelease(){
 void Article::editGenres(){
     cout << "Les genres actuels sont supprimes et remplaces par ceux que vous allez rentrer" << endl;
     deleteGenre();
-    
+
     int genre1 = 0, genre2 = 0;
-    
+
     cout << "ID genre 1" << endl;
-    
+
     genre1 = Util::displayIdList<Genre>("genres");
-    
+
     addGenre(genre1);
-    
+
     cout << "ID genre 2" << endl;
-    
+
     genre1 = Util::displayIdList<Genre>("genres");
-    
+
     addGenre(genre2);
 }
 
 void Article::editStatuts(){
     cout << "Les statuts actuels sont supprimes et remplaces par ceux que vous allez rentrer" << endl;
     deleteStatus();
-    
+
     int artistId = 0, positionId = 0;
-    
+
     cout << "ID de l'artiste a rajouter au status" << endl;
     artistId = Util::displayIdList<Artist>("artists");
-    
+
     cout << "ID de la position de l'artiste" << endl;
     positionId = Util::displayIdList<Status>("status");
-    
+
     do {
         if (positionId != 0 && artistId != 0)
         {
             addStatus(positionId, artistId);
         }
-        
+
         cout << "ID de l'artiste a rajouter au status" << endl;
         artistId = Util::displayIdList<Artist>("artists");
-        
+
         if (artistId != 0)
         {
             cout << "ID de la position de l'artiste" << endl;
