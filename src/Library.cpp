@@ -375,10 +375,10 @@ void Library::getListEntity(bool askEdit)
     }
 
 
-    string filter = "borrowable=1";
-    string filterStr = " empruntable";
+    string filter = "";
+    string filterStr = "";
 
-    if(isAdmin()){
+    if(isAdmin() && !askEdit){
         if(type>= 0 && type <= 2){
             int choice;
             bool failInput = false;
@@ -411,6 +411,7 @@ void Library::getListEntity(bool askEdit)
                     break;
                 default:
                     filter = "borrowable=1";
+                    filterStr = " empruntable";
                     break;
             }
         }
@@ -476,13 +477,16 @@ void Library::getListEntity(bool askEdit)
         ids.insert(stoi(response[i]["id"]));
     }
 
-    int responseId;
-    do{
-        cout << "Pour voir un " + typeStr + ", puis le modifier ou le supprimer, tapez son ID, ou 0 pour revenir au menu precedent." << endl << "Choix: " << endl;
-        cin >> responseId;
-    } while(responseId != 0 && !(ids.find(responseId) != ids.end()));
-
-    seeEntity<T>(responseId, is_same<T, Transaction>::value);
+    if(!askEdit){
+        int responseId;
+        do{
+            cout << "Pour voir un " + typeStr + ", puis le modifier ou le supprimer, tapez son ID, ou 0 pour revenir au menu precedent." << endl << "Choix: " << endl;
+            cin >> responseId;
+        } while(responseId != 0 && !(ids.find(responseId) != ids.end()));
+        
+        seeEntity<T>(responseId, is_same<T, Transaction>::value);
+    }
+    
 }
 
 template <class T>

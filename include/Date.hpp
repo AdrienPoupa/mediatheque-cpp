@@ -16,6 +16,7 @@
 class Date
 {
     public:
+        static int monthLength[];
         Date(const int day = -1, const int month = -1, const int year = -1);
         Date(const std::string dateDB);
 
@@ -29,7 +30,11 @@ class Date
         void setYear(const int year);
 
         int daysSoFar() const;
-
+    
+        void addDay(int days);
+        void addMonth(int months);
+        void addYear(int years);
+    
         std::string dateToDB() const;
 
         friend std::ostream& operator<< (std::ostream& stream, const Date& date);
