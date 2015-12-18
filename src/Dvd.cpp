@@ -148,7 +148,7 @@ void Dvd::edit()
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
             }while(failInput || newLength <= 0);
-            
+
             setLength(newLength);
             break;
         }
@@ -341,28 +341,28 @@ ostream& operator<< (ostream& stream, Dvd& dvd)
 istream& operator>> (istream& stream, Dvd& dvd)
 {
     cout << "Saisie d'un dvd" << endl;
-    
+
     cout << "Saisie du titre : " << endl;
     stream.ignore(1, '\n');
     getline(stream, dvd._title, '\n');
-    
+
     cout << "ID du realisateur : " << endl;
     int authorId;
     do {
-        authorId = Util::displayIdList<Artist>("artistes");
+        authorId = Util::displayIdList<Artist>("artists");
     }while(authorId == 0);
     dvd._authorId = authorId;
-    
+
     cout << "Studio : " << endl;
     stream.ignore(1, '\n');
     getline(stream, dvd._studio, '\n');
-    
+
     cout << "Date de sortie : " << endl;
     stream >> dvd._release;
-    
+
     cout << "Duree en minutes : " << endl;
     stream >> dvd._length;
-    
+
     dvd.displayGenreFromCli(stream);
 
     int artistId = 0;
