@@ -123,7 +123,7 @@ Date Article::getRelease() const
     return _release;
 }
 
-void Article::setRelease(const string newRelease)
+void Article::setRelease(const Date newRelease)
 {
     _release = newRelease;
 }

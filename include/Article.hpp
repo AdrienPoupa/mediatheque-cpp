@@ -51,7 +51,7 @@ public:
     void retrieveStatusFromDB(std::string type);
 
     Date getRelease() const;
-    void setRelease(const std::string newRelease);
+    void setRelease(const Date newRelease);
 
     std::string getTitle() const;
     void setTitle(const std::string& newTitle);
