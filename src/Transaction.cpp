@@ -30,7 +30,8 @@ Transaction::Transaction(const int articleId, const int type, const int userId)
     _type = type;
     _userId = userId;
     _beginning = Date();
-    _finish = Date(_beginning.getMonth()+1, _beginning.getDay(), _beginning.getYear()); // By default, allow a month
+    _finish = Date(_beginning);
+    _finish.addMonth(1);
 }
 
 Transaction::Transaction(Article *article, const int type, const User user, const Date beginning, const Date finish) :
@@ -65,32 +66,6 @@ Transaction::Transaction(const int id, const int article_id, const int type, con
     _finish = date_returned;
     _returned = returned;
 }
-
-/*Transaction::Transaction(unsigned int id)
-{
-    SQLite::Database    dbTransaction("mediatheque.db3");
-
-    SQLite::Statement query(dbTransaction, "SELECT article_id, borrower, date, returned, date_returned FROM transactions WHERE id=?");
-    query.bind(1, id);
-
-    while (query.executeStep())
-    {
-        _id = id;
-        _articleTmp = query.getColumn(0).getInt();
-        Article newArticle(_articleTmp);
-        _article = newArticle;
-        _userTmp = query.getColumn(1).getInt();
-        User borrower(_userTmp);
-        _user = borrower;
-        string dateTmp = query.getColumn(2).getText();
-        Date newDate(dateTmp);
-        _beginning = newDate;
-        _returned = query.getColumn(3).getInt();
-        string date2Tmp = query.getColumn(4).getText();
-        Date newDate2(date2Tmp);
-        _finish = newDate2;
-    }
-}*/
 
 Transaction::~Transaction()
 {
@@ -139,7 +114,7 @@ void Transaction::deserialization(map<string, string> data)
         _beginning = Date(data["date_borrowed"]);
         Date finishDefault;
         finishDefault = _beginning;
-        finishDefault.setMonth(_beginning.getMonth() + 1);
+        finishDefault.addMonth(1);
         _finish = data["date_returned"] == "" ? finishDefault: Date(data["date_returned"]);
         _returned = data["returned"] == "1";
     }
@@ -313,6 +288,22 @@ bool Transaction::save()
 
 bool Transaction::remove()
 {
+    if(!_returned){
+        Article * art;
+        switch (_type) {
+            case Util::Types::Book:
+                art = new Book(_articleId);
+                break;
+            case Util::Types::Cd:
+                art = new Cd(_articleId);
+                break;
+            default:
+                art = new Dvd(_articleId);
+                break;
+        }
+        art->setBorrowable(!_returned);
+        art->save();
+    }
     return BaseModel::remove(_dbTable, _id);
 }
 

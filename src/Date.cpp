@@ -5,9 +5,10 @@
 
 using namespace std;
 
+int Date::monthLength[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
 Date::Date (const int month, const int day, const int year)
 {
-    static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
     if (month != -1 && day != -1 && year != -1)
     {
@@ -15,7 +16,7 @@ Date::Date (const int month, const int day, const int year)
         _month = min(_month,12);
 
         _day = max(1, day);
-        _day = min(_day, length[_month]);
+        _day = min(_day, monthLength[_month]);
 
         _year = max(1, year);
     }
@@ -68,8 +69,6 @@ int getMonthFromStr(string date)
 
 int getDayFromStr(string date, int month)
 {
-    static int length[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
     ostringstream ss3;
     ss3 << date.substr(8,2);
     string dayString = ss3.str();
@@ -78,7 +77,7 @@ int getDayFromStr(string date, int month)
     int day;
     ss33 >> day;
     day = max(1, day);
-    day = min(day, length[month]);
+    day = min(day, Date::monthLength[month]);
     return day;
 }
 
@@ -118,11 +117,10 @@ Date::Date (const string dateDB)
 int Date::daysSoFar() const
 {
    int total = 0;
-   static int length[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
    for (int i = 1; i < _month; i++)
    {
-       total += length[i];
+       total += monthLength[i];
    }
 
    total += _day;
@@ -159,6 +157,36 @@ void Date::setYear(const int year)
 int Date::getYear() const
 {
    return _year;
+}
+
+void Date::addDay(int days){
+    _day += days;
+    
+    while(_day > monthLength[_month]){
+        _day -= monthLength[_month];
+        if(_day == 0) _day = 1;
+        _month += 1;
+        if(_month == 13){
+            _year += 1;
+            _month = 1;
+        }
+    }
+}
+
+void Date::addMonth(int months){
+    int days = 0;
+    for(int i = 0; i < months; i++){
+        days += monthLength[_month+i == 13 ? 1 : _month+i];
+    }
+    addDay(days);
+}
+
+void Date::addYear(int years){
+    int days = 0;
+    for(int i = 0; i < years; i++){
+        days += 365;
+    }
+    addDay(days);
 }
 
 // Returns YEAR-MM-DAY to store in DB
