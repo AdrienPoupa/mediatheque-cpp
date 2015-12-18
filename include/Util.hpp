@@ -46,7 +46,42 @@ class Util
         }
 
         bool static checkInput(std::istream& stream, const int intToCheck, const int minValue);
+
         bool static isFilterableType(int type);
+
+        // Should be within cpp, but can't load...
+        template <class T>
+        int static displayIdList(std::string table, std::string fields = "*")
+        {
+            std::map<int, std::map<std::string, std::string>> rows = BaseModel::select(table, fields);
+
+            int totalCount = (int) rows.size();
+            std::set<int> ids = std::set<int>();
+
+            for(int i = 1; i <= totalCount; i++)
+            {
+                T tmp = T();
+                tmp.init(rows[i]);
+                tmp.shortDisplay();
+                ids.insert(stoi(rows[i]["id"]));
+            }
+
+            int selectedId;
+            bool failInput = false;
+            do
+            {
+                std::cout << "Choisir ID: ";
+                std::cin >> selectedId;
+                if(std::cin.fail())
+                {
+                    failInput = true;
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                }
+            } while(failInput || ids.find(selectedId) == ids.end());
+
+            return selectedId;
+        }
 };
 
 #endif // Util_hpp

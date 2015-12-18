@@ -35,6 +35,8 @@ Library* Library::getSingleton()
 Library::Library()
 {
     cout << "Bienvenue dans votre mediatheque !" << endl;
+    cout << "Timothee Barbot, Adrien Poupa, Edgar Buob" << endl;
+    cout << "Efrei L'3 2018" << endl;
 }
 
 Library::~Library()
@@ -468,7 +470,7 @@ void Library::getListEntity(bool askEdit)
     set<int> ids = set<int>();
     for (int i = 1; i != totalCount + 1; i++)
     {
-        T tmp= T();
+        T tmp = T();
         tmp.init(response[i]);
         tmp.shortDisplay();
         ids.insert(stoi(response[i]["id"]));

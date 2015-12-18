@@ -122,11 +122,7 @@ void Book::edit()
     {
         case 1:
         {
-            int newArtist;
-            cin >> newArtist;
-
-            Util::checkInput(cin, newArtist, 1);
-
+            int newArtist = Util::displayIdList<Book>("artists");
             setAuthorId(newArtist);
             break;
         }
