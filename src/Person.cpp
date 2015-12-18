@@ -20,7 +20,8 @@ Person::~Person()
     // Nothing for now
 }
 
-void Person::init(map<string, string> data){
+void Person::init(map<string, string> data)
+{
     this->deserialization(data);
 }
 

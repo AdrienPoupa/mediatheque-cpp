@@ -7,11 +7,13 @@
 #include "Book.hpp"
 #include "Cd.hpp"
 #include "Dvd.hpp"
+#include "Genre.hpp"
+#include "Status.h"
 
 class Util
 {
     public:
-        enum Types{Book, Cd, Dvd, Artist, User, Transaction};
+        enum Types{Book, Cd, Dvd, Artist, User, Genre, Status, Transaction};
 
         static std::string getTypesString(Types type)
         {
@@ -28,6 +30,12 @@ class Util
                     break;
                 case Types::User:
                     return "utilisateur";
+                    break;
+                case Types::Genre:
+                    return "genre";
+                    break;
+                case Types::Status:
+                    return "status";
                     break;
                 case Types::Transaction:
                     return "emprunt";

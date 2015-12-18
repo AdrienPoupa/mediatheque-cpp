@@ -94,11 +94,13 @@ bool Library::connect()
         cout << "Saisissez le numero du compte a ouvrir" << endl;
         cin >> idToOpen;
 
-        if(cin.fail()){
+        if(cin.fail())
+        {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
-        else {
+        else
+        {
             correctId = userIds.find(idToOpen) != userIds.end();
         }
 
@@ -149,19 +151,23 @@ int Library::displayMenu()
         cout << "2. Liste des dvds" << endl;
         cout << "3. Liste des cds" << endl;
         cout << "4. Liste des artistes" << endl;
-        cout << "5. Mes emprunts" << endl;
-        cout << "6. Chercher un article" << endl;
+        cout << "5. Liste des genres" << endl;
+        cout << "6. Liste des statuts" << endl;
+        cout << "7. Mes emprunts" << endl;
+        cout << "8. Chercher un article" << endl;
 
         if (isAdmin())
         {
             cout << endl << "Menu Administrateur" << endl;
-            cout << "7. Liste des utilisateurs" << endl;
-            cout << "8. Ajouter un utilisateur" << endl;
-            cout << "9. Ajouter un livre" << endl;
-            cout << "10. Ajouter un cd" << endl;
-            cout << "11. Ajouter un dvd" << endl;
-            cout << "12. Ajouter un artiste" << endl;
-            cout << "13. Emprunts en cours" << endl;
+            cout << "9. Liste des utilisateurs" << endl;
+            cout << "10. Ajouter un utilisateur" << endl;
+            cout << "11. Ajouter un livre" << endl;
+            cout << "12. Ajouter un cd" << endl;
+            cout << "13. Ajouter un dvd" << endl;
+            cout << "14. Ajouter un artiste" << endl;
+            cout << "15. Ajouter un genre" << endl;
+            cout << "16. Ajouter un statuts" << endl;
+            cout << "17. Emprunts en cours" << endl;
         }
 
         cout << "Choix: " << endl;
@@ -172,7 +178,7 @@ int Library::displayMenu()
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
 
-    } while(failInput || choice < 0 || (!isAdmin() && choice > 6) || choice > 13);
+    } while(failInput || choice < 0 || (!isAdmin() && choice > 8) || choice > 17);
 
     return choice;
 }
@@ -198,31 +204,43 @@ void Library::redirectChoice(const int choice)
             getListEntity<Artist>();
             break;
         case 5:
-            borrowedMenu();
+            getListEntity<Genre>();
             break;
         case 6:
+            getListEntity<Status>();
+            break;
+        case 7:
+            borrowedMenu();
+            break;
+        case 8:
             searchList();
             break;
         // Admin action
-        case 7:
+        case 9:
             getListEntity<User>();
             break;
-        case 8:
+        case 10:
             addThing<User>();
             break;
-        case 9:
+        case 11:
             addThing<Book>();
             break;
-        case 10:
+        case 12:
             addThing<Cd>();
             break;
-        case 11:
+        case 13:
             addThing<Dvd>();
             break;
-        case 12:
+        case 14:
             addThing<Artist>();
             break;
-        case 13:
+        case 15:
+            addThing<Genre>();
+            break;
+        case 16:
+            addThing<Status>();
+            break;
+        case 17:
             getListEntity<Transaction>();
             break;
         default:
@@ -306,6 +324,8 @@ void Library::getListEntity(bool askEdit)
         {Util::Types::Dvd, {"dvds", "*"}},
         {Util::Types::Artist, {"artists", "id, name, surname"}},
         {Util::Types::User, {"users", "*"}},
+        {Util::Types::Genre, {"genres", "*"}},
+        {Util::Types::Status, {"status", "*"}},
         {Util::Types::Transaction, {"transactions", "*"}}
     };
 
@@ -337,6 +357,16 @@ void Library::getListEntity(bool askEdit)
         type = Util::Types::Artist;
         typeStr = Util::getTypesString(Util::Types::Artist);
     }
+    else if (is_same<T, Genre>::value)
+    {
+        type = Util::Types::Genre;
+        typeStr = Util::getTypesString(Util::Types::Genre);
+    }
+    else if (is_same<T, Status>::value)
+    {
+        type = Util::Types::Status;
+        typeStr = Util::getTypesString(Util::Types::Status);
+    }
     else if (is_same<T, Transaction>::value){
         type = Util::Types::Transaction;
         typeStr = Util::getTypesString(Util::Types::Transaction);
@@ -345,7 +375,7 @@ void Library::getListEntity(bool askEdit)
 
     string filter = "borrowable=1";
     string filterStr = " empruntable";
-    
+
     if(isAdmin()){
         if(type>= 0 && type <= 2){
             int choice;
@@ -365,9 +395,9 @@ void Library::getListEntity(bool askEdit)
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
             }while(failInput || choice < 0 || choice > 3);
-            
+
             if(choice == 0) return;
-            
+
             switch(choice){
                 case 2:
                     filter = "borrowable=0";
@@ -399,9 +429,9 @@ void Library::getListEntity(bool askEdit)
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
             } while(failInput || choice < 0 || choice > 3);
-            
+
             if (choice == 0) return;
-            
+
             switch(choice)
             {
                 case 1:
@@ -422,7 +452,7 @@ void Library::getListEntity(bool askEdit)
             }
         }
     }
-    
+
     cout << "Liste des " + (typeStr.substr(typeStr.length()-1, 1) == "s" ? typeStr : typeStr + "s") + " dans la mediatheque:" << endl;
 
     map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], (type != 3 && type != 4)? filter : "");
@@ -493,6 +523,14 @@ void Library::seeEntity(int id)
     {
         type = Util::Types::Artist;
     }
+    else if (is_same<T, Genre>::value)
+    {
+        type = Util::Types::Genre;
+    }
+    else if (is_same<T, Status>::value)
+    {
+        type = Util::Types::Status;
+    }
     else if (is_same<T, Transaction>::value){
         type = Util::Types::Transaction;
         trCast = static_cast<Transaction*>(art);
@@ -518,7 +556,7 @@ void Library::seeEntity(int id)
 
     if (isAdmin())
     {
-        
+
         if (affichageChoixSee("modifier", Util::getTypesString(type)))
         {
             tmp.edit();
@@ -602,4 +640,3 @@ void Library::returnArticle(Transaction *t)
 
     return;
 }
-
