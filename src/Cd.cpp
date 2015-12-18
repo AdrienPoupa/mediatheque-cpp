@@ -122,7 +122,10 @@ void Cd::edit()
         case 1:
         {
             int newArtist = Util::displayIdList<Artist>("artists");
-            setAuthorId(newArtist);
+            if (newArtist != 0)
+            {
+                setAuthorId(newArtist);
+            }
             break;
         }
         case 2:
@@ -146,16 +149,18 @@ void Cd::edit()
             bool failInput;
             do{
                 failInput = false;
-                cout << "Saisir nouvel duree: ";
+                cout << "Saisir nouvel duree (0 pour annuler): ";
                 cin >> newLength;
                 if(cin.fail()){
                     failInput = true;
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
-            }while(failInput || newLength <= 0);
+            }while(failInput || newLength < 0);
             
-            setLength(newLength);
+            if(newLength != 0){
+                setLength(newLength);
+            }
             break;
         }
         case 5:
@@ -168,53 +173,52 @@ void Cd::edit()
         }
         case 6:
         {
+            cout << "Les genres actuels sont supprimes et remplaces par ceux que vous allez rentrer" << endl;
+            deleteGenre();
+            
             int genre1 = 0, genre2 = 0;
-
+            
             cout << "ID genre 1" << endl;
-            cin >> genre1;
-
-            Util::checkInput(cin, genre1, 1);
-
+            
+            genre1 = Util::displayIdList<Genre>("genres");
+            
             addGenre(genre1);
-
+            
             cout << "ID genre 2" << endl;
-            cin >> genre2;
-
-            Util::checkInput(cin, genre2, 1);
-
+            
+            genre1 = Util::displayIdList<Genre>("genres");
+            
             addGenre(genre2);
-
+            
             break;
+
         }
         case 7:
         {
             cout << "Les statuts actuels sont supprimes et remplaces par ceux que vous allez rentrer" << endl;
             deleteStatus();
-
+            
             int artistId = 0, positionId = 0;
-
+            
             cout << "ID de l'artiste a rajouter au status" << endl;
-            cin >> artistId;
-
+            artistId = Util::displayIdList<Artist>("artists");
+            
             cout << "ID de la position de l'artiste" << endl;
-            cin >> positionId;
-
+            positionId = Util::displayIdList<Status>("status");
+            
             do {
-                Util::checkInput(cin, artistId, 1);
-                Util::checkInput(cin, positionId, 1);
-
                 addStatus(positionId, artistId);
-
-                cout << "ID de l'artiste a rajouter au status, 0 pour arreter" << endl;
-                cin >> artistId;
-
+                
+                cout << "ID de l'artiste a rajouter au status" << endl;
+                artistId = Util::displayIdList<Artist>("artists");
+                
                 if (artistId != 0)
                 {
                     cout << "ID de la position de l'artiste" << endl;
-                    cin >> positionId;
+                    positionId = Util::displayIdList<Status>("status");
                 }
             } while (artistId != 0);
-
+            
             break;
         }
         default:

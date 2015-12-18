@@ -147,13 +147,22 @@ void Book::edit()
             break;
         }
         case 4:
-        {
-            int newPages;
-            cin >> newPages;
-
-            Util::checkInput(cin, newPages, 1);
-
-            setPages(newPages);
+        {int newLength = 0;
+            bool failInput;
+            do{
+                failInput = false;
+                cout << "Saisir nombre de pages (0 pour annuler): ";
+                cin >> newLength;
+                if(cin.fail()){
+                    failInput = true;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            }while(failInput || newLength < 0);
+            
+            if(newLength != 0){
+                setPages(newLength);
+            }
             break;
         }
         case 5:
