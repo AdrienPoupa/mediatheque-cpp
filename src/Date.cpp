@@ -231,17 +231,17 @@ istream& operator>> (istream& stream, Date& date)
 {
 
     do {
-        cout << "Saisissez d'abord le jour (de 1 a 31, ou -1 si inconnu) : " << endl;
+        cout << "Saisissez le jour (de 1 a 31, ou -1 si inconnu) : " << endl;
         stream >> date._day;
     }while(date._day < -1 && date._day > 31 && date._day == 0);
     
     do {
-        cout << "Saisissez ensuite le mois (de 1 a 12, ou -1 si inconnu) : " << endl;
+        cout << "Saisissez le mois (de 1 a 12, ou -1 si inconnu) : " << endl;
         stream >> date._month;
     }while(date._month < -1 && date._month > 12 && date._month == 0);
     
     do{
-        cout << "Saisissez enfin l'annee (-1 si inconnu): " << endl;
+        cout << "Saisissez l'annee (-1 si inconnu): " << endl;
         stream >> date._year;
     }while(date._year < -1 && date._year > 9000);
     

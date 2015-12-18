@@ -231,6 +231,7 @@ void User::edit()
     {
         case 1:
         {
+            cout << "Saisir nouveau prenom : " << endl;
             string newName;
             cin.ignore(1, '\n');
             getline(cin, newName, '\n');
@@ -239,6 +240,7 @@ void User::edit()
         }
         case 2:
         {
+            cout << "Saisir nouveau nom : " << endl;
             string newLastName;
             cin.ignore(1, '\n');
             getline(cin, newLastName, '\n');
@@ -247,6 +249,7 @@ void User::edit()
         }
         case 3:
         {
+            cout << "Saisir nouveau numero de telephone : " << endl;
             string newPhone;
             cin.ignore(1, '\n');
             getline(cin, newPhone, '\n');
@@ -255,6 +258,7 @@ void User::edit()
         }
         case 4:
         {
+            cout << "Saisir nouvelle date de naissance : " << endl;
             Date newBirthDate;
             cin >> newBirthDate;
             setBirthDate(newBirthDate);
@@ -262,6 +266,7 @@ void User::edit()
         }
         case 5:
         {
+            cout << "Saisir nouvelle adresse : " << endl;
             Address newAddress;
             cin >> newAddress;
             setAddress(newAddress);
@@ -306,6 +311,7 @@ void User::edit()
         }
         case 8:
         {
+            cout << "Saisir nouveau mot de passe : " << endl;
             string newPassword;
             cin.ignore(1, '\n');
             getline(cin, newPassword, '\n');

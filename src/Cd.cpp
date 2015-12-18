@@ -121,26 +121,17 @@ void Cd::edit()
     {
         case 1:
         {
-            int newArtist = Util::displayIdList<Artist>("artists");
-            if (newArtist != 0)
-            {
-                setAuthorId(newArtist);
-            }
+            editArtist();
             break;
         }
         case 2:
         {
-            string newTitle;
-            cin.ignore(1, '\n');
-            getline(cin, newTitle, '\n');
-            setTitle(newTitle);
+            editTitle();
             break;
         }
         case 3:
         {
-            Date newReleaseDate;
-            cin >> newReleaseDate;
-            setRelease(newReleaseDate);
+            editRelease();
             break;
         }
         case 4:
@@ -173,55 +164,12 @@ void Cd::edit()
         }
         case 6:
         {
-            cout << "Les genres actuels sont supprimes et remplaces par ceux que vous allez rentrer" << endl;
-            deleteGenre();
-
-            int genre1 = 0, genre2 = 0;
-
-            cout << "ID genre 1" << endl;
-
-            genre1 = Util::displayIdList<Genre>("genres");
-
-            addGenre(genre1);
-
-            cout << "ID genre 2" << endl;
-
-            genre1 = Util::displayIdList<Genre>("genres");
-
-            addGenre(genre2);
-            
+            editGenres();
             break;
-
         }
         case 7:
         {
-            cout << "Les statuts actuels sont supprimes et remplaces par ceux que vous allez rentrer" << endl;
-            deleteStatus();
-
-            int artistId = 0, positionId = 0;
-
-            cout << "ID de l'artiste a rajouter au status" << endl;
-            artistId = Util::displayIdList<Artist>("artists");
-
-            cout << "ID de la position de l'artiste" << endl;
-            positionId = Util::displayIdList<Status>("status");
-
-            do {
-                if (positionId != 0 && artistId != 0)
-                {
-                    addStatus(positionId, artistId);
-                }
-
-                cout << "ID de l'artiste a rajouter au status" << endl;
-                artistId = Util::displayIdList<Artist>("artists");
-
-                if (artistId != 0)
-                {
-                    cout << "ID de la position de l'artiste" << endl;
-                    positionId = Util::displayIdList<Status>("status");
-                }
-            } while (artistId != 0);
-
+            editStatuts();
             break;
         }
         default:

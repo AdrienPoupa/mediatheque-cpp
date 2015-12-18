@@ -62,7 +62,13 @@ public:
     void shortDisplay() const;
     std::ostream& displayGenres(std::ostream& stream);
     std::istream& displayGenreFromCli(std::istream& stream);
-
+    
+    void editArtist();
+    void editTitle();
+    void editRelease();
+    void editGenres();
+    void editStatuts();
+    
     virtual void edit() = 0;
 
     virtual bool save() = 0;
