@@ -11,12 +11,14 @@
 #include "Book.hpp"
 #include "Dvd.hpp"
 #include "Cd.hpp"
+#include "Genre.hpp"
 #include "Person.hpp"
 #include "Artist.hpp"
 #include "User.hpp"
 #include "Util.hpp"
 #include "../sqlite/SQLiteCpp.h"
 #include "Transaction.hpp"
+#include "Status.h"
 
 class Library {
     User _currentUser;

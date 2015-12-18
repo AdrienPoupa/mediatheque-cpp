@@ -37,6 +37,39 @@ Genre::Genre(const int id)
     }
 }
 
+void Genre::init(map<string, string> data)
+{
+    this->deserialization(data);
+}
+
+void Genre::shortDisplay() const
+{
+    cout << _id << ". " << _name << endl;
+}
+
+void Genre::deserialization(map<string, string> data)
+{
+    if (!data.empty())
+    {
+        _id = data.find("id")!= data.end() ? stoi(data["id"]): 0;
+        _name = data["genre"];
+    }
+}
+
+void Genre::edit()
+{
+    cout << "Nouveau nom :" << endl;
+    string name;
+    cin.ignore(1, '\n');
+    getline(cin, name, '\n');
+    _name = name;
+
+    cout << "Sauvegarde..." << endl;
+    save();
+
+    return;
+}
+
 int Genre::getId() const
 {
     return _id;
@@ -74,7 +107,7 @@ bool Genre::remove()
 
 ostream& operator<< (ostream& stream, const Genre& genre)
 {
-    stream << genre._name;
+    stream << genre._id << ". " <<  genre._name;
 
     return stream;
 }
