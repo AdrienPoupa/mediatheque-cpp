@@ -344,10 +344,10 @@ void Library::searchList()
         seeEntity<Book>(bookSet[responseId].getId());
     }
     else if(responseId >= totalBooks && responseId < totalBooks + totalCds){
-        seeEntity<Cd>(cdSet[responseId].getId());
+        seeEntity<Cd>(cdSet[responseId - totalBooks].getId());
     }
     else if(responseId >= totalBooks + totalCds && responseId < n){
-        seeEntity<Dvd>(dvdSet[responseId].getId());
+        seeEntity<Dvd>(dvdSet[responseId - (totalBooks + totalCds) ].getId());
     }
     
 }
@@ -625,7 +625,7 @@ bool Library::affichageChoixSee(const string typeChoix, const string typeArticle
     string choice = "";
 
     do {
-        cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' le si oui, 'n' sinon" << endl;
+        cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' si oui, 'n' sinon" << endl;
         cin >> choice;
     } while(choice != "o" && choice !="n");
 
