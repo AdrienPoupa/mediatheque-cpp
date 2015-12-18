@@ -18,7 +18,7 @@ public:
     Person(const std::string lastName = "John", const std::string firstName = "Doe");
     Person(const std::string lastName, const std::string firstName, const Date birthDate);
 
-    void init(std::map<std::string, std::string> data);
+    virtual void init(std::map<std::string, std::string> data);
 
     unsigned int getId() const;
 

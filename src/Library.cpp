@@ -483,10 +483,10 @@ void Library::getListEntity(bool askEdit)
             cout << "Pour voir un " + typeStr + ", puis le modifier ou le supprimer, tapez son ID, ou 0 pour revenir au menu precedent." << endl << "Choix: " << endl;
             cin >> responseId;
         } while(responseId != 0 && !(ids.find(responseId) != ids.end()));
-        
+
         seeEntity<T>(responseId, is_same<T, Transaction>::value);
     }
-    
+
 }
 
 template <class T>
