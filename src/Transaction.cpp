@@ -342,46 +342,76 @@ void Transaction::edit(){
     {
         case 1:
         {
-//            Article * prev = _article;
-//            
-//            
-//            
-//            map<int, map<string, string>> articles = BaseModel::select("", "id, title, type", "borrowable IS 1 ");
-//            
-//            int totalCount = (int) articles.size();
-//            vector<int> articleIds = vector<int>();
-//            for(int i = 1; i <= totalCount; i++){
-//                cout << i << ". " << articles[i]["title"] << Util::getTypesString(Util::Types(stoi(articles[i]["type"])))<< endl;
-//                articleIds.push_back(stoi(articles[i]["id"]));
-//            }
-//            
-//            int selectedId;
-//            bool failInput = false;
-//            do {
-//                cout << "Choisir ID, ou 0 pour annuler: ";
-//                cin >> selectedId;
-//                if(cin.fail()){
-//                    failInput = true;
-//                    cin.clear();
-//                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-//                }
-//            }while(failInput || selectedId < 0 || selectedId > totalCount);
-//            
-//            if(selectedId == 0) break;
-//            
-//            _articleId = articleIds[selectedId];
-//            prev->setBorrowable(true);
-//            prev->save();
-            cout << "Non implemente" << endl;
+            Article * prev = _article;
+            Article * nArt;
+            
+            string from = "";
+            
+            switch (_type) {
+                case Util::Types::Book:
+                    from = "books";
+                    break;
+                case Util::Types::Cd:
+                    from = "cds";
+                    break;
+                default:
+                    from = "dvds";
+                    break;
+            }
+            
+            
+            map<int, map<string, string>> articles = BaseModel::select(from, "id, title", "borrowable=1");
+            
+            int totalCount = (int) articles.size();
+            set<int> articleIds = set<int>();
+            for(int i = 1; i <= totalCount; i++){
+                cout << articles[i]["id"] << ". " << articles[i]["title"] << endl;
+                articleIds.insert(stoi(articles[i]["id"]));
+            }
+            
+            int selectedId;
+            bool failInput = false;
+            do {
+                cout << "Choisir ID, ou 0 pour annuler: ";
+                cin >> selectedId;
+                if(cin.fail()){
+                    failInput = true;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            }while(failInput || (articleIds.find(selectedId) == articleIds.end() && selectedId != 0));
+            
+            if(selectedId == 0) break;
+            
+            _articleId = selectedId;
+            
+            prev->setBorrowable(true);
+            prev->save();
+            
+            switch (_type) {
+                case Util::Types::Book:
+                    nArt = new Book(selectedId);
+                    break;
+                case Util::Types::Cd:
+                    nArt = new Cd(selectedId);
+                    break;
+                default:
+                    nArt = new Dvd(selectedId);
+                    break;
+            }
+        
+            nArt->setBorrowable(false);
+            nArt->save();
+            
             break;
         }
         case 2:
         {
             map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname");
             
-            int totalCount = (int) users.size();
+            int totalCount = (int)users.size();
             set<int> userIds = set<int>();
-            for(int i = 0; i < totalCount; i++){
+            for(int i = 1; i <= totalCount; i++){
                 cout << users[i]["id"] << ". " << users[i]["name"] << " " << users[i]["surname"] << endl;
                 userIds.insert(stoi(users[i]["id"]));
             }
