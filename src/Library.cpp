@@ -672,6 +672,8 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
     cout << "----------------------" << (needE ? "-" : "") << dash << "-----" << endl ;
     cout << " -- Informations sur l" << (needE ? "e " : "'") << typeStr  << " -- "<< endl;
     cout << tmp << endl;
+    
+    // todo : artist -> selection article depuis filmo, biblio, disco
 
     if (artCast != nullptr && artCast->getBorrowable())
     {

@@ -5,12 +5,14 @@
 #include <fstream>
 #include <stdio.h>
 #include <set>
-#include "mingw.thread.hpp"
+
 
 #ifdef _WIN32
 #define CLEAN_SCREEN "CLS"
+#include "mingw.thread.hpp"
 #else
 #define CLEAN_SCREEN "clear"
+#include <thread>
 #endif
 
 #include "BaseModel.hpp"
