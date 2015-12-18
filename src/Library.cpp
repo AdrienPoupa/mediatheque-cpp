@@ -257,64 +257,92 @@ void Library::searchList()
     string query;
     cin.ignore(1, '\n');
     getline(cin, query, '\n');
-
-    cout << "Livres trouves" << endl;
+    
+    int totalCount = 0;
 
     map<int, map<string, string>> bibliography = BaseModel::select("books", "id, title, author, release", "title LIKE '%" + query + "%'");
 
     int totalBooks = (int)bibliography.size();
-
+    
+    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "title LIKE '%" + query + "%'");
+    
+    int totalDvds = (int)dvds.size();
+    
+    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "title LIKE '%" + query + "%'");
+    
+    int totalCds = (int)cds.size();
+    
+    totalCount = totalBooks + totalCds + totalDvds;
+    int n = 1;
+    
+    vector<Book> bookSet = vector<Book>();
+    
+    cout << "Livres trouves : " << endl;
     if (totalBooks == 0)
     {
         cout << "Aucun livre dans la mediatheque" << endl;
     }
-
     for (int i = 1; i != totalBooks + 1; i++)
     {
-        Artist writer(stoi(bibliography[i]["author"]));
-        Date release(bibliography[i]["release"]);
-        cout << bibliography[i]["id"] << ". " << bibliography[i]["title"] << " (" << release << ")" << endl;
+        Book tmp = Book();
+        tmp.init(bibliography[i]);
+        cout << n << ". " << tmp.getTitle() << " (" << tmp.getRelease() << ")" << endl;
+        bookSet.push_back(tmp);
+        n++;
     }
-
-    cout << "CDs trouves" << endl;
-
-    map<int, map<string, string>> cds = BaseModel::select("cds", "id, title, release", "title LIKE '%" + query + "%'");
-
-    int totalCds = (int)cds.size();
-
+    
+    
+    vector<Cd> cdSet = vector<Cd>();
+    
+    cout << "CDs trouves : " << endl;
     if (totalCds == 0)
     {
         cout << "Aucun cd dans la mediatheque" << endl;
     }
-
     for (int i = 1; i != totalCds + 1; i++)
     {
-        Date release(cds[i]["release"]);
-        cout << cds[i]["id"] << ". " << cds[i]["title"] << " (" << release << ")" << endl;
+        Cd tmp = Cd();
+        tmp.init(cds[i]);
+        cout << n << ". " << tmp.getTitle() << " (" << tmp.getRelease() << ")" << endl;
+        cdSet.push_back(tmp);
+        n++;
     }
 
-    cout << "DVDs trouves" << endl;
-
-    map<int, map<string, string>> dvds = BaseModel::select("dvds", "id, title, release", "title LIKE '%" + query + "%'");
-
-    int totalDvds = (int)dvds.size();
-
+    vector<Dvd> dvdSet = vector<Dvd>();
+    cout << "DVDs trouves : " << endl;
     if (totalDvds == 0)
     {
         cout << "Aucun dvd dans la mediatheque" << endl;
     }
-
     for (int i = 1; i != totalDvds + 1; i++)
     {
-        Date release(dvds[i]["release"]);
-        cout << dvds[i]["id"] << ". " << dvds[i]["title"] << " (" << release << ")" << endl;
+        Dvd tmp = Dvd();
+        tmp.init(dvds[i]);
+        cout << n << ". " << tmp.getTitle() << " (" << tmp.getRelease() << ")" << endl;
+        dvdSet.push_back(tmp);
+        n++;
     }
-
-    // Action a proposer avec les resultats.
-    /*
-     On peut aussi demander les filtres avant, et faire differente fonction qui traite chaque table de la DB
-     */
-     return;
+    
+    int responseId;
+    do{
+        cout << "Pour voir un article, puis le modifier ou le supprimer, tapez son ID, ou 0 pour revenir au menu precedent." << endl << "Choix: " << endl;
+        cin >> responseId;
+    } while(responseId < 0 && responseId > n );
+    
+    if(responseId == 0) return;
+    
+    responseId -= 1;
+    
+    if(responseId >= 0 && responseId < totalBooks){
+        seeEntity<Book>(bookSet[responseId].getId());
+    }
+    else if(responseId >= totalBooks && responseId < totalBooks + totalCds){
+        seeEntity<Cd>(cdSet[responseId].getId());
+    }
+    else if(responseId >= totalBooks + totalCds && responseId < n){
+        seeEntity<Dvd>(dvdSet[responseId].getId());
+    }
+    
 }
 
 template <class T>
