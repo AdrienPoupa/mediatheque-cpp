@@ -404,7 +404,7 @@ void Library::searchList()
 }
 
 template <class T>
-void Library::getListEntity(bool askEdit)
+void Library::getListEntity(bool askEdit, int artistFilter)
 {
     system(CLEAN_SCREEN);
     map<int, vector<string>> liaison = {
@@ -420,21 +420,25 @@ void Library::getListEntity(bool askEdit)
 
     int type = 0;
     string typeStr;
+    string artistArticleStr;
 
     if (is_same<T, Cd>::value)
     {
         type = Util::Types::Cd;
         typeStr = Util::getTypesString(Util::Types::Cd);
+        artistArticleStr = "Discographie";
     }
     else if (is_same<T, Dvd>::value)
     {
         type = Util::Types::Dvd;
         typeStr = Util::getTypesString(Util::Types::Dvd);
+        artistArticleStr = "Filmographie";
     }
     else if (is_same<T, Book>::value)
     {
         type = Util::Types::Book;
         typeStr = Util::getTypesString(Util::Types::Book);
+        artistArticleStr = "Bibliographie";
     }
     else if(is_same<T, User>::value)
     {
@@ -555,19 +559,23 @@ void Library::getListEntity(bool askEdit)
         std::this_thread::sleep_for(chrono::milliseconds(100));
         cout << "." << flush;
     }
+    
     cout << endl << endl;
-
-    string dash = "";
-    for(unsigned int i = 0; i < typeStr.length(); i++){
-        dash += "-";
-    }
 
     bool needS = typeStr.substr(typeStr.length()-1, 1) == "s";
 
-    cout << "--------------" << dash << (needS ? "-" : "") << "------------------------"<< endl;
-    cout << " -- Liste des " + (needS ? typeStr + "s" : typeStr) + " dans la mediatheque --" << endl << endl;
+    if(!artistFilter){
+        cout << "--------------" << Util::fillWithDash(typeStr.length()) << (needS ? "-" : "") << "------------------------"<< endl;
+        cout << " -- Liste des " + (needS ? typeStr + "s" : typeStr) + " dans la mediatheque --" << endl << endl;
+    }
+    else{
+                
+        cout << "----" << Util::fillWithDash(artistArticleStr.length()) << "----" << endl;
+        cout << " -- " << artistArticleStr << " -- " << endl;
+    }
+    
 
-    map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], (Util::isFilterableType(type))? filter : "");
+    map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], (!artistFilter ? ((Util::isFilterableType(type))? filter : "") : "artist_id=" + to_string(artistFilter)));
 
     int totalCount = (int)response.size();
 
@@ -605,6 +613,7 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
     system(CLEAN_SCREEN);
     void * art = nullptr;
     Article * artCast = nullptr;
+    Artist * artistCast = nullptr;
     Transaction * trCast = nullptr;
     string typeStr;
 
@@ -663,14 +672,10 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
     string firstL = typeStr.substr(0, 1);
     set<string> voyelles = {"a", "e", "i", "o", "u", "y"};
     bool needE = voyelles.find(firstL) == voyelles.end();
-    string dash = "";
-    for(unsigned int i = 0; i < typeStr.length(); i++){
-        dash += "-";
-    }
 
     T tmp(id);
-    cout << "----------------------" << (needE ? "-" : "") << dash << "-----" << endl ;
-    cout << " -- Informations sur l" << (needE ? "e " : "'") << typeStr  << " -- "<< endl;
+    cout << "----------------------" << (needE ? "--" : "-") << Util::fillWithDash(typeStr.length()) << "----" << endl ;
+    cout << " -- Informations sur l" << (needE ? "e " : "'") << typeStr << " -- "<< endl;
     cout << tmp << endl;
     
     // todo : artist -> selection article depuis filmo, biblio, disco
@@ -687,6 +692,41 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
         {
             returnArticle(trCast);
         }
+    }
+    else if(artistCast != nullptr){
+        int choice;
+        bool failInput;
+        do {
+            failInput = false;
+            cout << "--------------------" << endl;
+            cout << " -- Realisations --" << endl;
+            cout << " 1. Bibliographie " << endl;
+            cout << " 2. Discographie " << endl;
+            cout << " 3. Filmographie " << endl;
+            cout << " 0. Annuler" << endl;
+            cout << "Saisir un choix : " << endl;
+            cin >> choice;
+            if(cin.fail()){
+                failInput = true;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+        }while(failInput || choice < 0 || choice > 3);
+        
+        if(choice != 0){
+            switch(choice){
+                case 1:
+                    getListEntity<Book>(false, artistCast->getId());
+                    break;
+                case 2:
+                    getListEntity<Cd>(false, artistCast->getId());
+                    break;
+                case 3:
+                    getListEntity<Dvd>(false, artistCast->getId());
+                    break;
+            }
+        }
+        
     }
 
     if (isAdmin())

@@ -381,16 +381,14 @@ void Transaction::edit(){
         }
         case 3:
         {
-            cout << "Date d'emprunt actuelle: " << _beginning << endl;
+            cout << "Saisie de la date d'emprunt : " << endl;
             cin >> _beginning;
-            cout << "Nouvelle date d'emprunt: " << _beginning << endl;
             break;
         }
         case 4:
         {
-            cout << "Date de rendu actuelle: " << _finish << endl;
+            cout << "Saisie de la date de retour : " << endl;
             cin >> _finish;
-            cout << "Nouvelle date de rendu: " << _finish << endl;
             break;
         }
         case 5:

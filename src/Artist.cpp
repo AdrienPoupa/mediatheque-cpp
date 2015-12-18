@@ -197,9 +197,9 @@ void Artist::edit()
 std::ostream& operator<<(std::ostream& os, const Artist& me)
 {
     os << me._firstName << " " << me._lastName <<" (" << me._nationality << "), ne(e) le " << me._birthDate << endl;
-    me.discography();
-    me.filmography();
-    me.bibliography();
+//    me.discography();
+//    me.filmography();
+//    me.bibliography();
     return os;
 }
 

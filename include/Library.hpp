@@ -52,7 +52,7 @@ class Library {
         void seeEntity(const int id, bool isTrWithAdmin = false);
 
         template <class T>
-        void getListEntity(bool askEdit = true);
+        void getListEntity(bool askEdit = true, int artistFilter = 0);
 
         bool affichageChoixSee(std::string typeChoix, std::string typeArticle) const;
 
