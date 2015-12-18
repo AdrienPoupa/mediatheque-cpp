@@ -46,6 +46,7 @@ class Util
         }
 
         bool static checkInput(std::istream& stream, const int intToCheck, const int minValue);
+        bool static isFilterableType(int type);
 };
 
 #endif // Util_hpp

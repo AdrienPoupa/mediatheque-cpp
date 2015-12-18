@@ -145,7 +145,7 @@ void Artist::filmography() const
 void Artist::edit()
 {
     int choice;
-
+    bool failInput = false;
     do
     {
         cout << "Modification d'un artiste" << endl;
@@ -157,7 +157,12 @@ void Artist::edit()
         cout << "0. Annuler" << endl;
         cout << "Choix: ";
         cin >> choice;
-    } while(choice < 0 && choice > 4);
+        if(cin.fail()){
+            failInput = true;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    } while(failInput || choice < 0 || choice > 4);
 
     switch (choice)
     {

@@ -455,7 +455,7 @@ void Library::getListEntity(bool askEdit)
 
     cout << "Liste des " + (typeStr.substr(typeStr.length()-1, 1) == "s" ? typeStr : typeStr + "s") + " dans la mediatheque:" << endl;
 
-    map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], (type != 3 && type != 4)? filter : "");
+    map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], (Util::isFilterableType(type))? filter : "");
 
     int totalCount = (int)response.size();
 
@@ -476,15 +476,15 @@ void Library::getListEntity(bool askEdit)
 
     int responseId;
     do{
-        cout << "Pour voir un " + typeStr + ", puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
+        cout << "Pour voir un " + typeStr + ", puis le modifier ou le supprimer, tapez son ID, ou 0 pour revenir au menu precedent." << endl << "Choix: " << endl;
         cin >> responseId;
     } while(responseId != 0 && !(ids.find(responseId) != ids.end()));
 
-    seeEntity<T>(responseId);
+    seeEntity<T>(responseId, is_same<T, Transaction>::value);
 }
 
 template <class T>
-void Library::seeEntity(int id)
+void Library::seeEntity(int id, bool isTrWithAdmin)
 {
     void * art = nullptr;
     Article * artCast = nullptr;
@@ -547,7 +547,7 @@ void Library::seeEntity(int id)
             borrowArticle(artCast, type);
         }
     }
-    else if (trCast != nullptr){
+    else if (trCast != nullptr && !isTrWithAdmin){
         if (affichageChoixSee("rendre", Util::getTypesString(type)))
         {
             returnArticle(trCast);
@@ -556,7 +556,6 @@ void Library::seeEntity(int id)
 
     if (isAdmin())
     {
-
         if (affichageChoixSee("modifier", Util::getTypesString(type)))
         {
             tmp.edit();

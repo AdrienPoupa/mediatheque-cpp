@@ -40,7 +40,7 @@ class Library {
         void redirectChoice(const int choice);
 
         template <class T>
-        void seeEntity(const int id);
+        void seeEntity(const int id, bool isTrWithAdmin = false);
 
         template <class T>
         void getListEntity(bool askEdit = true);
