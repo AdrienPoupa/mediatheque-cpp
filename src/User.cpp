@@ -205,7 +205,8 @@ void User::edit()
     int choice;
     bool failInput = false;
     do {
-        cout << "Modification d'un utilisateur" << endl;
+        cout << "-------------------------------------" << endl;
+        cout << " -- Modification d'un utilisateur -- " << endl;
 
         cout << "1. Modifier le prenom" << endl;
         cout << "2. Modifier le nom" << endl;
@@ -218,7 +219,7 @@ void User::edit()
         cout << "9. Supprimer l'utilisateur" << endl;
         cout << "0. Annuler" << endl;
 
-        cout << "Choix: ";
+        cout << "Choix: " << endl;
         cin >> choice;
         if(cin.fail()){
             failInput = true;
@@ -231,20 +232,12 @@ void User::edit()
     {
         case 1:
         {
-            cout << "Saisir nouveau prenom : " << endl;
-            string newName;
-            cin.ignore(1, '\n');
-            getline(cin, newName, '\n');
-            setFirstName(newName);
+            editFirstname();
             break;
         }
         case 2:
         {
-            cout << "Saisir nouveau nom : " << endl;
-            string newLastName;
-            cin.ignore(1, '\n');
-            getline(cin, newLastName, '\n');
-            setLastName(newLastName);
+            editLastname();
             break;
         }
         case 3:
@@ -258,10 +251,7 @@ void User::edit()
         }
         case 4:
         {
-            cout << "Saisir nouvelle date de naissance : " << endl;
-            Date newBirthDate;
-            cin >> newBirthDate;
-            setBirthDate(newBirthDate);
+            editBirthdate();
             break;
         }
         case 5:

@@ -58,7 +58,7 @@ void Genre::deserialization(map<string, string> data)
 
 void Genre::edit()
 {
-    cout << "Nouveau nom :" << endl;
+    cout << "Nouveau nom : " << endl;
     string name;
     cin.ignore(1, '\n');
     getline(cin, name, '\n');

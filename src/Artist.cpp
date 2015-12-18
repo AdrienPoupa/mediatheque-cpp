@@ -148,14 +148,15 @@ void Artist::edit()
     bool failInput = false;
     do
     {
-        cout << "Modification d'un artiste" << endl;
+        cout << "---------------------------------" << endl;
+        cout << " -- Modification d'un artiste --" << endl;
 
         cout << "1. Modifier le prenom" << endl;
         cout << "2. Modifier le nom" << endl;
         cout << "3. Modifier la date de naissance" << endl;
         cout << "4. Modifier la nationalite" << endl;
         cout << "0. Annuler" << endl;
-        cout << "Choix: ";
+        cout << "Choix: " << endl;
         cin >> choice;
         if(cin.fail()){
             failInput = true;
@@ -168,25 +169,17 @@ void Artist::edit()
     {
         case 1:
         {
-            string newName;
-            cin.ignore(1, '\n');
-            getline(cin, newName, '\n');
-            setFirstName(newName);
+            editFirstname();
             break;
         }
         case 2:
         {
-            string newLastName;
-            cin.ignore(1, '\n');
-            getline(cin, newLastName, '\n');
-            setLastName(newLastName);
+            editLastname();
             break;
         }
         case 3:
         {
-            Date newBirthDate;
-            cin >> newBirthDate;
-            setBirthDate(newBirthDate);
+            editBirthdate();
             break;
         }
         case 4:

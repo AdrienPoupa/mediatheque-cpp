@@ -70,6 +70,27 @@ void Person::setBirthDate(const Date birthDate)
     _birthDate = birthDate;
 }
 
+void Person::editFirstname(){
+    cout << "Saisir nouveau prenom : " << endl;
+    string newName;
+    cin.ignore(1, '\n');
+    getline(cin, newName, '\n');
+    setFirstName(newName);
+}
+void Person::editLastname(){
+    cout << "Saisir nouveau nom : " << endl;
+    string newLastName;
+    cin.ignore(1, '\n');
+    getline(cin, newLastName, '\n');
+    setLastName(newLastName);
+}
+void Person::editBirthdate(){
+    cout << "Saisir nouvelle date de naissance : " << endl;
+    Date newBirthDate;
+    cin >> newBirthDate;
+    setBirthDate(newBirthDate);
+}
+
 ostream& operator<< (ostream& stream, const Person& person)
 {
     stream << person._id << ' ' << person._firstName << ' ' << person._lastName;

@@ -88,7 +88,8 @@ void Dvd::edit()
     bool failInput = false;
     do
     {
-        cout << "Modification d'un DVD" << endl;
+        cout << "-----------------------------" << endl;
+        cout << " -- Modification d'un DVD -- " << endl;
 
         cout << "1. Modifier le realisateur" << endl;
         cout << "2. Modifier le titre" << endl;
@@ -99,7 +100,7 @@ void Dvd::edit()
         cout << "7. Modifier le casting" << endl;
         cout << "8. Modifier les statuts" << endl;
         cout << "0. Annuler" << endl;
-        cout << "Choix: ";
+        cout << "Choix: " << endl;
         cin >> choice;
         if(cin.fail()){
             failInput = true;

@@ -32,7 +32,11 @@ public:
 
     Date getBirthDate() const;
     void setBirthDate(const Date birthDate);
-
+    
+    void editFirstname();
+    void editLastname();
+    void editBirthdate();
+    
     virtual void edit() = 0;
 
     // DB

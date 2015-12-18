@@ -98,7 +98,8 @@ void Cd::edit()
     bool failInput = false;
     do
     {
-        cout << "Modification d'un CD" << endl;
+        cout << "----------------------------" << endl;
+        cout << " -- Modification d'un CD -- " << endl;
 
         cout << "1. Modifier l'artiste" << endl;
         cout << "2. Modifier le titre" << endl;
@@ -108,7 +109,7 @@ void Cd::edit()
         cout << "6. Modifier les genres" << endl;
         cout << "7. Modifier les statuts" << endl;
         cout << "0. Annuler" << endl;
-        cout << "Choix: ";
+        cout << "Choix: " << endl;
         cin >> choice;
         if(cin.fail()){
             failInput = false;

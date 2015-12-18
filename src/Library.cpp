@@ -183,24 +183,24 @@ int Library::displayMenu()
         cout << "#  2. Liste des dvds         #" << endl;
         cout << "#  3. Liste des cds          #" << endl;
         cout << "#  4. Liste des artistes     #" << endl;
-        cout << "#  5. Liste des genres       #" << endl;
-        cout << "#  6. Liste des statuts      #" << endl;
-        cout << "#  7. Mes emprunts           #" << endl;
-        cout << "#  8. Chercher un article    #" << endl;
+        cout << "#  5. Mes emprunts           #" << endl;
+        cout << "#  6. Chercher un article    #" << endl;
         
         if (isAdmin())
         {
             cout << "#                            #" << endl;
             cout << "# -- Menu Administrateur --  #" << endl;
-            cout << "#  9. Liste des utilisateurs #" << endl;
-            cout << "# 10. Ajouter un utilisateur #" << endl;
-            cout << "# 11. Ajouter un livre       #" << endl;
-            cout << "# 12. Ajouter un cd          #" << endl;
-            cout << "# 13. Ajouter un dvd         #" << endl;
-            cout << "# 14. Ajouter un artiste     #" << endl;
-            cout << "# 15. Ajouter un genre       #" << endl;
-            cout << "# 16. Ajouter un statuts     #" << endl;
-            cout << "# 17. Emprunts en cours      #" << endl;
+            cout << "#  7. Liste des utilisateurs #" << endl;
+            cout << "#  8. Liste des genres       #" << endl;
+            cout << "#  9. Liste des statuts      #" << endl;
+            cout << "# 10. Liste des emprunts     #" << endl;
+            cout << "# 11. Ajouter un utilisateur #" << endl;
+            cout << "# 12. Ajouter un livre       #" << endl;
+            cout << "# 13. Ajouter un cd          #" << endl;
+            cout << "# 14. Ajouter un dvd         #" << endl;
+            cout << "# 15. Ajouter un artiste     #" << endl;
+            cout << "# 16. Ajouter un genre       #" << endl;
+            cout << "# 17. Ajouter un statuts     #" << endl;
         }
         
         cout << "#  -----------------------   #" << endl;
@@ -215,7 +215,7 @@ int Library::displayMenu()
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
 
-    } while(failInput || choice < 0 || (!isAdmin() && choice > 8) || choice > 17);
+    } while(failInput || choice < 0 || (!isAdmin() && choice > 6) || choice > 17);
 
     return choice;
 }
@@ -241,44 +241,44 @@ void Library::redirectChoice(const int choice)
             getListEntity<Artist>();
             break;
         case 5:
-            getListEntity<Genre>();
-            break;
-        case 6:
-            getListEntity<Status>();
-            break;
-        case 7:
             borrowedMenu();
             break;
-        case 8:
+        case 6:
             searchList();
             break;
         // Admin action
-        case 9:
+        case 7:
             getListEntity<User>();
             break;
+        case 8:
+            getListEntity<Genre>();
+            break;
+        case 9:
+            getListEntity<Status>();
+            break;
         case 10:
-            addThing<User>();
+            getListEntity<Transaction>();
             break;
         case 11:
-            addThing<Book>();
+            addThing<User>();
             break;
         case 12:
-            addThing<Cd>();
+            addThing<Book>();
             break;
         case 13:
-            addThing<Dvd>();
+            addThing<Cd>();
             break;
         case 14:
-            addThing<Artist>();
+            addThing<Dvd>();
             break;
         case 15:
-            addThing<Genre>();
+            addThing<Artist>();
             break;
         case 16:
-            addThing<Status>();
+            addThing<Genre>();
             break;
         case 17:
-            getListEntity<Transaction>();
+            addThing<Status>();
             break;
         default:
             return;
