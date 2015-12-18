@@ -276,10 +276,21 @@ void Library::redirectChoice(const int choice)
 
 void Library::searchList()
 {
-    cout << "Rechercher dans la mediatheque : rentrez le titre de l'article recherche" << endl;
+    cout << "--------------------------------------" << endl;
+    cout << " -- Rechercher dans la mediatheque -- " << endl;
+    cout << endl;
+    
+    cout << "Saisisser le titre de l'element que vous cherche : " << endl;
     string query;
     cin.ignore(1, '\n');
     getline(cin, query, '\n');
+    
+    cout << endl << "Traitement de la recherche en cours ." << flush;
+    for(int i = 0; i < 10; i++){
+        std::this_thread::sleep_for(chrono::milliseconds(100));
+        cout << "." << flush;
+    }
+    cout << endl << endl;
     
     int totalCount = 0;
 
@@ -300,7 +311,8 @@ void Library::searchList()
     
     vector<Book> bookSet = vector<Book>();
     
-    cout << "Livres trouves : " << endl;
+    cout << "----------------------" << endl;
+    cout << " -- Livres trouves -- " << endl;
     if (totalBooks == 0)
     {
         cout << "Aucun livre dans la mediatheque" << endl;
@@ -317,7 +329,8 @@ void Library::searchList()
     
     vector<Cd> cdSet = vector<Cd>();
     
-    cout << "CDs trouves : " << endl;
+    cout << "-------------------" << endl;
+    cout << " -- CDs trouves -- " << endl;
     if (totalCds == 0)
     {
         cout << "Aucun cd dans la mediatheque" << endl;
@@ -332,7 +345,9 @@ void Library::searchList()
     }
 
     vector<Dvd> dvdSet = vector<Dvd>();
-    cout << "DVDs trouves : " << endl;
+    
+    cout << "--------------------" << endl;
+    cout << " -- DVDs trouves -- " << endl;
     if (totalDvds == 0)
     {
         cout << "Aucun dvd dans la mediatheque" << endl;
@@ -346,11 +361,13 @@ void Library::searchList()
         n++;
     }
     
+    if(totalCount == 0) return;
+    
     int responseId;
     bool failInput;
     do{
         failInput = false;
-        cout << "Pour voir un article, puis le modifier ou le supprimer, tapez son ID, ou 0 pour revenir au menu precedent." << endl << "Choix: " << endl;
+        cout << "Saisissez l'identifiant d'un article pour y acceder, ou 0 pour revenir au menu precedent : " << endl;
         cin >> responseId;
         if(cin.fail()){
             failInput = true;
