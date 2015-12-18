@@ -71,7 +71,7 @@ class Util
             bool failInput = false;
             do
             {
-                std::cout << "Choisir ID: ";
+                std::cout << "Choisir ID (0 pour arreter) : ";
                 std::cin >> selectedId;
                 if(std::cin.fail())
                 {
@@ -79,7 +79,7 @@ class Util
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 }
-            } while(failInput || ids.find(selectedId) == ids.end());
+            } while(failInput || (ids.find(selectedId) == ids.end() && selectedId != 0));
 
             return selectedId;
         }
