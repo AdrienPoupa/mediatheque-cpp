@@ -523,11 +523,17 @@ void Library::getListEntity(bool askEdit)
         std::this_thread::sleep_for(chrono::milliseconds(100));
         cout << "." << flush;
     }
-    cout << endl;
+    cout << endl << endl;
     
+    string dash = "";
+    for(int i = 0; i < typeStr.length(); i++){
+        dash += "-";
+    }
     
+    bool needS = typeStr.substr(typeStr.length()-1, 1) == "s";
     
-    cout << "Liste des " + (typeStr.substr(typeStr.length()-1, 1) == "s" ? typeStr : typeStr + "s") + " dans la mediatheque:" << endl;
+    cout << "--------------" << dash << (needS ? "-" : "") << "------------------------"<< endl;
+    cout << " -- Liste des " + (needS ? typeStr + "s" : typeStr) + " dans la mediatheque --" << endl << endl;
 
     map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], (Util::isFilterableType(type))? filter : "");
 
@@ -547,11 +553,12 @@ void Library::getListEntity(bool askEdit)
         tmp.shortDisplay();
         ids.insert(stoi(response[i]["id"]));
     }
-
+    
+    cout << " ---------- " << endl;
     if(askEdit){
         int responseId;
         do{
-            cout << "Pour voir un " + typeStr + ", puis le modifier ou le supprimer, tapez son ID, ou 0 pour revenir au menu precedent." << endl << "Choix: " << endl;
+            cout << "Saisissez l'identifiant d'un " + typeStr + " pour y accéder ou 0 pour revenir au menu precedent :" << endl;
             cin >> responseId;
         } while(responseId != 0 && !(ids.find(responseId) != ids.end()));
 
@@ -566,6 +573,7 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
     void * art = nullptr;
     Article * artCast = nullptr;
     Transaction * trCast = nullptr;
+    string typeStr;
 
     if (id == 0)
     {
@@ -579,12 +587,15 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
         type = Util::Types::Cd;
         artCast = static_cast<Cd*>(art);
         artCast = new Cd(id);
+        typeStr = Util::getTypesString(Util::Types::Cd);
+        
     }
     else if (is_same<T, Dvd>::value)
     {
         type = Util::Types::Dvd;
         artCast = static_cast<Dvd*>(art);
         artCast = new Dvd(id);
+        typeStr = Util::getTypesString(Util::Types::Dvd);
     }
     else if (is_same<T, Book>::value)
     {
@@ -613,8 +624,20 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
         trCast = static_cast<Transaction*>(art);
         trCast = new Transaction(id);
     }
-
+    
+    typeStr = Util::getTypesString(type);
+    
+    string firstL = typeStr.substr(0, 1);
+    set<string> voyelles = {"a", "e", "i", "o", "u", "y"};
+    bool needE = voyelles.find(firstL) == voyelles.end();
+    string dash = "";
+    for(int i = 0; i < typeStr.length(); i++){
+        dash += "-";
+    }
+    
     T tmp(id);
+    cout << "----------------------" << (needE ? "-" : "") << dash << "-----" << endl ;
+    cout << " -- Informations sur l" << (needE ? "e " : "'") << typeStr  << " -- "<< endl;
     cout << tmp << endl;
 
     if (artCast != nullptr && artCast->getBorrowable())
@@ -670,7 +693,9 @@ bool Library::affichageChoixSee(const string typeChoix, const string typeArticle
 
 void Library::borrowedMenu()
 {
-    cout << "Mes emprunts en cours" << endl;
+    cout << endl;
+    cout << " --------------------------- " << endl;
+    cout << " -- Mes emprunts en cours -- " << endl;
 
     map<int, map<string, string>> transactions = BaseModel::select("transactions", "*", "borrower_id=" + to_string(_currentUser.getId()) +" AND returned=0");
 
@@ -694,7 +719,7 @@ void Library::borrowedMenu()
     int empruntId;
     do
     {
-        cout << "Pour voir un emprunt, puis le modifier ou le supprimer, tapez son ID, et 0 pour revenir au menu." << endl << "Choix: " << endl;
+        cout << "Saisissez l'identifiant d'un emprunt pour y acceder ou 0 pour revenir au menu: " << endl;
         cin >> empruntId;
     } while(empruntId != 0 && !(ids.find(empruntId) != ids.end()));
 

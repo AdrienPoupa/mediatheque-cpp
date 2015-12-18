@@ -58,13 +58,13 @@ ostream& Article::displayStatus(ostream& stream)
 
     if (!status.empty())
     {
-        stream << "Statuts : ";
+        stream << "Statuts : " << endl;
         int totalStatus = (int)status.size();
         for (int i = 1; i != totalStatus + 1; i++)
         {
             Artist actor(stoi(status[i]["artist_id"]));
             Status statu(stoi(status[i]["status_id"]));
-            stream << actor.getFirstName() << " " << actor.getLastName() << " : " << statu.getName();
+            stream << "\t - " << statu.getName()<< " : " <<  actor.getFirstName() << " " << actor.getLastName() << endl;
 
             // Add a comma as long as we didn't reach the last item
             if (i != totalStatus)
@@ -72,7 +72,6 @@ ostream& Article::displayStatus(ostream& stream)
                 stream << ", ";
             }
         }
-        stream << endl;
     }
 
     return stream;
