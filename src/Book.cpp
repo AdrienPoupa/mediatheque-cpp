@@ -95,7 +95,7 @@ void Book::setEditor(const string& editor)
 void Book::edit()
 {
     int choice;
-
+    bool failInput = false;
     do
     {
         cout << "Modification d'un livre" << endl;
@@ -110,8 +110,13 @@ void Book::edit()
         cout << "0. Annuler" << endl;
         cout << "Choix: ";
         cin >> choice;
+        if(cin.fail()){
+            failInput = true;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
 
-    } while(choice < 0 && choice > 6);
+    } while(failInput || choice < 0 || choice > 6);
 
     switch (choice)
     {

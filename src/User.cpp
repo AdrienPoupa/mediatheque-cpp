@@ -208,7 +208,7 @@ bool User::returnArticle(Transaction * t)
 void User::edit()
 {
     int choice;
-
+    bool failInput = false;
     do {
         cout << "Modification d'un utilisateur" << endl;
 
@@ -225,7 +225,12 @@ void User::edit()
 
         cout << "Choix: ";
         cin >> choice;
-    } while(choice < 0 && choice > 9);
+        if(cin.fail()){
+            failInput = true;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    } while(failInput || choice < 0 || choice > 9);
 
     switch (choice)
     {

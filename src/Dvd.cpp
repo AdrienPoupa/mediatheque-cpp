@@ -85,7 +85,7 @@ vector<int> Dvd::getCasting() const
 void Dvd::edit()
 {
     int choice;
-
+    bool failInput = false;
     do
     {
         cout << "Modification d'un DVD" << endl;
@@ -101,7 +101,12 @@ void Dvd::edit()
         cout << "0. Annuler" << endl;
         cout << "Choix: ";
         cin >> choice;
-    } while(choice < 0 && choice > 7);
+        if(cin.fail()){
+            failInput = true;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    } while(failInput || choice < 0 || choice > 7);
 
     switch (choice)
     {

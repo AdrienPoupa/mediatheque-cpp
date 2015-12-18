@@ -95,7 +95,7 @@ void Cd::setLength(const unsigned int& length)
 void Cd::edit()
 {
     int choice;
-
+    bool failInput = false;
     do
     {
         cout << "Modification d'un CD" << endl;
@@ -110,8 +110,12 @@ void Cd::edit()
         cout << "0. Annuler" << endl;
         cout << "Choix: ";
         cin >> choice;
-
-    } while(choice < 0 && choice > 6);
+        if(cin.fail()){
+            failInput = false;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    } while(failInput || choice < 0 || choice > 6);
 
     switch (choice)
     {

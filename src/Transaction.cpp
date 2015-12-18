@@ -317,6 +317,169 @@ bool Transaction::remove()
 }
 
 void Transaction::edit(){
+    int choice;
+    bool failInput = false;
+    do {
+        cout << "Modification d'un emprunt" << endl;
+        
+        cout << "1. Modifier l'article" << endl;
+        cout << "2. Modifier l'utilisateur" << endl;
+        cout << "3. Modifier la date d'emprunt" << endl;
+        cout << "4. Modifier la date de rendu" << endl;
+        cout << "5. Modifier l'état de l'emprunt" << endl;
+        cout << "0. Annuler" << endl;
+        
+        cout << "Choix: ";
+        cin >> choice;
+        if(cin.fail()){
+            failInput = true;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    } while(failInput || choice < 0 || choice > 5);
+    
+    switch (choice)
+    {
+        case 1:
+        {
+            Article * prev = _article;
+            Article * nArt;
+            
+            string from = "";
+            
+            switch (_type) {
+                case Util::Types::Book:
+                    from = "books";
+                    break;
+                case Util::Types::Cd:
+                    from = "cds";
+                    break;
+                default:
+                    from = "dvds";
+                    break;
+            }
+            
+            
+            map<int, map<string, string>> articles = BaseModel::select(from, "id, title", "borrowable=1");
+            
+            int totalCount = (int) articles.size();
+            set<int> articleIds = set<int>();
+            for(int i = 1; i <= totalCount; i++){
+                cout << articles[i]["id"] << ". " << articles[i]["title"] << endl;
+                articleIds.insert(stoi(articles[i]["id"]));
+            }
+            
+            int selectedId;
+            bool failInput = false;
+            do {
+                cout << "Choisir ID, ou 0 pour annuler: ";
+                cin >> selectedId;
+                if(cin.fail()){
+                    failInput = true;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            }while(failInput || (articleIds.find(selectedId) == articleIds.end() && selectedId != 0));
+            
+            if(selectedId == 0) break;
+            
+            _articleId = selectedId;
+            
+            prev->setBorrowable(true);
+            prev->save();
+            
+            switch (_type) {
+                case Util::Types::Book:
+                    nArt = new Book(selectedId);
+                    break;
+                case Util::Types::Cd:
+                    nArt = new Cd(selectedId);
+                    break;
+                default:
+                    nArt = new Dvd(selectedId);
+                    break;
+            }
+        
+            nArt->setBorrowable(false);
+            nArt->save();
+            
+            break;
+        }
+        case 2:
+        {
+            map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname");
+            
+            int totalCount = (int)users.size();
+            set<int> userIds = set<int>();
+            for(int i = 1; i <= totalCount; i++){
+                cout << users[i]["id"] << ". " << users[i]["name"] << " " << users[i]["surname"] << endl;
+                userIds.insert(stoi(users[i]["id"]));
+            }
+            
+            int selectedId;
+            bool failInput = false;
+            do {
+                cout << "Choisir ID: ";
+                cin >> selectedId;
+                if(cin.fail()){
+                    failInput = true;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            }while(failInput || userIds.find(selectedId) == userIds.end());
+            
+            _userId = selectedId;
+            
+            break;
+        }
+        case 3:
+        {
+            cout << "Date d'emprunt actuelle: " << _beginning << endl;
+            cin >> _beginning;
+            cout << "Nouvelle date d'emprunt: " << _beginning << endl;
+            break;
+        }
+        case 4:
+        {
+            cout << "Date de rendu actuelle: " << _finish << endl;
+            cin >> _finish;
+            cout << "Nouvelle date de rendu: " << _finish << endl;
+            break;
+        }
+        case 5:
+        {
+            cout << "Etat actuel: " << (_returned ? "rendu" : "non rendu") << endl;
+            bool prev = _returned;
+            bool ret;
+            bool failInput = false;
+            do {
+                cout << "Rendu: '1' ; Non rendu: '0'. Choix : ";
+                cin >> ret;
+                if(cin.fail()){
+                    failInput = true;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+                _returned = ret;
+            }while(failInput);
+            cout << "Nouvel etat: " << (_returned ? "rendu" : "non rendu") << endl;
+            
+            if(prev != _returned){
+                _article->setBorrowable(!_returned);
+                _article->save();
+            }
+            break;
+        }
+        default:
+            return;
+            break;
+    }
+    
+    if (choice != 0 )
+    {
+        cout << "Sauvegarde..." << endl;
+        save();
+    }
     return;
 }
 
@@ -334,7 +497,7 @@ void Transaction::shortDisplay() const{
 
 ostream& operator<<(ostream& os, const Transaction& transaction)
 {
-    os << "Transaction #" << transaction._id << " : Article  " << transaction._article->getTitle() << " emprunte par " << transaction._user.getFirstName() << " "  <<transaction._user.getLastName() << ", le " << transaction._beginning << " a rendre le "  << transaction._finish << endl;
+    os << "Transaction #" << transaction._id << " : Article  " << transaction._article->getTitle() << " emprunte par " << transaction._user.getFirstName() << " "  <<transaction._user.getLastName() << ", le " << transaction._beginning << " a rendre avant le "  << transaction._finish << " : " << (transaction._returned ? "rendu." : "non rendu.") << endl;
     return os;
 }
 
