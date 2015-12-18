@@ -179,8 +179,7 @@ string Date::dateToDB() const
     ostringstream ss3;
     ss3 << setw(2) << setfill('0') << (_day == -1 ? 0 : _day);
     string day = ss3.str();
-
-    cout << year << "-" << month << "-" << day << endl;
+    
     return year + "-" + month + "-" + day;
 }
 
