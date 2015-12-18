@@ -30,11 +30,6 @@ void Person::shortDisplay() const
     cout << _id << ". " << _firstName << " " << _lastName << endl;
 }
 
-void Person::deserialization(map<string, string> data)
-{
-    //empty
-}
-
 unsigned int Person::getId() const
 {
     return _id;

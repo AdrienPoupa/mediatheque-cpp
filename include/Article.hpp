@@ -30,7 +30,7 @@ public:
 
     unsigned int getId() const;
 
-    virtual void deserialization(std::map<std::string, std::string> data);
+    virtual void deserialization(std::map<std::string, std::string> data) = 0;
 
     bool getBorrowable() const;
     void setBorrowable(const bool& newBorrowable);
@@ -62,13 +62,13 @@ public:
     void shortDisplay() const;
     std::ostream& displayGenres(std::ostream& stream);
     std::istream& displayGenreFromCli(std::istream& stream);
-    
+
     void editArtist();
     void editTitle();
     void editRelease();
     void editGenres();
     void editStatuts();
-    
+
     virtual void edit() = 0;
 
     virtual bool save() = 0;

@@ -68,16 +68,6 @@ std::set<Article*> Artist::getArticles() const
     return _articles;
 }
 
-void addArticles(const Article& article)
-{
-    // TODO?
-}
-
-void removeArticles(const Article& article)
-{
-    // TODO
-}
-
 void Artist::bibliography() const
 {
     cout << "Bibliographie de " << getFirstName() << " " << getLastName() << endl;
@@ -216,17 +206,17 @@ std::ostream& operator<<(std::ostream& os, const Artist& me)
 std::istream& operator>>(std::istream& is, Artist& me)
 {
     cout << "Saisie d'un artiste: " << endl;
-    
+
     cout << "Saisie du prenom : " << endl;
     is.ignore(1, '\n');
     getline(is, me._firstName, '\n');
-    
+
     cout << "Saisie du nom : " << endl;
     getline(is, me._lastName, '\n');
-    
+
     cout << "Saisie de la nationalite : " << endl;
     getline(is, me._nationality, '\n');
-    
+
     cout << "Saisie de la date de naissance : " << endl;
     is >> me._birthDate;
 

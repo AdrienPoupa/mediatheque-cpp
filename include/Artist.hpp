@@ -30,9 +30,6 @@ public:
 
     void deserialization(std::map<std::string, std::string> data);
 
-    void addArticles(const Article& article);
-    void removeArticles(const Article& article);
-
     void bibliography() const;
     void discography() const;
     void filmography() const;

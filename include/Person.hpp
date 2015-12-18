@@ -22,7 +22,7 @@ public:
 
     unsigned int getId() const;
 
-    virtual void deserialization(std::map<std::string, std::string> data);
+    virtual void deserialization(std::map<std::string, std::string> data) = 0;
 
     std::string getLastName() const;
     void setLastName(const std::string lastName);
@@ -32,11 +32,11 @@ public:
 
     Date getBirthDate() const;
     void setBirthDate(const Date birthDate);
-    
+
     void editFirstname();
     void editLastname();
     void editBirthdate();
-    
+
     virtual void edit() = 0;
 
     // DB
