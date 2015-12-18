@@ -108,7 +108,7 @@ bool Library::connect()
         for (int i = 1; i != totalUsers + 1; i++)
         {
             string space;
-            for(int i = 0; i < (11 - users[i]["id"].length()); i++){
+            for(unsigned int i = 0; i < (11 - users[i]["id"].length()); i++){
                 space += " ";
             }
             cout <<  space << users[i]["id"] << " | " << users[i]["name"] << " " << users[i]["surname"] << endl;
@@ -558,7 +558,7 @@ void Library::getListEntity(bool askEdit)
     cout << endl << endl;
 
     string dash = "";
-    for(int i = 0; i < typeStr.length(); i++){
+    for(unsigned int i = 0; i < typeStr.length(); i++){
         dash += "-";
     }
 
@@ -664,7 +664,7 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
     set<string> voyelles = {"a", "e", "i", "o", "u", "y"};
     bool needE = voyelles.find(firstL) == voyelles.end();
     string dash = "";
-    for(int i = 0; i < typeStr.length(); i++){
+    for(unsigned int i = 0; i < typeStr.length(); i++){
         dash += "-";
     }
 
