@@ -293,7 +293,7 @@ bool Transaction::save()
         {"borrower_id", {to_string(_userId), "int"}},
         {"type", {to_string(_type), "int"}},
         {"date_borrowed", {_beginning.dateToDB(), "string"}},
-        {"returned", {to_string(_returned), "int"}},
+        {"returned", {_returned ? "1": "0", "int"}},
     };
 
     if (_id != 0)

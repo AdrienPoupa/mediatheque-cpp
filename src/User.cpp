@@ -82,7 +82,7 @@ void User::deserialization(map<string, string> data){
         _birthDate = data.find("birthdate") != data.end() ? Date(data["birthdate"]) : Date();
         _phone = data["phone"];
         _address = Address(data.find("house_number") != data.end() ? stoi(data["house_number"]) : 0, data["street"], data["postal_code"], data["town"], data["country"]);
-        _isAdmin = data.find("isAdmin") != data.end() ? stoi(data["isadmin"]) : 0;
+        _isAdmin = data.find("isadmin") != data.end() ? stoi(data["isadmin"]) : 0;
         _quota = data.find("quota") != data.end() ? stoi(data["quota"]) : 0;
         _password = data["password"];
     }
@@ -148,14 +148,13 @@ void User::setQuota(const int quota)
 
 bool User::checkQuota() const
 {
-    return true;//Transaction::byUser(_id, true).size() < _quota; // TODO
+    return _quota > BaseModel::getCount("transactions", "borrower_id=" + to_string(_id) + " AND returned=0");
 }
 
 bool User::borrow(Article* art, const int type)
 {
     if (checkQuota())
     {
-
         Transaction t(art->getId(), type, _id);
 
         if (t.save())
@@ -164,10 +163,6 @@ bool User::borrow(Article* art, const int type)
             // update borrowable of article
             (*art).setBorrowable(false);
             (*art).save();
-
-            // update quota
-            _quota -= 1;
-            save();
 
             return true;
         }

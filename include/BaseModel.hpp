@@ -14,6 +14,7 @@ private:
 
 public:
     static std::map<std::string, std::string> getById(const std::string& table, const int& id);
+    static int getCount(const std::string& table, std::string filter = "");
     static std::map<int, std::map<std::string, std::string>> select(const std::string& table, const std::string& fields = "*", const std::string& where = "");
     static int save(const std::string& table, std::map<std::string, std::vector<std::string>> data);
     static bool remove(const std::string& table, const int& id);

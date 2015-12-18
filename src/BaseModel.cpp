@@ -197,6 +197,29 @@ int BaseModel::save(const string& table, map<string, vector<string>> data)
     }
 }
 
+int BaseModel::getCount(const string& table, string filter){
+    
+    if (filter != ""){
+        filter = " WHERE " + filter;
+    }
+    try
+    {
+        SQLite::Database db("mediatheque.db3");
+        
+        SQLite::Statement query(db, "SELECT count(*) FROM " + table + filter);
+        
+        while (query.executeStep())
+        {
+            return query.getColumn(0);
+        }
+        
+        
+    } catch (exception& e) {
+        cout << "exception: " << e.what() << endl;
+    }
+    return 0;
+}
+
 bool BaseModel::remove(const string& table, const int& id)
 {
 
