@@ -110,7 +110,7 @@ bool Library::connect()
         {
             string space, star = "";
 
-            for(unsigned int i = 0; i < (13 - users[i]["id"].length()); i++){
+            for(unsigned int i = 0; i < (11 - users[i]["id"].length()); i++){
                 space += " ";
             }
 
