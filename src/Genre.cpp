@@ -107,7 +107,7 @@ bool Genre::remove()
 
 ostream& operator<< (ostream& stream, const Genre& genre)
 {
-    stream << genre._id << ". " <<  genre._name;
+    stream <<  genre._name;
 
     return stream;
 }

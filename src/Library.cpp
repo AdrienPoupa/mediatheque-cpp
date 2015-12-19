@@ -92,7 +92,7 @@ void Library::run()
 
 bool Library::connect()
 {
-    map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname");
+    map<int, map<string, string>> users = BaseModel::select("users", "id, name, surname, isadmin");
 
     int totalUsers = (int)users.size();
 
@@ -103,15 +103,23 @@ bool Library::connect()
     do{
         cout << "-------------------------------------------------------" << endl;
         cout << " -- Liste des comptes disponibles pour la connexion --" << endl;
+        cout << " --   Les administrateurs sont indiques par une *   --" << endl;
         cout << " Identifiant | Prenom Nom " << endl;
         cout << "-------------|-------------------" << endl;
         for (int i = 1; i != totalUsers + 1; i++)
         {
-            string space;
-            for(unsigned int i = 0; i < (11 - users[i]["id"].length()); i++){
+            string space, star = "";
+
+            for(unsigned int i = 0; i < (13 - users[i]["id"].length()); i++){
                 space += " ";
             }
-            cout <<  space << users[i]["id"] << " | " << users[i]["name"] << " " << users[i]["surname"] << endl;
+
+            if (users[i]["isadmin"] == "1")
+            {
+                star = "* ";
+            }
+
+            cout << space << users[i]["id"] << " | " << star << users[i]["name"] << " " << users[i]["surname"] << endl;
             userIds.insert(stoi(users[i]["id"]));
         }
 
@@ -567,7 +575,7 @@ void Library::getListEntity(bool askEdit, int artistFilter)
         std::this_thread::sleep_for(chrono::milliseconds(100));
         cout << "." << flush;
     }
-    
+
     cout << endl << endl;
 
     bool needS = typeStr.substr(typeStr.length()-1, 1) != "s";
@@ -577,17 +585,17 @@ void Library::getListEntity(bool askEdit, int artistFilter)
         cout << " -- Liste des " + (needS ? typeStr + "s" : typeStr) + " dans la mediatheque --" << endl << endl;
     }
     else{
-                
+
         cout << "----" << Util::fillWithDash(artistArticleStr.length()) << "----" << endl;
         cout << " -- " << artistArticleStr << " -- " << endl;
     }
-    
+
     string completeFilter = "";
-    
+
     if(Util::isFilterableType(type)){
         completeFilter += filter;
     }
-       
+
     if(artistFilter){
         if(completeFilter.length()>0){
             completeFilter += " AND ";
@@ -618,7 +626,7 @@ void Library::getListEntity(bool askEdit, int artistFilter)
     if(askEdit){
         int responseId;
         do{
-            cout << "Saisissez l'identifiant d'un " + typeStr + " pour y accéder ou 0 pour revenir au menu precedent :" << endl;
+            cout << "Saisissez l'identifiant d'un " + typeStr + " pour y acceder ou 0 pour revenir au menu precedent :" << endl;
             cin >> responseId;
         } while(responseId != 0 && !(ids.find(responseId) != ids.end()));
 
@@ -734,7 +742,7 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
         }while(failInput || choice < 0 || choice > 3);
-        
+
         if(choice != 0){
             switch(choice){
                 case 1:
@@ -748,7 +756,7 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
                     break;
             }
         }
-        
+
     }
 
     if (isAdmin())
@@ -783,10 +791,15 @@ void Library::addThing()
 
 bool Library::affichageChoixSee(const string typeChoix, const string typeArticle) const
 {
-    string choice = "";
+    string choice = "", liaison = "ce";
+
+    if (typeArticle == "utilisateur")
+    {
+        liaison = "cet";
+    }
 
     do {
-        cout << "Voulez-vous " + typeChoix + " ce " + typeArticle + " ? Tapez 'o' si oui, 'n' sinon" << endl;
+        cout << "Voulez-vous " + typeChoix + " " + liaison + " " + typeArticle + " ? Tapez 'o' si oui, 'n' sinon" << endl;
         cin >> choice;
     } while(choice != "o" && choice !="n");
 

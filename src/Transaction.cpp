@@ -269,7 +269,7 @@ void Transaction::edit(){
         cout << "2. Modifier l'utilisateur" << endl;
         cout << "3. Modifier la date d'emprunt" << endl;
         cout << "4. Modifier la date de rendu" << endl;
-        cout << "5. Modifier l'état de l'emprunt" << endl;
+        cout << "5. Modifier l'etat de l'emprunt" << endl;
         cout << "0. Annuler" << endl;
 
         cout << "Choix: ";

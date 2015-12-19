@@ -160,7 +160,7 @@ bool User::borrow(Article* art, const int type)
 
         if (t.save())
         {
-            cout << "Emprunt validé !" << endl;
+            cout << "Emprunt valide !" << endl;
             // update borrowable of article
             (*art).setBorrowable(false);
             (*art).save();
@@ -191,7 +191,7 @@ bool User::returnArticle(Transaction * t)
 
     if (t->save())
     {
-        cout << "Rendu validé!" << endl;
+        cout << "Rendu valide !" << endl;
         art->setBorrowable(true);
         art->save();
 
@@ -366,11 +366,18 @@ void User::shortDisplay() const
 
 ostream& operator<< (ostream& stream, const User& user)
 {
+    string isAdmin = "Non";
+
+    if (user._isAdmin == true)
+    {
+        isAdmin = "Oui";
+    }
+
     stream << user._id << ". " << user._firstName << " " << user._lastName << endl;
     stream << "Anniversaire: " << user._birthDate << endl;
     stream << "Telephone: " << user._phone << endl;
     stream << "Adresse: " << user._address << endl;
-    stream << "Est admin: " << user._isAdmin << endl;
+    stream << "Est admin: " << isAdmin << endl;
     stream << "Nombre d'emprunts simultanes: " << user._quota << endl;
 
     return stream;
