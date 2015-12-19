@@ -298,7 +298,7 @@ void Library::searchList()
     cout << " -- Rechercher dans la mediatheque -- " << endl;
     cout << endl;
 
-    cout << "Saisisser le titre de l'element que vous cherche : " << endl;
+    cout << "Saisissez le titre de l'element que vous cherchez : " << endl;
     string query;
     cin.ignore(1, '\n');
     getline(cin, query, '\n');
