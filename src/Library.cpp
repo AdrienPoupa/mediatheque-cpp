@@ -424,24 +424,28 @@ void Library::getListEntity(bool askEdit, int artistFilter)
 
     int type = 0;
     string typeStr;
+    string artistFilterStr;
     string artistArticleStr;
 
     if (is_same<T, Cd>::value)
     {
         type = Util::Types::Cd;
         typeStr = Util::getTypesString(Util::Types::Cd);
+        artistFilterStr = "artist";
         artistArticleStr = "Discographie";
     }
     else if (is_same<T, Dvd>::value)
     {
         type = Util::Types::Dvd;
         typeStr = Util::getTypesString(Util::Types::Dvd);
+        artistFilterStr = "director";
         artistArticleStr = "Filmographie";
     }
     else if (is_same<T, Book>::value)
     {
         type = Util::Types::Book;
         typeStr = Util::getTypesString(Util::Types::Book);
+        artistFilterStr = "author";
         artistArticleStr = "Bibliographie";
     }
     else if(is_same<T, User>::value)
@@ -566,7 +570,7 @@ void Library::getListEntity(bool askEdit, int artistFilter)
     
     cout << endl << endl;
 
-    bool needS = typeStr.substr(typeStr.length()-1, 1) == "s";
+    bool needS = typeStr.substr(typeStr.length()-1, 1) != "s";
 
     if(!artistFilter){
         cout << "--------------" << Util::fillWithDash(typeStr.length()) << (needS ? "-" : "") << "------------------------"<< endl;
@@ -578,8 +582,20 @@ void Library::getListEntity(bool askEdit, int artistFilter)
         cout << " -- " << artistArticleStr << " -- " << endl;
     }
     
+    string completeFilter = "";
+    
+    if(Util::isFilterableType(type)){
+        completeFilter += filter;
+    }
+       
+    if(artistFilter){
+        if(completeFilter.length()>0){
+            completeFilter += " AND ";
+        }
+        completeFilter += artistFilterStr + "=" + to_string(artistFilter);
+    }
 
-    map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], (!artistFilter ? ((Util::isFilterableType(type))? filter : "") : "artist_id=" + to_string(artistFilter)));
+    map<int, map<string, string>> response = BaseModel::select(liaison.at(type)[0], liaison.at(type)[1], completeFilter);
 
     int totalCount = (int)response.size();
 
@@ -656,6 +672,8 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
     else if (is_same<T, Artist>::value)
     {
         type = Util::Types::Artist;
+        artistCast = static_cast<Artist*>(art);
+        artistCast = new Artist(id);
     }
     else if (is_same<T, Genre>::value)
     {
@@ -720,13 +738,13 @@ void Library::seeEntity(int id, bool isTrWithAdmin)
         if(choice != 0){
             switch(choice){
                 case 1:
-                    getListEntity<Book>(false, artistCast->getId());
+                    getListEntity<Book>(true, artistCast->getId());
                     break;
                 case 2:
-                    getListEntity<Cd>(false, artistCast->getId());
+                    getListEntity<Cd>(true, artistCast->getId());
                     break;
                 case 3:
-                    getListEntity<Dvd>(false, artistCast->getId());
+                    getListEntity<Dvd>(true, artistCast->getId());
                     break;
             }
         }
