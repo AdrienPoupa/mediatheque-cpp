@@ -11,11 +11,11 @@ int main()
 {
     try
     {
-        Library * towerOfBabel = Library::getSingleton();
+        Library * libraryOfAlexandria = Library::getSingleton();
 
-        towerOfBabel->run();
+        libraryOfAlexandria->run();
 
-        delete towerOfBabel;
+        delete libraryOfAlexandria;
     }
     catch (const exception& e)
     {
